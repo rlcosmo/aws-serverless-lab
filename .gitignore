@@ -55,6 +55,8 @@ override.tf.json
 *_override.tf.json
 .terraformrc
 terraform.rc
+# Provider lock files are intentional source files and must be versioned.
+!terraform/**/.terraform.lock.hcl
 
 # Editor and operating system files
 .idea/
