@@ -8,7 +8,11 @@ terraform {
     }
   }
 
-  backend "local" {
-    path = "terraform.tfstate"
+  backend "s3" {
+    bucket       = "aws-serverless-lab-414053644145-tfstate-use1"
+    key          = "aws-serverless-lab/dev/terraform.tfstate"
+    region       = "us-east-1"
+    encrypt      = true
+    use_lockfile = true
   }
 }
