@@ -4,7 +4,7 @@ AWS Serverless Lab is a hands-on lab for operating an event-driven order-process
 
 ## Architecture
 
-The deployed development environment also includes an HTTP API Gateway route, an EKS cluster, and observability components. The repository does not currently contain the EKS or observability infrastructure definitions, and the application does not yet implement durable order processing end to end. The current AWS API route requires IAM SigV4 authorization. See [docs/architecture.md](docs/architecture.md) for implemented behavior and [docs/initial-audit.md](docs/initial-audit.md) for the live audit, risks, and prioritized backlog.
+The deployed development environment also includes an HTTP API Gateway route, an EKS cluster, and observability components. The repository does not currently contain the EKS or observability infrastructure definitions, and the application does not yet implement durable order processing end to end. The current AWS API route requires IAM SigV4 authorization. The private GLPI/Kestra host is managed by Terraform and accessed through SSM; see [ops/itsm/README.md](ops/itsm/README.md). See [docs/architecture.md](docs/architecture.md) for implemented behavior and [docs/initial-audit.md](docs/initial-audit.md) for the live audit and backlog.
 
 ## Repository Layout
 
