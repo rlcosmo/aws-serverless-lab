@@ -2,13 +2,15 @@ import base64
 import io
 import json
 
+import boto3
 import pytest
 from moto import mock_aws
-import boto3
 
 from orders.consumer.handler import (
     PermanentProcessingError,
     TransientProcessingError,
+)
+from orders.consumer.handler import (
     handler as consumer_handler,
 )
 from orders.producer.handler import handler as producer_handler
@@ -193,7 +195,8 @@ def test_consumer_delegates_duplicate_suppression_to_durable_store_contract(monk
     class TestStore:
         """Test double only; production idempotency requires a durable implementation."""
 
-        completed = set()
+        def __init__(self):
+            self.completed = set()
 
         def execute_once(self, key, action):
             if key in self.completed:

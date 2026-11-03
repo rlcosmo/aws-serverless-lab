@@ -56,7 +56,7 @@ def handler(
     for record in records:
         if not isinstance(record, dict) or not isinstance(record.get("messageId"), str):
             # There is no identifier to put in batchItemFailures; fail invocation.
-            raise ValueError("SQS record is missing messageId")
+            raise ValueError("SQS record is missing messageId")  # noqa: TRY004
         message_id = record["messageId"]
         try:
             body = json.loads(record["body"])
@@ -79,7 +79,7 @@ def handler(
             else:
                 executed = idempotency_store.execute_once(
                     order_event["order_id"],
-                    lambda: process_order(order_event["order_id"]),
+                    lambda order_id=order_event["order_id"]: process_order(order_id),
                 )
                 if not executed:
                     logger.info("duplicate_order_skipped", extra={"event": "duplicate_skipped"})
@@ -89,7 +89,7 @@ def handler(
                 extra={"event": "permanent_failure", "error_type": type(exc).__name__},
             )
             failures.append({"itemIdentifier": message_id})
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001
             # Includes explicit transient failures and unknown dependency errors.
             logger.error(
                 "order_processing_failed",

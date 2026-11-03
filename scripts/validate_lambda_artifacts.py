@@ -48,7 +48,7 @@ def validate(path: Path, module_name: str, expected: set[str]) -> None:
     finally:
         sys.path.remove(str(path))
     if not callable(getattr(module, "handler", None)):
-        raise ValueError(f"{path.name}: {module_name}.handler is not callable")
+        raise ValueError(f"{path.name}: {module_name}.handler is not callable")  # noqa: TRY004
     for name in tuple(sys.modules):
         if name == "orders" or name.startswith("orders."):
             del sys.modules[name]

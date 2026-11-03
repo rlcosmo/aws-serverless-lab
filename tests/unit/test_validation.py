@@ -1,4 +1,5 @@
 import pytest
+
 from orders.shared.validation import (
     MAX_ITEMS,
     MAX_ORDER_ID_LENGTH,

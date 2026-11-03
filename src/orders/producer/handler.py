@@ -1,16 +1,20 @@
 """API Gateway compatible Lambda handler that enqueues validated orders."""
 
-import json
-import os
 import base64
 import binascii
+import json
+import os
 from typing import Any
 
 import boto3
 from botocore.config import Config
 
 from orders.shared.logging import get_logger
-from orders.shared.validation import MAX_REQUEST_BYTES, OrderValidationError, validate_order
+from orders.shared.validation import (
+    MAX_REQUEST_BYTES,
+    OrderValidationError,
+    validate_order,
+)
 
 logger = get_logger(__name__)
 
@@ -68,7 +72,7 @@ def handler(
     message = {"event_type": "order.created", "version": 1, "order_id": order["order_id"]}
     try:
         client.send_message(QueueUrl=queue_url, MessageBody=json.dumps(message))
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001
         logger.error(
             "order_enqueue_failed",
             extra={"event": "order_enqueue_failed", "error_type": type(exc).__name__},
