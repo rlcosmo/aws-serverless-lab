@@ -2,28 +2,27 @@
 
 ## Purpose and Scope
 
-This document describes the target architecture for an event-driven order-processing lab. The repository is currently a scaffold: AWS resources have not been created. Infrastructure changes must be reviewed through Terraform plans and deployed only with explicit authorization.
+This document distinguishes the implemented serverless path from the intended end state. The development AWS environment is deployed. Terraform in this repository manages the serverless API, Lambda, SQS, DynamoDB, and CloudWatch resources; the live EKS and observability stack is not currently declared here. Review plans and assess cost, data, and security impact before infrastructure changes.
 
 ## Logical Components
 
-- **Ingress Lambda (Python 3.12, Boto3):** validates the request, assigns or validates an order identifier, stores the initial order, and publishes an order event to SQS.
-- **Amazon DynamoDB:** stores order state with a stable partition key such as `order_id`. Access patterns and any secondary indexes must be documented before schema changes.
-- **Amazon SQS:** buffers work between ingress and processing, absorbs traffic bursts, and enables retry-based decoupling.
-- **Worker Lambda (Python 3.12, Boto3):** consumes messages in batches, processes each order idempotently, updates its state, and publishes a result event.
-- **Amazon SNS:** distributes processing outcomes to explicitly configured subscribers. Message content must not include secrets or unnecessary personal data.
-- **Amazon CloudWatch:** collects structured Lambda logs, service metrics, dashboards, and actionable alarms for errors, throttles, queue age, and dead-letter queue depth.
+- **Amazon API Gateway HTTP API:** exposes `POST /orders`; the route uses AWS IAM authorization and requires SigV4-signed requests with `execute-api:Invoke` permission.
+- **Producer Lambda (Python 3.12, Boto3):** validates the request and publishes a minimal `order.created` event to SQS. It does not write order records to DynamoDB.
+- **Amazon DynamoDB:** the current table supports conditional idempotency claims for the consumer. Durable order state is not implemented.
+- **Amazon SQS:** buffers work and retries failed records through a redrive policy and DLQ.
+- **Consumer Lambda (Python 3.12, Boto3):** validates messages and records idempotency claims. The `process_order` business function remains a no-op seam.
+- **Amazon CloudWatch:** collects Lambda logs, a dashboard, and error/DLQ alarms. Current Terraform alarms do not have notification actions.
 - **Terraform:** defines infrastructure as reviewable, version-controlled code. State and plan artifacts are sensitive operational data and must not be committed.
 
 ## Order Processing Flow
 
-1. A client request reaches the ingress Lambda through a future API integration.
-2. The handler validates required fields and rejects malformed input before persistence.
-3. The handler writes an order in `PENDING` state to DynamoDB, using conditional writes or another concurrency-safe strategy where appropriate.
-4. It publishes an order event to SQS. The message carries an order identifier and a versioned event type; avoid copying unnecessary customer data into the queue.
-5. SQS invokes the worker Lambda. The worker validates the event, loads the authoritative order, and performs idempotent processing so retries do not duplicate effects.
-6. On success, the worker updates the order state and publishes a result event to SNS.
-7. On a transient failure, the message is retried according to a bounded redrive policy. After the configured receive threshold, SQS moves it to a dead-letter queue (DLQ) for investigation and controlled replay.
-8. CloudWatch logs and metrics support troubleshooting and alarms. Logs must be structured, useful, and scrubbed of credentials, tokens, and sensitive payloads.
+1. A client signs a `POST /orders` request with AWS SigV4; API Gateway rejects anonymous requests before Lambda invocation.
+2. The producer validates the request and publishes a minimal versioned order event to SQS.
+3. SQS invokes the consumer Lambda with partial batch failure reporting. Failed records can be retried and eventually sent to the DLQ.
+4. The consumer validates each event and uses a conditional DynamoDB claim to suppress duplicate completed work. The current business processing step is a no-op seam; the flow does not yet persist order state or cause a business side effect.
+5. CloudWatch logs, metrics, dashboard, and alarms support troubleshooting. Alarms currently have no notification destination configured by this repository.
+
+The target API → SQS → worker → DynamoDB flow is therefore only partially implemented. Do not describe it as end-to-end durable order processing until the persistence, business operation, retries, and recovery path are implemented and tested.
 
 ### Current Python Scaffold
 
@@ -41,14 +40,14 @@ The consumer reports failures by SQS message ID so successful records in a batch
 
 Set the SQS visibility timeout with enough margin for the Lambda timeout, batching window, and retries; confirm the final values against the event source mapping configuration before deployment. Bound `maxReceiveCount`, set source and DLQ retention deliberately, alarm on DLQ depth and age, and document who investigates and how replay is authorized. Redrive should be controlled and safe to repeat because a replay may duplicate work.
 
-There is a persistence/publication gap if ingress first writes an order to DynamoDB and then separately publishes to SQS: a crash between operations can leave an order without an event (or a retry can publish twice). Prefer a transactional outbox: write the order and an outbox record atomically, then have a publisher deliver pending outbox records and mark them delivered with retry-safe state. If an outbox is not used, explicitly document and implement reconciliation/compensation; do not claim atomicity across DynamoDB and SQS.
+When durable order persistence is implemented, address the persistence/publication gap: writing to DynamoDB and then separately publishing to SQS can leave an order without an event or publish duplicates after retries. Prefer a transactional outbox, or implement and document reconciliation/compensation. Do not claim atomicity across DynamoDB and SQS.
 
-Development log retention defaults to seven days. Three metric alarms cover any invocation error for each Lambda and any visible DLQ message. They have no notification actions in this scaffold, so an operator must inspect CloudWatch alarm state; an alert destination can be introduced after its operations and cost are approved. Each alarm may incur CloudWatch charges. Logs can also incur ingestion and storage charges.
+Development log retention defaults to seven days. Three metric alarms cover any invocation error for each Lambda and any visible DLQ message. The Terraform alarms have no notification actions, so operators must inspect CloudWatch alarm state. Add and validate a notification destination before treating alerting as operational; account for its cost. Logs also incur ingestion and storage charges.
 
 ## Security Boundaries
 
-Grant each Lambda role only the actions and resource ARNs it needs: ingress access to the order table and queue send action; worker access to the queue, required table operations, and the specific SNS topic. Scope trust policies to the intended service and function context where supported. Encrypt data in transit and at rest using service encryption defaults or explicitly managed keys as requirements dictate. Keep credentials out of source, Terraform variables, logs, and state; use role-based access and a secrets manager for runtime secrets if needed. Require review of IAM, data retention, and network exposure changes.
+Grant each Lambda role only the actions and resource ARNs it needs: the producer sends messages to its SQS queue; the consumer reads/deletes messages and accesses the idempotency table. Scope trust policies to the intended service and function context where supported. Encrypt data in transit and at rest using service encryption defaults or explicitly managed keys as requirements dictate. Keep credentials out of source, Terraform variables, logs, and state; use role-based access and a secrets manager for runtime secrets if needed. Require review of IAM, data retention, and network exposure changes.
 
 ## Infrastructure and Change Management
 
-Organize Terraform into small, understandable modules and environments. Pin provider versions, declare required inputs, mark sensitive values, and use remote state with encryption, locking, and restricted access when deployment is approved. Run formatting, validation, security checks, and plan review in the delivery workflow. Do not run `terraform apply` or `terraform destroy` without explicit authorization; this project has not yet initialized Git or provisioned AWS resources.
+Terraform is organized into modules under `terraform/modules` and the `dev` environment. Terraform state and plan artifacts are sensitive and must not be committed. Run formatting, validation, security checks, and a full plan review before deployment. Never run `terraform destroy`; assess budget and data impact before any apply.

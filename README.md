@@ -1,12 +1,10 @@
 # AWS Serverless Lab
 
-AWS Serverless Lab is a hands-on reference project for designing and operating an event-driven order-processing service with AWS managed services. It uses Python 3.12 and Boto3 for application code and Terraform for infrastructure definitions.
+AWS Serverless Lab is a hands-on lab for operating an event-driven order-processing service with AWS managed services, plus an existing EKS and observability environment. It uses Python 3.12 and Boto3 for application code and Terraform for the serverless resources represented in this repository.
 
 ## Architecture
 
-The current development infrastructure contains AWS Lambda, Amazon DynamoDB, Amazon SQS, and Amazon CloudWatch. It does not define API Gateway, SNS, NAT Gateway, EC2, or RDS. See [docs/architecture.md](docs/architecture.md) for the flow and operational considerations.
-
-This repository is an initial scaffold. No AWS resources have been created, and no deployment has been performed.
+The deployed development environment also includes an HTTP API Gateway route, an EKS cluster, and observability components. The repository does not currently contain the EKS or observability infrastructure definitions, and the application does not yet implement durable order processing end to end. The current AWS API route requires IAM SigV4 authorization. See [docs/architecture.md](docs/architecture.md) for implemented behavior and [docs/initial-audit.md](docs/initial-audit.md) for the live audit, risks, and prioritized backlog.
 
 ## Repository Layout
 
