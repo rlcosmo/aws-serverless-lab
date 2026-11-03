@@ -2,7 +2,9 @@
 
 ## Purpose and Scope
 
-This document distinguishes the implemented serverless path from the intended end state. The development AWS environment is deployed. Terraform in this repository manages the serverless API, Lambda, SQS, DynamoDB, and CloudWatch resources; the live EKS and observability stack is not currently declared here. Review plans and assess cost, data, and security impact before infrastructure changes.
+This document distinguishes the implemented serverless path from the intended end state. Terraform manages the serverless API, Lambda, SQS, DynamoDB, CloudWatch resources, the private GLPI/Kestra host, and the DEV S3 state backend. The live EKS and observability stacks are still not declared here. Review plans and assess data, security, and operational impact before infrastructure changes.
+
+The ITSM host runs Ubuntu 24.04 on a private `t3.large` with encrypted 50 GiB gp3 storage, no public IP or ingress rules, and SSM access. Docker Compose runs GLPI with a dedicated MariaDB and Kestra with a dedicated PostgreSQL. Application ports are bound to loopback and accessed through SSM port forwarding. AWS Backup retains daily EC2 recovery points for 14 days. See [the host runbook](../ops/itsm/README.md).
 
 ## Logical Components
 
@@ -13,6 +15,8 @@ This document distinguishes the implemented serverless path from the intended en
 - **Consumer Lambda (Python 3.12, Boto3):** validates messages and records idempotency claims. The `process_order` business function remains a no-op seam.
 - **Amazon CloudWatch:** collects Lambda logs, a dashboard, and error/DLQ alarms. Current Terraform alarms do not have notification actions.
 - **Terraform:** defines infrastructure as reviewable, version-controlled code. State and plan artifacts are sensitive operational data and must not be committed.
+- **Terraform state:** DEV uses a versioned, encrypted S3 bucket with public access blocked, TLS-only access, and native lock files. The bucket and host instance have `prevent_destroy` safeguards.
+- **ITSM host:** private, SSM-only access to GLPI and Kestra; generated credentials are stored in SSM SecureString and not available to the instance role for retrieval.
 
 ## Order Processing Flow
 
@@ -50,4 +54,4 @@ Grant each Lambda role only the actions and resource ARNs it needs: the producer
 
 ## Infrastructure and Change Management
 
-Terraform is organized into modules under `terraform/modules` and the `dev` environment. Terraform state and plan artifacts are sensitive and must not be committed. Run formatting, validation, security checks, and a full plan review before deployment. Never run `terraform destroy`; assess budget and data impact before any apply.
+Terraform is organized into modules under `terraform/modules` and the `dev` environment. Terraform state and plan artifacts are sensitive and must not be committed. GitHub Actions validates Python, Lambda artifacts, and Terraform formatting/configuration on pushes and pull requests. It does not deploy. EKS/observability manifests and a least-privilege GitHub OIDC deployment role remain to be implemented. Never run `terraform destroy`; assess data and security impact before any apply.

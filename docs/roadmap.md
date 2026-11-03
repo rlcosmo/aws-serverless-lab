@@ -1,34 +1,29 @@
-# Three-Week Implementation Roadmap
+# Implementation backlog
 
-This roadmap assumes focused, reviewable increments. Each week ends with working local evidence and a documented review; cloud deployment is outside scope until separately authorized.
+The cloud environment already contains live workloads and user data. Changes are made incrementally, with Terraform plans and health checks reviewed before applying. Deletion, replacement of data-bearing resources, and destructive recovery actions are out of scope.
 
-## Week 1 — Foundations and Contracts
+## Completed in this implementation
 
-- Define order and event schemas, validation rules, state transitions, and error responses.
-- Establish Python 3.12 package layout, configuration boundaries, structured logging conventions, and handler interfaces.
-- Implement ingress and worker logic behind testable interfaces; add unit tests using local AWS service mocks where appropriate.
-- Define Terraform project layout, provider/version constraints, naming and tagging conventions, and environment inputs without provisioning resources.
-- Review data classification, retention needs, and the initial threat model.
+- Restricted the API Gateway order route to AWS IAM authorization and verified anonymous calls receive 403.
+- Restricted the existing observability ALB ingress to the existing administrator source range.
+- Created a versioned, encrypted, TLS-only private S3 backend with native lock files and migrated DEV Terraform state.
+- Added a reusable Terraform module for a private Ubuntu 24.04 `t3.large` host with encrypted gp3 storage, IMDSv2, dedicated IAM/SG, SSM access, EKS read-only access, and AWS Backup retention.
+- Created the ITSM EC2 in the existing private subnet. Its user-data bootstrap is still being verified; GLPI/Kestra are not complete until their SSM and application health checks pass.
+- Added pinned Docker Compose definitions for separate GLPI/MariaDB and Kestra/PostgreSQL services, local-only listeners, generated credentials, and operational runbook.
+- Added GitHub Actions validation for Python lint/tests, Lambda artifacts, Terraform formatting, and Terraform configuration validation.
 
-**Exit criteria:** documented contracts, reproducible local setup, baseline unit tests, and reviewed Terraform structure.
+## Active priority work
 
-## Week 2 — Event-Driven Processing and Least Privilege
+1. Verify host cloud-init completion, SSM registration, Docker service health, GLPI and Kestra login, secrets retrieval path, and backup selection. Repair bootstrap errors without replacing the instance or volumes.
+2. Verify the EKS node group scale-up and restore `istiod` scheduling. Preserve the existing namespace `orders` workloads while identifying their source of truth and missing configuration.
+3. Create tracked Kubernetes/Helm configuration for workloads and observability, then reconcile it against live objects before changing them.
+4. Configure durable observability storage, retention, and recovery. No PVCs were observed during the live audit.
+5. Configure an actual notification receiver and test a controlled alert.
+6. Implement durable Orders processing, DynamoDB state transitions, retries/idempotency, DLQ operations, and API → SQS → worker → DynamoDB integration tests.
+7. Add a tightly scoped DEV-only GitHub OIDC deployment role and deployment gates only after the infrastructure and Kubernetes sources of truth exist.
 
-- Define DynamoDB table keys and required access patterns; implement repository operations and conditional state updates.
-- Add SQS queue, redrive policy, DLQ, Lambda event source mapping, and partial batch failure handling to Terraform.
-- Implement idempotent processing, bounded retries, input validation, and SNS outcome publishing.
-- Write narrowly scoped IAM policies for each function and resource; verify that permissions match actual code paths.
-- Add integration tests for successful processing, retries, duplicate delivery, and DLQ routing using local emulation.
+## Validation and operations
 
-**Exit criteria:** end-to-end processing is covered locally, duplicate delivery is safe, and permissions and failure paths have been reviewed.
-
-## Week 3 — Observability and Operational Readiness
-
-- Add structured CloudWatch logs, key service metrics, dashboards, and actionable alarms.
-- Document timeout, concurrency, batch size, visibility timeout, retention, and cost assumptions.
-- Prepare operational runbooks for queue backlog, DLQ inspection/replay, failed notifications, and incident triage.
-- Complete security review for secrets handling, encryption, IAM scope, Terraform state, and sensitive logging.
-- Run formatting, tests, Terraform formatting/validation, and static security checks; capture results for review.
-- Prepare a deployment plan for approval without applying it.
-
-**Exit criteria:** reviewed operational documentation, recorded validation results, and a human-reviewed infrastructure plan. No AWS resources are created until separately authorized.
+- Run Ruff, pytest, compileall, dependency checks, Lambda artifact validation, Terraform format/validate, and Compose config validation locally and in CI.
+- Review every Terraform plan for resource replacement, data impact, network exposure, IAM scope, and cost before apply. Never use Terraform destroy.
+- Keep the parent project and `cosmotech-infrastructure-mcp` repository independent. Do not stage the nested MCP repository from the parent.

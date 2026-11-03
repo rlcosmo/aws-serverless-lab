@@ -4,7 +4,7 @@ AWS Serverless Lab is a hands-on lab for operating an event-driven order-process
 
 ## Architecture
 
-The deployed development environment also includes an HTTP API Gateway route, an EKS cluster, and observability components. The repository does not currently contain the EKS or observability infrastructure definitions, and the application does not yet implement durable order processing end to end. The current AWS API route requires IAM SigV4 authorization. The private GLPI/Kestra host is managed by Terraform and accessed through SSM; see [ops/itsm/README.md](ops/itsm/README.md). See [docs/architecture.md](docs/architecture.md) for implemented behavior and [docs/initial-audit.md](docs/initial-audit.md) for the live audit and backlog.
+The deployed development environment includes an IAM-authorized HTTP API Gateway route, Lambda, SQS, DynamoDB, EKS, Istio, and an observability stack. Terraform in this repository manages the serverless resources, remote state backend, and private GLPI/Kestra host. The host is accessed through SSM; see [ops/itsm/README.md](ops/itsm/README.md). The active Orders API and worker run in EKS, but durable end-to-end order persistence is not implemented by the Python Lambda scaffold. See [docs/architecture.md](docs/architecture.md) for behavior and [docs/initial-audit.md](docs/initial-audit.md) for live evidence and remaining work.
 
 ## Repository Layout
 
@@ -24,7 +24,7 @@ requirements.txt
 - AWS CLI v2 and Terraform 1.17 for later infrastructure work
 - Git for local version control
 
-Do not place AWS access keys, session tokens, private keys, or populated secret files in this repository. Prefer short-lived AWS IAM Identity Center or role-based credentials when cloud access is eventually authorized.
+Do not place AWS access keys, session tokens, private keys, or populated secret files in this repository. Prefer short-lived AWS IAM Identity Center or role-based credentials. CI currently runs validation only and has no AWS deployment credentials.
 
 ## Local Development
 
@@ -55,19 +55,20 @@ python scripts/validate_lambda_artifacts.py
 
 The deterministic archives contain only first-party `.py` files from `src/`. They omit pytest, Moto, and SDK packages; the handlers use the boto3/botocore SDK included in the AWS Lambda Python 3.12 runtime. `dist/` is ignored by Git. Rebuild after changing application code and before Terraform validation; Terraform expects both ZIP paths to exist.
 
-Run Terraform formatting and static validation from the infrastructure directory when Terraform configuration is present:
+Run Terraform formatting and static validation locally. The DEV backend is an encrypted, versioned, access-restricted S3 bucket with native state locking; use `-backend=false` for local validation that must not read remote state:
 
 ```bash
 terraform -chdir=terraform fmt -check -recursive
-terraform -chdir=terraform validate
+terraform -chdir=terraform/environments/dev init -backend=false -input=false
+terraform -chdir=terraform/environments/dev validate
 ```
 
-Terraform validation requires provider initialization. In this phase, validation is local and must not access AWS; no plan, apply, or destroy is part of the build process. The local state path is `terraform/environments/dev/terraform.tfstate`; it and its backups/plans are ignored. Protect local state with filesystem permissions and encrypted, access-controlled backups outside the repository. To recover, restore a verified backup to that exact path while Terraform is stopped, preserve the prior state copy, and inspect state/configuration consistency before any later operation. Do not create a cloud backend in this phase. The `.terraform.lock.hcl` provider lock file is a source artifact that should be versioned.
+Terraform backend initialization uses the repository's S3 backend and requires AWS access. Validation can use `-backend=false`; do not commit state, plan files, credentials, or local backups. The `.terraform.lock.hcl` provider lock file is a source artifact that should be versioned.
 
 ### Cost Notes
 
-These AWS services are not asserted to be free. Potential charges include Lambda requests and duration; SQS requests and data transfer; DynamoDB on-demand reads/writes and stored data; CloudWatch log ingestion/storage and three metric alarms (one per Lambda plus one DLQ alarm). Seven-day log retention limits stored history but does not remove ingestion charges. DynamoDB point-in-time recovery is disabled by default; enabling it can add charges. The small number of alarms is intended to alert on function failures and any visible DLQ message; each alarm can incur a recurring CloudWatch charge. No notification topic or API endpoint is configured.
+AWS resource usage incurs variable charges. The account is currently on the paid plan with promotional credits available. The lab includes EKS, Spot workers, NAT, load balancers, CloudWatch, and a private `t3.large` ITSM host with encrypted gp3 storage and AWS Backup. See the audit for limits and unimplemented alert delivery. No cost ceiling was applied per the current project instruction.
 
 ## Delivery Plan
 
-See [docs/roadmap.md](docs/roadmap.md) for the three-week implementation plan. The project should advance through reviewed, testable increments with operational readiness and security checks included throughout.
+GitHub Actions runs Python lint/tests, Lambda artifact checks, and Terraform formatting/validation. It does not deploy: EKS and observability manifests are not maintained in this repository and no least-privilege GitHub OIDC deploy role has been configured. See [docs/roadmap.md](docs/roadmap.md) for remaining work.
