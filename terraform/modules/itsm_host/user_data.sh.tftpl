@@ -9,8 +9,11 @@ export DEBIAN_FRONTEND=noninteractive
 find /etc/apt -type f \( -name '*.list' -o -name '*.sources' \) \
   -exec sed -i -e 's|^deb http://|deb https://|' -e 's|URIs: http://|URIs: https://|' {} +
 apt-get update
-apt-get install -y awscli ca-certificates curl docker.io docker-compose-v2 gettext-base git jq openssl snapd
+apt-get install -y ca-certificates curl docker.io docker-compose-v2 gettext-base git jq openssl snapd
 systemctl enable --now docker
+systemctl enable --now snapd.socket
+snap install aws-cli --classic
+export PATH="/snap/bin:$PATH"
 
 install -d -o root -g root -m 0750 /opt/cosmotech
 git clone --depth 1 --branch main "$REPOSITORY_URL" /opt/cosmotech/aws-serverless-lab

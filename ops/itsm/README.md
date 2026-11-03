@@ -2,7 +2,7 @@
 
 Terraform provisions one Ubuntu 24.04 LTS `t3.large` in the existing EKS VPC's private subnet. The instance has an encrypted 50 GiB gp3 root disk, no public IP, no inbound security-group rules, an EC2 instance profile, and SSM Session Manager access. Its role can inspect the lab, read the DEV Terraform state, write the two generated bootstrap passwords to their fixed SSM parameter paths, and view the EKS cluster. It cannot apply Terraform changes.
 
-GLPI and its MariaDB database are separate from Kestra and its PostgreSQL database. Docker volumes persist application files and each database on the encrypted EBS root volume. Compose publishes only loopback ports `8080` and `8081`; SSM port forwarding is the access path. No web listener is exposed to the internet.
+GLPI and its MariaDB database are separate from Kestra and its PostgreSQL database. Docker volumes persist application files and each database on the encrypted EBS root volume. A short-lived, network-isolated BusyBox init container sets the Kestra volume owner to UID 1000, matching the non-root Kestra process. Compose publishes only loopback ports `8080` and `8081`; SSM port forwarding is the access path. No web listener is exposed to the internet.
 
 ## Access
 

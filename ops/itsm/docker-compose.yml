@@ -77,6 +77,23 @@ services:
     mem_limit: 1g
     logging: *default-logging
 
+  kestra-storage-init:
+    image: busybox@sha256:66a6306db78bf2dbf3487f293aa8d6990d8e506fdffab9cc43fe422becf886e4
+    user: "0:0"
+    command: ["sh", "-c", "chown -R 1000:1000 /data"]
+    volumes:
+      - kestra_data:/data
+    network_mode: none
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+    restart: "no"
+    logging: *default-logging
+
   kestra:
     image: kestra/kestra@sha256:ad7602269219ab969e8194a6000e139ad5d5e153556435afb8d2a35a19993ccd
     restart: unless-stopped
@@ -98,6 +115,8 @@ services:
     depends_on:
       kestra-db:
         condition: service_healthy
+      kestra-storage-init:
+        condition: service_completed_successfully
     mem_limit: 5g
     logging: *default-logging
 
