@@ -20,6 +20,8 @@ module "monitoring" {
 
   lambda_names             = [local.producer_function_name, local.consumer_function_name]
   dead_letter_queue_name   = module.sqs.dead_letter_queue_name
+  orders_queue_name        = "${local.name_prefix}-orders"
+  environment              = var.environment
   lambda_error_alarm_names = [local.producer_function_name, local.consumer_function_name]
   log_retention_days       = var.log_retention_days
   tags                     = local.common_tags
@@ -95,16 +97,28 @@ module "producer_lambda" {
 module "consumer_lambda" {
   source = "../../modules/lambda"
 
-  function_name           = local.consumer_function_name
-  description             = "Consumes and validates order events from SQS."
-  handler                 = "orders.consumer.handler.handler"
-  package_path            = local.consumer_package_path
-  role_arn                = module.consumer_iam.role_arn
-  timeout                 = local.lambda_timeout_seconds
-  event_source_queue_arn  = module.sqs.orders_queue_arn
-  event_source_batch_size = 10
+  function_name               = local.consumer_function_name
+  description                 = "Consumes and validates order events from SQS."
+  handler                     = "orders.consumer.handler.handler"
+  package_path                = local.consumer_package_path
+  role_arn                    = module.consumer_iam.role_arn
+  timeout                     = local.lambda_timeout_seconds
+  create_event_source_mapping = true
+  event_source_queue_arn      = module.sqs.orders_queue_arn
+  event_source_batch_size     = 10
   environment_variables = {
     ORDERS_TABLE_NAME = module.dynamodb.table_name
   }
   tags = local.common_tags
+}
+
+
+module "api_gateway" {
+  source = "../../modules/api_gateway"
+
+  name_prefix          = local.name_prefix
+  environment          = var.environment
+  lambda_arn           = module.producer_lambda.function_arn
+  lambda_function_name = module.producer_lambda.function_name
+  tags                 = local.common_tags
 }

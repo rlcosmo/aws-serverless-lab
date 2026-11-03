@@ -24,7 +24,7 @@ resource "aws_lambda_function" "this" {
 }
 
 resource "aws_lambda_event_source_mapping" "sqs" {
-  count = var.event_source_queue_arn == null ? 0 : 1
+  count = var.create_event_source_mapping ? 1 : 0
 
   event_source_arn                   = var.event_source_queue_arn
   function_name                      = aws_lambda_function.this.arn

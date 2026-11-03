@@ -41,6 +41,12 @@ variable "environment_variables" {
   default     = {}
 }
 
+variable "create_event_source_mapping" {
+  description = "Whether to create an event source mapping for this Lambda."
+  type        = bool
+  default     = false
+}
+
 variable "event_source_queue_arn" {
   description = "Optional SQS queue ARN for a Lambda event source mapping."
   type        = string

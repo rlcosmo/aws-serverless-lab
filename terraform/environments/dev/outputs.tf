@@ -32,3 +32,19 @@ output "consumer_function_name" {
   description = "Consumer Lambda function name."
   value       = module.consumer_lambda.function_name
 }
+
+
+output "orders_api_url" {
+  description = "HTTP endpoint for creating orders."
+  value       = module.api_gateway.invoke_url
+}
+
+output "orders_api_id" {
+  description = "HTTP API Gateway ID."
+  value       = module.api_gateway.api_id
+}
+
+output "cloudwatch_dashboard_name" {
+  description = "CloudWatch dashboard for the Serverless Lab."
+  value       = module.monitoring.dashboard_name
+}
