@@ -40,7 +40,7 @@ Audit date: 2026-11-03. This report reflects live AWS and Kubernetes observation
 ## Repository and automation
 
 - Terraform owns the serverless resources and new ITSM host. It does not own the existing EKS cluster, node group, live application deployments, Istio, or observability Helm releases.
-- GitHub Actions validation for Python lint/tests, Lambda artifacts, Terraform formatting, and Terraform configuration validation passed on [run 41734798857](https://github.com/rlcosmo/aws-serverless-lab/actions/runs/41734798857). It does not deploy. There are no tracked Kubernetes manifests or a narrowly scoped GitHub OIDC deployment role yet.
+- GitHub Actions validation for Python lint/tests, Lambda artifacts, Terraform formatting, and Terraform configuration validation passed on [run 41739881815](https://github.com/rlcosmo/aws-serverless-lab/actions/runs/41739881815). It does not deploy. The account has an ECR-publish OIDC role, but its trust subject is the separate `rlcosmo/aws-eks-istio-lab` repository. This repository has no deploy trust or deployment workflow, and no tracked Kubernetes manifests/container app sources.
 - The nested `cosmotech-infrastructure-mcp` repository remains a separate project and must not be staged or committed through the parent repository.
 
 ## Priority backlog
