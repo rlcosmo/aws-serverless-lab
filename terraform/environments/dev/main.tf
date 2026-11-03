@@ -71,6 +71,16 @@ module "consumer_iam" {
       }
     },
     {
+      sid       = "PersistOrderRecords"
+      actions   = ["dynamodb:GetItem", "dynamodb:PutItem"]
+      resources = [module.dynamodb.table_arn]
+      condition = {
+        test     = "ForAllValues:StringLike"
+        variable = "dynamodb:LeadingKeys"
+        values   = ["ORDER#*"]
+      }
+    },
+    {
       sid       = "WriteConsumerLogs"
       actions   = ["logs:CreateLogStream", "logs:PutLogEvents"]
       resources = ["${trimsuffix(module.monitoring.log_group_arns[local.consumer_function_name], ":*")}:log-stream:*"]

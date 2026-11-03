@@ -6,6 +6,7 @@ from orders.shared.validation import (
     MAX_QUANTITY,
     MAX_REQUEST_BYTES,
     MAX_SKU_LENGTH,
+    ORDER_EVENT_VERSION,
     OrderValidationError,
     validate_order,
     validate_order_event,
@@ -29,13 +30,45 @@ def test_validate_order_rejects_invalid_payload(payload):
 
 
 def test_validate_order_event_accepts_supported_contract():
-    assert validate_order_event({"event_type": "order.created", "version": 1, "order_id": "o-1"})["order_id"] == "o-1"
+    event = validate_order_event(
+        {
+            "event_type": "order.created",
+            "version": ORDER_EVENT_VERSION,
+            "order_id": "o-1",
+            "order": {"order_id": "o-1", "items": [{"sku": "x", "quantity": 1}]},
+            "created_at": "2026-11-03T12:00:00Z",
+        }
+    )
+    assert event["order_id"] == "o-1"
+    assert event["order"]["items"] == [{"sku": "x", "quantity": 1}]
+    assert event["created_at"] == "2026-11-03T12:00:00Z"
 
 
-@pytest.mark.parametrize("version", [True, False, 1.0, "1", 2, None])
+@pytest.mark.parametrize("version", [True, False, 1.0, "2", 1, None])
 def test_validate_order_event_rejects_non_integer_or_unsupported_version(version):
     with pytest.raises(OrderValidationError):
         validate_order_event({"event_type": "order.created", "version": version, "order_id": "o-1"})
+
+
+@pytest.mark.parametrize(
+    "order,created_at",
+    [
+        ({"order_id": "o-2", "items": [{"sku": "x", "quantity": 1}]}, "2026-11-03T12:00:00Z"),
+        ({"order_id": "o-1", "items": [{"sku": "x", "quantity": 1}]}, "2026-11-03T12:00:00"),
+        ({"order_id": "o-1", "items": []}, "2026-11-03T12:00:00Z"),
+    ],
+)
+def test_validate_order_event_rejects_mismatched_or_invalid_payload(order, created_at):
+    with pytest.raises(OrderValidationError):
+        validate_order_event(
+            {
+                "event_type": "order.created",
+                "version": ORDER_EVENT_VERSION,
+                "order_id": "o-1",
+                "order": order,
+                "created_at": created_at,
+            }
+        )
 
 
 @pytest.mark.parametrize(

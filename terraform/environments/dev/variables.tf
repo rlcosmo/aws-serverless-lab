@@ -45,7 +45,7 @@ variable "orders_table_deletion_protection" {
 }
 
 variable "orders_table_point_in_time_recovery" {
-  description = "Enable DynamoDB point-in-time recovery. It can add cost; disabled by default in dev."
+  description = "Enable DynamoDB point-in-time recovery for the development orders table."
   type        = bool
-  default     = false
+  default     = true
 }

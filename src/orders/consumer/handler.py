@@ -1,38 +1,34 @@
-"""SQS batch handler with partial failures and an injectable idempotency boundary."""
+"""SQS batch handler that durably records orders with partial failures."""
 
 import json
 import os
 from collections.abc import Callable
 from typing import Any, Protocol
 
+from orders.consumer.errors import PermanentProcessingError, TransientProcessingError
+from orders.consumer.idempotency import DynamoDBIdempotencyStore
+from orders.consumer.repository import DynamoDBOrderRepository, create_dynamodb_resource
 from orders.shared.logging import get_logger
 from orders.shared.validation import OrderValidationError, validate_order_event
 
 logger = get_logger(__name__)
 
 
-class PermanentProcessingError(Exception):
-    """A validly decoded event that cannot succeed if retried unchanged."""
-
-
-class TransientProcessingError(Exception):
-    """A temporary processing or dependency failure that can succeed on retry."""
-
-
 class IdempotencyStore(Protocol):
-    """Durable boundary required for duplicate suppression (for example DynamoDB)."""
+    """Durable boundary for suppressing duplicate SQS delivery."""
 
     def execute_once(self, key: str, action: Callable[[], None]) -> bool:
-        """Atomically run action once; return False when key was already completed.
-
-        Implementations must use durable conditional state and define recovery for
-        interrupted/in-progress work. An in-memory cache is not sufficient.
-        """
+        """Run action once per key, returning false for a completed duplicate."""
 
 
-def process_order(order_id: str) -> None:
-    """Application seam; persistence and business effects are not implemented yet."""
-    logger.info("order_processing_seam_called", extra={"event": "processing_seam_called"})
+class OrderRepository(Protocol):
+    """Persistence boundary for a validated order."""
+
+    def persist(self, order: dict[str, Any], created_at: str) -> None:
+        """Persist an order or accept a matching prior write."""
+
+    def verify_matches(self, order: dict[str, Any]) -> None:
+        """Verify an existing durable order matches a repeated request."""
 
 
 def handler(
@@ -40,27 +36,30 @@ def handler(
     context: Any,
     *,
     idempotency_store: IdempotencyStore | None = None,
+    order_repository: OrderRepository | None = None,
+    dynamodb_resource: Any | None = None,
 ) -> dict[str, list[dict[str, str]]]:
-    """Process records, retrying failures individually when SQS partial responses are enabled.
+    """Persist valid messages and report only failed SQS record identifiers."""
+    table_name = os.environ.get("ORDERS_TABLE_NAME")
+    if table_name and (idempotency_store is None or order_repository is None):
+        resource = dynamodb_resource or create_dynamodb_resource(
+            region_name=os.getenv("AWS_REGION")
+        )
+        idempotency_store = idempotency_store or DynamoDBIdempotencyStore(
+            table_name, dynamodb_resource=resource
+        )
+        order_repository = order_repository or DynamoDBOrderRepository(
+            table_name, dynamodb_resource=resource
+        )
 
-    Invalid/permanent messages are returned as failures so the queue redrive policy
-    can move them to a DLQ after its receive limit. Unknown processing errors are
-    treated as transient. Without a durable store, duplicate suppression is absent.
-    """
     failures: list[dict[str, str]] = []
-    if idempotency_store is None and os.environ.get("ORDERS_TABLE_NAME"):
-        from orders.consumer.idempotency import DynamoDBIdempotencyStore
-
-        idempotency_store = DynamoDBIdempotencyStore(os.environ["ORDERS_TABLE_NAME"])
     records = event.get("Records", [])
     for record in records:
         if not isinstance(record, dict) or not isinstance(record.get("messageId"), str):
-            # There is no identifier to put in batchItemFailures; fail invocation.
-            raise ValueError("SQS record is missing messageId")  # noqa: TRY004
+            raise TypeError("SQS record is missing messageId")
         message_id = record["messageId"]
         try:
-            body = json.loads(record["body"])
-            order_event = validate_order_event(body)
+            order_event = validate_order_event(json.loads(record["body"]))
         except (KeyError, json.JSONDecodeError, OrderValidationError, TypeError):
             logger.warning(
                 "invalid_order_message",
@@ -70,19 +69,18 @@ def handler(
             continue
 
         try:
-            if idempotency_store is None:
-                logger.warning(
-                    "idempotency_store_unconfigured",
-                    extra={"event": "idempotency_unconfigured"},
-                )
-                process_order(order_event["order_id"])
-            else:
-                executed = idempotency_store.execute_once(
-                    order_event["order_id"],
-                    lambda order_id=order_event["order_id"]: process_order(order_id),
-                )
-                if not executed:
-                    logger.info("duplicate_order_skipped", extra={"event": "duplicate_skipped"})
+            if idempotency_store is None or order_repository is None:
+                raise TransientProcessingError("DynamoDB order storage is not configured")
+
+            executed = idempotency_store.execute_once(
+                order_event["order_id"],
+                lambda order=order_event["order"], created_at=order_event["created_at"]: (
+                    order_repository.persist(order, created_at)
+                ),
+            )
+            if not executed:
+                order_repository.verify_matches(order_event["order"])
+            logger.info("order_persisted", extra={"event": "order_persisted"})
         except PermanentProcessingError as exc:
             logger.warning(
                 "permanent_order_failure",
@@ -90,7 +88,6 @@ def handler(
             )
             failures.append({"itemIdentifier": message_id})
         except Exception as exc:  # noqa: BLE001
-            # Includes explicit transient failures and unknown dependency errors.
             logger.error(
                 "order_processing_failed",
                 extra={"event": "transient_failure", "error_type": type(exc).__name__},

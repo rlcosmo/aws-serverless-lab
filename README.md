@@ -4,7 +4,7 @@ AWS Serverless Lab is a hands-on lab for operating an event-driven order-process
 
 ## Architecture
 
-The deployed development environment includes an IAM-authorized HTTP API Gateway route, Lambda, SQS, DynamoDB, EKS, Istio, and an observability stack. Terraform in this repository manages the serverless resources, remote state backend, and private GLPI/Kestra host. The host is accessed through SSM; see [ops/itsm/README.md](ops/itsm/README.md). The active Orders API and worker run in EKS, but durable end-to-end order persistence is not implemented by the Python Lambda scaffold. See [docs/architecture.md](docs/architecture.md) for behavior and [docs/initial-audit.md](docs/initial-audit.md) for live evidence and remaining work.
+The deployed development environment includes an IAM-authorized HTTP API Gateway route, Lambda, SQS, DynamoDB, EKS, Istio, and an observability stack. Terraform in this repository manages the serverless resources, remote state backend, and private GLPI/Kestra host. The host is accessed through SSM; see [ops/itsm/README.md](ops/itsm/README.md). The Lambda path validates orders, queues versioned events, and stores order records idempotently in DynamoDB. The EKS Orders workloads are separate live deployments whose source manifests are not yet tracked here. See [docs/architecture.md](docs/architecture.md) for behavior and [docs/initial-audit.md](docs/initial-audit.md) for live evidence and remaining work.
 
 ## Repository Layout
 
@@ -42,7 +42,7 @@ Run the unit test suite with:
 python -m pytest
 ```
 
-The producer uses `ORDERS_QUEUE_URL` for its SQS destination. Tests run locally with Moto and do not connect to AWS. The consumer now uses a conditional DynamoDB idempotency claim when `ORDERS_TABLE_NAME` is configured. Its business processing function remains a seam, so this does not yet make real order processing durable.
+The producer uses `ORDERS_QUEUE_URL` for its SQS destination. Tests run locally with Moto and do not connect to AWS. The consumer requires `ORDERS_TABLE_NAME`, stores orders in DynamoDB, and uses conditional idempotency claims. The live API → SQS → Lambda → DynamoDB flow was smoke-tested with a synthetic order; submitting the same order twice persisted one matching record. This path stores order intake with `RECEIVED` status. It does not implement inventory, payments, or fulfillment.
 
 ### Lambda Artifacts
 
@@ -55,7 +55,7 @@ python scripts/validate_lambda_artifacts.py
 
 The deterministic archives contain only first-party `.py` files from `src/`. They omit pytest, Moto, and SDK packages; the handlers use the boto3/botocore SDK included in the AWS Lambda Python 3.12 runtime. `dist/` is ignored by Git. Rebuild after changing application code and before Terraform validation; Terraform expects both ZIP paths to exist.
 
-Run Terraform formatting and static validation locally. The DEV backend is an encrypted, versioned, access-restricted S3 bucket with native state locking; use `-backend=false` for local validation that must not read remote state:
+Build Lambda archives before Terraform planning so it uses the current source. Run Terraform formatting and static validation locally. The DEV backend is an encrypted, versioned, access-restricted S3 bucket with native state locking; use `-backend=false` for local validation that must not read remote state:
 
 ```bash
 terraform -chdir=terraform fmt -check -recursive

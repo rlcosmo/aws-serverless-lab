@@ -4,6 +4,7 @@ import base64
 import binascii
 import json
 import os
+from datetime import UTC, datetime
 from typing import Any
 
 import boto3
@@ -12,6 +13,7 @@ from botocore.config import Config
 from orders.shared.logging import get_logger
 from orders.shared.validation import (
     MAX_REQUEST_BYTES,
+    ORDER_EVENT_VERSION,
     OrderValidationError,
     validate_order,
 )
@@ -30,7 +32,7 @@ def _response(status_code: int, body: dict[str, Any]) -> dict[str, Any]:
 def handler(
     event: dict[str, Any], context: Any, *, sqs_client: Any | None = None
 ) -> dict[str, Any]:
-    """Validate an API request and publish a minimal event to SQS."""
+    """Validate an API request and publish the complete order event to SQS."""
     try:
         raw_body = event.get("body")
         if event.get("isBase64Encoded") is True:
@@ -69,9 +71,18 @@ def handler(
             retries={"max_attempts": 2, "mode": "standard"},
         ),
     )
-    message = {"event_type": "order.created", "version": 1, "order_id": order["order_id"]}
+    message = {
+        "event_type": "order.created",
+        "version": ORDER_EVENT_VERSION,
+        "order_id": order["order_id"],
+        "order": order,
+        "created_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+    }
     try:
-        client.send_message(QueueUrl=queue_url, MessageBody=json.dumps(message))
+        client.send_message(
+            QueueUrl=queue_url,
+            MessageBody=json.dumps(message, separators=(",", ":")),
+        )
     except Exception as exc:  # noqa: BLE001
         logger.error(
             "order_enqueue_failed",

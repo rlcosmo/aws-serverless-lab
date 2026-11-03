@@ -6,6 +6,7 @@ import boto3
 import pytest
 from moto import mock_aws
 
+from orders.consumer import handler as consumer_module
 from orders.consumer.handler import (
     PermanentProcessingError,
     TransientProcessingError,
@@ -15,6 +16,40 @@ from orders.consumer.handler import (
 )
 from orders.producer.handler import handler as producer_handler
 from orders.shared.validation import MAX_REQUEST_BYTES
+
+ORDER = {"order_id": "o-1", "items": [{"sku": "x", "quantity": 1}]}
+
+
+def order_event(order_id="o-1"):
+    order = {"order_id": order_id, "items": [{"sku": "x", "quantity": 1}]}
+    return {
+        "event_type": "order.created",
+        "version": 2,
+        "order_id": order_id,
+        "order": order,
+        "created_at": "2026-11-03T12:00:00Z",
+    }
+
+
+class ImmediateStore:
+    def execute_once(self, key, action):
+        action()
+        return True
+
+
+class RecordingRepository:
+    def __init__(self, failure=None):
+        self.failure = failure
+        self.persisted = []
+        self.verified = []
+
+    def persist(self, order, created_at):
+        if self.failure:
+            raise self.failure(order)
+        self.persisted.append((order, created_at))
+
+    def verify_matches(self, order):
+        self.verified.append(order)
 
 
 @mock_aws
@@ -29,7 +64,11 @@ def test_producer_validates_and_enqueues_order(monkeypatch):
 
     assert response["statusCode"] == 202
     assert json.loads(response["body"])["order_id"] == "o-1"
-    assert json.loads(sqs.receive_message(QueueUrl=queue_url)["Messages"][0]["Body"])["order_id"] == "o-1"
+    message = json.loads(sqs.receive_message(QueueUrl=queue_url)["Messages"][0]["Body"])
+    assert message["order_id"] == "o-1"
+    assert message["version"] == 2
+    assert message["order"] == {"order_id": "o-1", "items": [{"sku": "x", "quantity": 1}]}
+    assert message["created_at"].endswith("Z")
 
 
 def test_producer_rejects_bad_json():
@@ -136,23 +175,25 @@ def test_producer_configures_bounded_aws_timeouts_and_retries(monkeypatch):
     assert config.retries["max_attempts"] == 2
 
 
-def test_consumer_reports_only_failed_records(monkeypatch):
-    from orders.consumer import handler as consumer_module
-
-    def fail(order_id):
-        raise RuntimeError("temporary failure")
-
-    monkeypatch.setattr(consumer_module, "process_order", fail)
+def test_consumer_reports_only_failed_records():
+    repository = RecordingRepository(failure=lambda order: RuntimeError("temporary failure"))
     result = consumer_module.handler({"Records": [
-        {"messageId": "good", "body": json.dumps({"event_type": "order.created", "version": 1, "order_id": "o-1"})},
+        {"messageId": "good", "body": json.dumps(order_event())},
         {"messageId": "bad", "body": "not-json"},
-    ]}, None)
+    ]}, None, idempotency_store=ImmediateStore(), order_repository=repository)
     assert result == {"batchItemFailures": [{"itemIdentifier": "good"}, {"itemIdentifier": "bad"}]}
 
 
 def test_consumer_accepts_valid_record():
-    result = consumer_handler({"Records": [{"messageId": "m-1", "body": json.dumps({"event_type": "order.created", "version": 1, "order_id": "o-1"})}]}, None)
+    repository = RecordingRepository()
+    result = consumer_handler(
+        {"Records": [{"messageId": "m-1", "body": json.dumps(order_event())}]},
+        None,
+        idempotency_store=ImmediateStore(),
+        order_repository=repository,
+    )
     assert result == {"batchItemFailures": []}
+    assert repository.persisted == [(ORDER, "2026-11-03T12:00:00Z")]
 
 
 @pytest.mark.parametrize("body", ["not-json", json.dumps({"event_type": "order.created", "version": True, "order_id": "o-1"})])
@@ -162,22 +203,24 @@ def test_consumer_sends_invalid_messages_to_retry_and_redrive(body):
 
 
 def test_consumer_distinguishes_permanent_and_transient_failures(monkeypatch):
-    from orders.consumer import handler as consumer_module
-
     log_stream = io.StringIO()
     monkeypatch.setattr(consumer_module.logger.handlers[0], "stream", log_stream)
 
-    def process(order_id):
-        if order_id == "permanent":
+    def process(order):
+        if order["order_id"] == "permanent":
             raise PermanentProcessingError("bad business state")
         raise TransientProcessingError("temporary dependency outage")
 
-    monkeypatch.setattr(consumer_module, "process_order", process)
+    repository = RecordingRepository(failure=process)
     messages = [
-        {"messageId": order_id, "body": json.dumps({"event_type": "order.created", "version": 1, "order_id": order_id})}
+        {"messageId": order_id, "body": json.dumps(order_event(order_id))}
         for order_id in ("permanent", "transient")
     ]
-    result = consumer_module.handler({"Records": messages}, None)
+    result = consumer_module.handler(
+        {"Records": messages}, None,
+        idempotency_store=ImmediateStore(),
+        order_repository=repository,
+    )
     output = log_stream.getvalue()
     assert result["batchItemFailures"] == [
         {"itemIdentifier": "permanent"},
@@ -190,8 +233,6 @@ def test_consumer_distinguishes_permanent_and_transient_failures(monkeypatch):
 
 
 def test_consumer_delegates_duplicate_suppression_to_durable_store_contract(monkeypatch):
-    from orders.consumer import handler as consumer_module
-
     class TestStore:
         """Test double only; production idempotency requires a durable implementation."""
 
@@ -205,16 +246,20 @@ def test_consumer_delegates_duplicate_suppression_to_durable_store_contract(monk
             self.completed.add(key)
             return True
 
-    calls = []
-    monkeypatch.setattr(consumer_module, "process_order", lambda order_id: calls.append(order_id))
-    message = {"messageId": "m-1", "body": json.dumps({"event_type": "order.created", "version": 1, "order_id": "o-1"})}
+    repository = RecordingRepository()
+    message = {"messageId": "m-1", "body": json.dumps(order_event())}
     store = TestStore()
-    first = consumer_module.handler({"Records": [message]}, None, idempotency_store=store)
-    second = consumer_module.handler({"Records": [message]}, None, idempotency_store=store)
+    first = consumer_module.handler(
+        {"Records": [message]}, None, idempotency_store=store, order_repository=repository
+    )
+    second = consumer_module.handler(
+        {"Records": [message]}, None, idempotency_store=store, order_repository=repository
+    )
     assert first["batchItemFailures"] == second["batchItemFailures"] == []
-    assert calls == ["o-1"]
+    assert len(repository.persisted) == 1
+    assert repository.verified == [ORDER]
 
 
 def test_consumer_requires_message_id_to_report_partial_failure():
-    with pytest.raises(ValueError, match="messageId"):
+    with pytest.raises(TypeError, match="messageId"):
         consumer_handler({"Records": [{"body": "not-json"}]}, None)
