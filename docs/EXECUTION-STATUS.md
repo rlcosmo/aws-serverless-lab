@@ -1,8 +1,23 @@
 # CosmoTech AWS Lab — Execution Status
 
-Updated: 2026-11-04 18:47 UTC
+Updated: 2026-11-04 19:13 UTC
 
-## Pending-work validation — 2026-11-04
+## Current — approval-free DEV CI/CD pilot, 2026-11-04
+
+**Owner instruction:** “neste primeiro momento vamos testar ci/cd sem necessidade de nenhuma aprovação”. This explicitly supersedes the earlier approval/GMUD hold for the Orders API DEV pilot only. No human approval was fabricated; the DEV policy says approval_required=false. Billing, private repository visibility, AWS permissions, WAF and application authentication were not changed.
+
+- **Delivered:** GitHub Actions → immutable ECR artifact → scoped GitHub App → automatic GitOps PR merge → dedicated Argo CD → EKS. Original CI `41875936763` was reused; no unnecessary rebuild or full Python suite. Targeted automatic promotion run [41893014782](https://github.com/rlcosmo/cosmotech-orders-api/actions/runs/41893014782) SUCCESS. An initial promotion attempt exposed shallow Git history; fetch-depth=0 corrected only that cause.
+- **Scope/control:** API variable DEV_AUTO_PROMOTE=true; GitOps gitops/environments/dev/release-policy.json permits only an image-field change for orders-api-dev / namespace orders-api, checked against the successful CI SHA/digest. The App token remains scoped to GitOps. SHA-matched merge has no admin override. Argo owns EKS Deployment writes; Actions never patches it directly. GitOps automated validation run `41892515886` passed without reviewer jobs.
+- **PRs:** #1 MERGED by rlcosmo-cosmotech-gitops[bot], image promotion commit `be3b7bf1f7f9fd9e18aa2e2a1b72a8b6df3edcbd`; previous policy-fix PR #2 CLOSED without merge because the owner changed this DEV requirement. Branch/history retained. No fake QA/PO/Infra approval records or paid protections.
+- **Argo:** Synced / Healthy, conditions empty, last deployment operation Succeeded at promotion revision be3b7bf. Application/AppProject configuration was applied only to namespace argocd on the dedicated management K3s (SSM `1f222010-d08a-4c1a-aead-49a64a699c97`). Automatic sync and self-heal enabled, pruning disabled. Post-rollout validation SSM `76a80f01-67e2-4eb5-9e5d-205b93597dcd` SUCCESS; public authentication/API 401 and GitHub/EKS connectivity remain healthy.
+- **EKS release:** Deployment generation 11 rolled out successfully. Pod orders-api-54c9f6dfdb-zlc48, 2/2 Running, zero restarts. Image tag sha-106b861dae142628ec0ff5960b65fa4c2e95c563; actual container imageID equals `sha256:9a45e770876979144754ead545772a7c7225a2e281b6f09eceeda165e441a9e0`. Other workloads were not deployed.
+- **Smoke passed:** GET /health/live 200; GET /health/ready 200; GET /version 200 (2.0.0-lab); GET random nonexistent order 404 (exercises storage read); invalid POST /orders {} 400. No valid order was submitted. Evidence /tmp/cosmotech-dev-cicd-smoke.json; reusable script is in canonical API scripts/smoke_dev_release.py. Local-only port-forward was stopped. Full business/SQS processing is outside this deployment smoke scope.
+- **Versioned changes:** GitOps 1332b46 (DEV policy/validation/auto-sync), be3b7bf (App promotion), 8652768 (mode/rollback documentation); API 845cc94 (auto-merge), 09a3f9a (fetch ancestry), 1c497e2 (smoke script/docs). SHA image still derives from the tested application source 106b861; later API commits changed pipeline/tests/docs only. No new AWS resources or recurring infrastructure charges.
+- **Pause/rollback:** set DEV_AUTO_PROMOTE=false; disable auto_promote in the GitOps DEV policy and automated.enabled in the Application, then apply the current management manifests on K3s. Roll back application versions through GitOps to a known validated immutable image; no direct kubectl rollout undo or destructive force/prune. Mandatory approvals are a later governance decision, not a requirement silently removed from unrelated environments.
+
+**Result:** this first DEV CI/CD test is complete under the owner's new no-approval scope. The earlier governance/restore checkpoints below remain historical evidence; they no longer block this pilot. Future application source pushes use the normal test/build/scan/OIDC publish/automatic DEV promotion path.
+
+## Historical pending-work validation — 2026-11-04
 
 This checkpoint supersedes the historical continuation sections below. CD is **not complete**: no approved release, authorized merge, Argo sync or new EKS version rollout has occurred.
 

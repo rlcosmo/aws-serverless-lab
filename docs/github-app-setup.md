@@ -1,6 +1,16 @@
 # GitHub App para propostas de GitOps
 
-A App cria branches e pull requests no GitOps. Não aprova GMUD, não faz merge e não sincroniza o Argo CD.
+A App cria branches/PRs e, no piloto DEV autorizado pelo proprietário, faz merge automático de mudanças exclusivas de imagem após CI aprovado. Argo CD sincroniza o EKS. Não há aprovação humana simulada nem alteração direta do Deployment por Actions.
+
+## Modo atual — piloto DEV sem aprovações
+
+O proprietário autorizou explicitamente testar CI/CD sem aprovações neste primeiro momento. A dispensa está limitada a `orders-api-dev` / namespace `orders-api` e ao arquivo `gitops/apps/orders-api/dev/deployment.json`.
+
+`DEV_AUTO_PROMOTE=true` na API e `gitops/environments/dev/release-policy.json` no GitOps permitem o merge automático pela App somente após validar CI de origem, SHA/digest imutável e diff exclusivo do campo image. O merge usa o SHA exato do PR. A Application tem auto-sync/self-heal ativos e prune desativado. O workflow GitOps atual faz validação automatizada, sem jobs de reviewers/Environments.
+
+PR #1 mergeado pela App; PR #2 de gates fechado sem merge, mantendo histórico/branch. A imagem foi implantada pelo Argo CD, com Synced/Healthy e smoke HTTP aprovado. Nenhuma cobrança, chave, visibilidade de repositório, autenticação ou controle de acesso foi relaxado. Os gates de outros fluxos/ambientes não foram alterados.
+
+Para pausar: definir DEV_AUTO_PROMOTE=false, auto_promote=false na política DEV, syncPolicy.automated.enabled=false na Application e aplicar os manifests de bootstrap atuais do GitOps no K3s de gerenciamento. O bootstrap inicial da IaC é uma semente conservadora; após reconstrução, aplicar a configuração atual e versionada do GitOps. Reintroduzir aprovações exige uma nova decisão de governança; as opções históricas abaixo não são bloqueio deste piloto.
 
 1. Na conta `rlcosmo`, abra https://github.com/settings/apps/new.
 2. Nome: `rlcosmo-cosmotech-gitops` (precisa ser único). Homepage: `https://github.com/rlcosmo`. Deixe Callback URL vazio; desmarque Webhook → Active. Não habilite OAuth nem Device Flow.
@@ -11,17 +21,17 @@ A App cria branches e pull requests no GitOps. Não aprova GMUD, não faz merge 
 7. Em `cosmotech-orders-api → Settings → Secrets and variables → Actions`:
    - Variables: `GITOPS_APP_ID` = App ID. O workflow também aceita esse ID como Secret, como configurado pelo proprietário.
    - Secrets: `GITOPS_APP_PRIVATE_KEY` = conteúdo completo do `.pem`, incluindo BEGIN/END e as quebras de linha.
-8. Configuração validada em 2026-11-04: token de instalação restrito ao GitOps, leitura/escrita e criação do PR #1 aprovadas. Não há merge ou deploy automático.
+8. Configuração validada em 2026-11-04: token de instalação restrito ao GitOps, leitura/escrita e criação do PR #1 aprovadas. No piloto atual, o merge DEV e o sync Argo são automáticos por autorização explícita do proprietário.
 
 Links diretos: [variáveis](https://github.com/rlcosmo/cosmotech-orders-api/settings/variables/actions), [secrets](https://github.com/rlcosmo/cosmotech-orders-api/settings/secrets/actions).
 
-Proteção de branch privada está disponível em Pro/Team/Enterprise. Entretanto, **required reviewers de ambientes privados não está disponível em Free, Pro ou Team**; esse recurso exige Enterprise. Portanto, Pro sozinho não resolve os quatro gates configurados. A App não resolve essa limitação. O fluxo de release permanece bloqueado enquanto os quatro gates reais e a autorização GLPI/GMUD não estiverem comprovados. O proprietário informou que não alterou o plano. Não foi alterada cobrança nem visibilidade dos repositórios.
+Proteção de branch privada está disponível em Pro/Team/Enterprise. Entretanto, **required reviewers de ambientes privados não está disponível em Free, Pro ou Team**; esse recurso exige Enterprise. Portanto, Pro sozinho não resolve os quatro gates configurados. A App não resolve essa limitação. Fora da dispensa explícita deste piloto DEV, a governança de quatro gates e GLPI/GMUD continua sendo uma decisão futura; não se deve afirmar que o plano atual passou a oferecer essas proteções. O proprietário informou que não alterou o plano. Não foi alterada cobrança nem visibilidade dos repositórios.
 
 Referências: [registro da App](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app), [token de instalação no Actions](https://github.com/actions/create-github-app-token).
 
 Referências de proteções: [branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches), [required reviewers](https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments#required-reviewers).
 
-## Validação efetiva e bloqueio atual
+## Evidência histórica antes da dispensa DEV
 
 - O ID e a chave estão em repository Secrets. Nenhuma chave foi regenerada ou exposta. `orders-ci.yml` aceita ID via Variable ou Secret; a chave permanece exclusivamente Secret.
 - Execuções `41885072665` e `41885793878`: somente proposta, reutilizando imagem da execução aprovada `41875936763`. Sem novo build/scan. A segunda confirmou que o token vê somente `rlcosmo/cosmotech-gitops` e não lê o repositório privado de infraestrutura.
@@ -29,7 +39,7 @@ Referências de proteções: [branches](https://docs.github.com/en/repositories/
 - [PR #1](https://github.com/rlcosmo/cosmotech-gitops/pull/1), autor `app/rlcosmo-cosmotech-gitops`, está aberto, sem reviews aprovadas. Tag SHA e digest imutável conferidos; server dry-run aprovado. O check verify-protections falhou e os quatro gates foram pulados. O PR #2 propõe corrigir também o check terminal: se qualquer gate falhar/pular, release-approved deve terminar em FAILURE (teste negativo confirmado), em vez de SKIPPED. Essa correção ainda não foi mergeada.
 - **Isso bloqueia os jobs, mas não impõe bloqueio de merge no GitHub:** main tem `protected=false`; branch protection e rulesets retornam 403. Revisões e checks podem existir sem serem obrigatórios. Argo auto-sync desabilitado também não equivale a aprovação técnica. Nenhum merge, sync ou deploy foi executado.
 
-## Alternativas de governança — propostas, não implementadas
+## Governança futura — alternativas ainda não implementadas
 
 | Opção | Imposição técnica necessária | Custo/licenciamento e limites |
 |---|---|---|
