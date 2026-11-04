@@ -1,13 +1,13 @@
 # CosmoTech AWS Lab — Execution Status
 
-Updated: 2026-11-04 00:47 UTC
+Updated: 2026-11-04 00:50 UTC
 
 ## Scope and preservation
 
 - Main repository: `/opt/aws-serverless-lab`, branch `main`, remote `origin` is `https://github.com/rlcosmo/aws-serverless-lab.git`.
 - Independent MCP directory `cosmotech-infrastructure-mcp/` is pre-existing, untracked in this repository, and has not been inspected, modified, or staged.
 - No destructive Terraform action, data deletion, queue redrive, Git reset/clean/stash, or forced push was performed. Only temporary, newly-created Kubernetes routing objects from the failed external-endpoint experiment were removed. The pre-existing serverless DLQ message remains untouched.
-- Git `main` has pending, validated public-access documentation and Terraform changes. The independent untracked MCP directory remains unstaged.
+- Git `main` matches `origin/main` at `6af9abf`; the independent untracked MCP directory remains untouched and unstaged.
 - The earlier $100/month cap is removed by the current instruction. Cost checks and the existing $100 AWS Budget alert remain in place; the alert does not cap spending.
 
 ## Initial live audit
@@ -42,8 +42,8 @@ Updated: 2026-11-04 00:47 UTC
 - Terraform DEV state contains 58 resources; latest refreshed plan reports no changes. Public routing apply added 3 resources, 0 changed, 0 destroyed; WAF phase added 6 resources and later updated logging redaction in place.
 - `kubectl apply --dry-run=server` passed for the original ingress manifests; temporary failed Service/EndpointSlice/Endpoints/Ingress objects were removed. Existing observability ingress remains declaratively restricted by WAF and CIDR policy.
 - Python unit suite: 43 passed. Ruff: passed. `compileall`: passed. Shell syntax check: passed. `git diff --check`: passed after direct target-group and documentation changes.
-- Staged-file secret scan passed for the first public-access commit; no secrets, credentials, or runtime files were staged. Rerun after the current changes.
-- Commit `5045b68 feat(itsm): publish GLPI and Kestra through protected ALB` was pushed to `origin/main`. Direct Terraform listener/target-group routing and final access documentation are validated and ready for a separate commit and push.
+- Staged-file secret scans passed for both public-access commits; no secrets, credentials, or runtime files were published.
+- Commits pushed to `origin/main`: `5045b68 feat(itsm): publish GLPI and Kestra through protected ALB` and `6af9abf feat(itsm): route public domains to private EC2 target`.
 
 ## Costs and budgets
 
@@ -64,9 +64,10 @@ Updated: 2026-11-04 00:47 UTC
 
 ## Next steps
 
-1. Stage only reviewed main-repository paths, rerun the staged secret scan, commit, and push without force.
-2. Record the new commit hash here in a follow-up continuity update if needed.
-3. Continue with durable observability and safe recovery plan, then resolve human dependencies for real approval-gated ITSM workflows.
+1. Continue with durable observability and safe recovery plan.
+2. Investigate Cluster Autoscaler compatibility and denied API reads before changing RBAC or upgrading.
+3. Resolve real approver identities and an alert receiver before implementing approval-gated ITSM workflows or notification delivery.
+4. Track EKS Orders source/manifests and tests for retries, DLQ, idempotency, payment/inventory/fulfillment, and trace propagation.
 
 ## Rollback notes
 
