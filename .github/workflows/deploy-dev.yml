@@ -6,7 +6,7 @@ on:
     inputs:
       mode:
         type: choice
-        options: [approval-probe, deploy]
+        options: [approval-probe]
         default: approval-probe
         required: true
       change_id:
@@ -119,7 +119,7 @@ jobs:
           fi
       - name: Verify private connectivity or deploy the approved DEV change
         env:
-          DEPLOY_MODE: ${{ inputs.mode }}
+          DEPLOY_MODE: approval-probe
         run: bash scripts/deploy_eks.sh
       - uses: actions/upload-artifact@v4
         if: always()
