@@ -1,6 +1,6 @@
 # CosmoTech AWS Lab — Execution Status
 
-Updated: 2026-11-04 01:19 UTC
+Updated: 2026-11-04 01:21 UTC
 
 ## Scope and preservation
 
@@ -50,12 +50,12 @@ Updated: 2026-11-04 01:19 UTC
 - `terraform validate`: passed.
 - Terraform DEV state previously contained 58 resources; current state includes the four EBS CSI resources listed below. Public routing apply added 3 resources, 0 changed, 0 destroyed; WAF phase added 6 resources and logging redactions were updated in place.
 - The EBS CSI foundation Terraform apply added 4 resources, 0 changed, 0 destroyed; latest state includes the role, policy attachment, Pod Identity association, and add-on. StorageClass server-side dry-run and apply passed.
-- GitHub Actions `validate` run for `34771d9` completed successfully (`41751849803`). GitHub reports zero deployment environments.
+- GitHub Actions `validate` runs for `34771d9` (`41751849803`) and `dbfd751` (`41806774501`) completed successfully. GitHub reports zero deployment environments.
 - `kubectl apply --dry-run=server` passed for the original ingress manifests; temporary failed Service/EndpointSlice/Endpoints/Ingress objects were removed. Existing observability ingress remains declaratively restricted by WAF and CIDR policy.
 - Added `ops/kubernetes/cluster-autoscaler-observability-rbac.yaml`; Kubernetes server-side dry run and apply passed. Verified the service account can read scheduling APIs and get/update the named status ConfigMap. The Autoscaler status ConfigMap was created and no authorization errors appeared in the final 20-second log window. Existing node count remains 3; all were Ready.
 - Python unit suite: 43 passed. Ruff: passed. `compileall`: passed. Shell syntax check: passed. `git diff --check`: passed after direct target-group and documentation changes.
 - Staged-file secret scans passed for public-access and log-hardening commits; no secrets, credentials, or runtime files were published. The MCP directory remains untracked and unstaged.
-- Commits pushed to `origin/main`: `5045b68 feat(itsm): publish GLPI and Kestra through protected ALB`, `6af9abf feat(itsm): route public domains to private EC2 target`, `0382b40 docs: record public ITSM access implementation`, `ba3d88b fix(security): keep webhook keys out of access logs`, `6bd573d docs: record ITSM approval gates and blockers`, and `34771d9 fix(autoscaler): complete cluster autoscaler rbac permissions`.
+- Commits pushed to `origin/main`: `5045b68 feat(itsm): publish GLPI and Kestra through protected ALB`, `6af9abf feat(itsm): route public domains to private EC2 target`, `0382b40 docs: record public ITSM access implementation`, `ba3d88b fix(security): keep webhook keys out of access logs`, `6bd573d docs: record ITSM approval gates and blockers`, `34771d9 fix(autoscaler): complete cluster autoscaler rbac permissions`, and `dbfd751 feat(observability): enable encrypted gp3 storage driver`.
 
 ## Costs and budgets
 
