@@ -11,6 +11,7 @@ import boto3
 from botocore.config import Config
 
 from orders.shared.logging import get_logger
+from orders.shared.tracing import inject_trace, span
 from orders.shared.validation import (
     MAX_REQUEST_BYTES,
     ORDER_EVENT_VERSION,
@@ -79,10 +80,24 @@ def handler(
         "created_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
     }
     try:
-        client.send_message(
-            QueueUrl=queue_url,
-            MessageBody=json.dumps(message, separators=(",", ":")),
-        )
+        headers = event.get("headers") or {}
+        carrier = {
+            key.lower(): value for key, value in headers.items()
+            if isinstance(key, str) and key.lower() in {"traceparent", "tracestate"}
+            and isinstance(value, str)
+        }
+        with span("orders.enqueue", carrier):
+            trace_attributes = {
+                key: {"DataType": "String", "StringValue": value}
+                for key, value in inject_trace().items()
+            }
+            parameters = {
+                "QueueUrl": queue_url,
+                "MessageBody": json.dumps(message, separators=(",", ":")),
+            }
+            if trace_attributes:
+                parameters["MessageAttributes"] = trace_attributes
+            client.send_message(**parameters)
     except Exception as exc:  # noqa: BLE001
         logger.error(
             "order_enqueue_failed",

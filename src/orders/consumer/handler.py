@@ -7,8 +7,10 @@ from typing import Any, Protocol
 
 from orders.consumer.errors import PermanentProcessingError, TransientProcessingError
 from orders.consumer.idempotency import DynamoDBIdempotencyStore
+from orders.consumer.processing import DynamoDBOrderProcessor
 from orders.consumer.repository import DynamoDBOrderRepository, create_dynamodb_resource
 from orders.shared.logging import get_logger
+from orders.shared.tracing import span
 from orders.shared.validation import OrderValidationError, validate_order_event
 
 logger = get_logger(__name__)
@@ -41,14 +43,16 @@ def handler(
 ) -> dict[str, list[dict[str, str]]]:
     """Persist valid messages and report only failed SQS record identifiers."""
     table_name = os.environ.get("ORDERS_TABLE_NAME")
+    complete_processing = os.environ.get("ORDERS_PROCESSING_MODE", "intake") == "complete"
     if table_name and (idempotency_store is None or order_repository is None):
         resource = dynamodb_resource or create_dynamodb_resource(
             region_name=os.getenv("AWS_REGION")
         )
         idempotency_store = idempotency_store or DynamoDBIdempotencyStore(
-            table_name, dynamodb_resource=resource
+            table_name, dynamodb_resource=resource, namespace="V3" if complete_processing else "V2"
         )
-        order_repository = order_repository or DynamoDBOrderRepository(
+        repository_class = DynamoDBOrderProcessor if complete_processing else DynamoDBOrderRepository
+        order_repository = order_repository or repository_class(
             table_name, dynamodb_resource=resource
         )
 
@@ -72,12 +76,19 @@ def handler(
             if idempotency_store is None or order_repository is None:
                 raise TransientProcessingError("DynamoDB order storage is not configured")
 
-            executed = idempotency_store.execute_once(
-                order_event["order_id"],
-                lambda order=order_event["order"], created_at=order_event["created_at"]: (
-                    order_repository.persist(order, created_at)
-                ),
-            )
+            attributes = record.get("messageAttributes", {})
+            carrier = {
+                key: value["stringValue"] for key, value in attributes.items()
+                if key in {"traceparent", "tracestate"} and isinstance(value, dict)
+                and isinstance(value.get("stringValue"), str)
+            }
+            with span("orders.consume", carrier):
+                executed = idempotency_store.execute_once(
+                    order_event["order_id"],
+                    lambda order=order_event["order"], created_at=order_event["created_at"]: (
+                        order_repository.persist(order, created_at)
+                    ),
+                )
             if not executed:
                 order_repository.verify_matches(order_event["order"])
             logger.info("order_persisted", extra={"event": "order_persisted"})

@@ -24,14 +24,21 @@ def create_dynamodb_resource(*, region_name: str | None = None) -> Any:
 class DynamoDBOrderRepository:
     """Persist each order once and verify identical duplicate deliveries."""
 
-    def __init__(self, table_name: str, *, dynamodb_resource: Any | None = None) -> None:
+    def __init__(
+        self, table_name: str, *, dynamodb_resource: Any | None = None,
+        key_schema: str = "composite",
+    ) -> None:
         if not table_name:
             raise ValueError("table_name must not be empty")
         resource = dynamodb_resource or create_dynamodb_resource()
         self.table = resource.Table(table_name)
+        if key_schema not in {"composite", "legacy"}:
+            raise ValueError("Unsupported order key schema")
+        self.key_schema = key_schema
 
-    @staticmethod
-    def _key(order_id: str) -> dict[str, str]:
+    def _key(self, order_id: str) -> dict[str, str]:
+        if self.key_schema == "legacy":
+            return {"order_id": order_id}
         return {"pk": f"ORDER#{order_id}", "sk": "ORDER"}
 
     def persist(self, order: dict[str, Any], created_at: str) -> None:
@@ -46,7 +53,8 @@ class DynamoDBOrderRepository:
             "schema_version": 1,
         }
         try:
-            self.table.put_item(Item=item, ConditionExpression=Attr("pk").not_exists())
+            key_name = "order_id" if self.key_schema == "legacy" else "pk"
+            self.table.put_item(Item=item, ConditionExpression=Attr(key_name).not_exists())
         except self.table.meta.client.exceptions.ConditionalCheckFailedException:
             self.verify_matches(order)
 
@@ -58,5 +66,11 @@ class DynamoDBOrderRepository:
         ).get("Item")
         if existing is None:
             raise TransientProcessingError("Completed idempotency record has no order record")
-        if existing.get("items") != order["items"]:
+        existing_items = existing.get("items")
+        if self.key_schema == "legacy" and isinstance(existing_items, list):
+            existing_items = [
+                {"sku": item.get("sku", item.get("product_id")), "quantity": item.get("quantity")}
+                for item in existing_items
+            ]
+        if existing_items != order["items"]:
             raise PermanentProcessingError("Order ID already exists with different items")

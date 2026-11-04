@@ -1,4 +1,5 @@
 boto3==1.43.122
+-r requirements-observability.txt
 botocore==1.43.122
 certifi==2026.10.23
 cffi==2.1.1

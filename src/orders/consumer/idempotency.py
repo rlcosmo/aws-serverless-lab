@@ -32,6 +32,7 @@ class DynamoDBIdempotencyStore:
         clock: Callable[[], float] = time.time,
         claim_seconds: int = DEFAULT_CLAIM_SECONDS,
         completed_ttl_seconds: int = DEFAULT_COMPLETED_TTL_SECONDS,
+        namespace: str = "V2",
     ) -> None:
         if not table_name:
             raise ValueError("table_name must not be empty")
@@ -40,6 +41,7 @@ class DynamoDBIdempotencyStore:
         self.clock = clock
         self.claim_seconds = claim_seconds
         self.completed_ttl_seconds = completed_ttl_seconds
+        self.namespace = namespace
         self._table: Any | None = None
 
     def _get_table(self) -> Any:
@@ -51,7 +53,7 @@ class DynamoDBIdempotencyStore:
     def execute_once(self, key: str, action: Callable[[], None]) -> bool:
         now = int(self.clock())
         claim_id = str(uuid.uuid4())
-        item_key = {"pk": f"IDEMPOTENCY#V2#{key}", "sk": "STATE"}
+        item_key = {"pk": f"IDEMPOTENCY#{self.namespace}#{key}", "sk": "STATE"}
         table = self._get_table()
         try:
             table.update_item(
