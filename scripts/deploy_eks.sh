@@ -3,7 +3,7 @@ set -Eeuo pipefail
 umask 077
 
 mode="${DEPLOY_MODE:?DEPLOY_MODE is required}"
-[[ "$mode" == approval-probe || "$mode" == deploy ]] || exit 2
+[[ "$mode" == approval-probe ]] || { echo "Use reviewed GitOps and Argo CD for deployment" >&2; exit 2; }
 [[ "${GITHUB_SHA:?}" =~ ^[a-f0-9]{40}$ ]] || exit 2
 [[ "${GITHUB_REF:?}" == refs/heads/main ]] || exit 2
 
@@ -35,7 +35,11 @@ aws eks update-kubeconfig --region "$region" --name "$cluster" --kubeconfig "$KU
 endpoint="$(aws eks describe-cluster --region "$region" --name "$cluster" --query cluster.endpoint --output text)"
 context="arn:aws:eks:$region:$account:cluster/$cluster"
 kubectl config set-cluster "$context" --server=https://127.0.0.1:8443 --tls-server-name="${endpoint#https://}"
-kubectl auth can-i patch deployment/orders-api -n orders-api
+kubectl auth can-i get deployment/orders-api -n orders-api
+if kubectl auth can-i patch deployment/orders-api -n orders-api; then
+  echo "Unexpected API deployment write access in the legacy connectivity identity" >&2
+  exit 1
+fi
 kubectl auth can-i patch deployment/orders-worker -n orders-worker
 if kubectl auth can-i get secrets -n orders-api; then
   echo 'Unexpected Secret read access; deployment blocked.' >&2

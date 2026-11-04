@@ -1,5 +1,8 @@
 # Architecture
 
+
+Current delivery plane (2026-11-04): GitHub Actions → immutable ECR image → reviewed GitOps PR → Argo CD on dedicated private EC2/K3s → EKS Orders namespace. Argo CD is outside EKS and the ITSM host. Existing ALB/ACM/WAF publish authenticated HTTPS; K3s API, Redis and management ports remain private. Kestra Automation runs separately from personal Kestra on the original private ITSM EC2. Terraform, Kubernetes RBAC and GitOps have separate canonical repositories linked in README. Application promotion remains blocked until actual GMUD/human approvals; older implementation details below are historical where superseded.
+
 ## Purpose and Scope
 
 This document distinguishes the implemented serverless path from the intended end state. Terraform manages the serverless API, Lambda, SQS, DynamoDB, CloudWatch resources, the private GLPI/Kestra host, and the DEV S3 state backend. The live EKS and observability stacks are still not declared here. Review plans and assess data, security, and operational impact before infrastructure changes.

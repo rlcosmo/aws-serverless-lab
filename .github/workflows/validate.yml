@@ -4,6 +4,7 @@ on:
   pull_request:
   push:
     branches: [main]
+    paths: [src/**, tests/**, scripts/**, requirements*.txt, .github/workflows/validate.yml]
   workflow_dispatch:
 
 permissions:
@@ -26,23 +27,3 @@ jobs:
       - run: python -m compileall -q src tests
       - run: python scripts/build_lambda_artifacts.py
       - run: python scripts/validate_lambda_artifacts.py
-
-  terraform:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.17.1
-          terraform_wrapper: false
-      - name: Check formatting
-        run: terraform -chdir=terraform fmt -check -recursive
-      - name: Validate bootstrap backend
-        run: |
-          terraform -chdir=terraform/bootstrap/state_backend init -backend=false -input=false
-          terraform -chdir=terraform/bootstrap/state_backend validate
-      - name: Validate DEV
-        run: |
-          python scripts/build_lambda_artifacts.py
-          terraform -chdir=terraform/environments/dev init -backend=false -input=false
-          terraform -chdir=terraform/environments/dev validate

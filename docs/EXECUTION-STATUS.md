@@ -1,6 +1,41 @@
 # CosmoTech AWS Lab — Execution Status
 
-Updated: 2026-11-04 15:44 UTC
+Updated: 2026-11-04 16:12 UTC
+
+## Latest continuation — 2026-11-04 16:12 UTC
+
+This is the current checkpoint; all earlier checkpoints below are historical where superseded.
+
+| Area | Completed | Pending / blocked |
+|---|---|---|
+| Grafana | Exact-host WAF allowance + per-IP limit, HTTPS/login 200, anonymous API 401; other dashboard restrictions retained; password never retrieved or reset | Owner validates current-password login, dashboards and datasource access in browser |
+| Backups | Previous Snap systemd/PV RBAC fixes preserved; Tempo job `2313d3cc-9bed-4ed4-9a02-71d5496e0697` COMPLETED; both daily timers active; fresh logical backup command `b980483f-034c-4257-8afc-a62f427912ad` succeeded, including the Automation database; all artifact SHA256 checks passed | Isolated restore of latest Tempo snapshot and full Argo EC2 boot restore remain pending; logical cleanup is manual |
+| SSM | CloudTrail denial identified; new maintenance-role session successfully executes only approved fixed documents on the ITSM host | No AdministratorAccess or wildcard shell grant added |
+| Kestra Automation | Private independent engine/DB/storage; runner ownership and startup retries fixed; health check active; functional GLPI workflow SUCCESS; logs/auth/restart persistence passed; personal services unchanged | GitHub App owner configuration for cross-repository integration |
+| GitHub | Six private component repositories published with original ancestry; original files retained as frozen snapshots; MCP untouched; Worker extraction deferred | IaC retains required first-party bootstrap/Lambda build snapshots until artifact references replace file() dependencies |
+| Dedicated Argo host | `i-0b33fdd51332e04e5`, private IP `10.20.11.199`, t3.large, encrypted 40 GiB gp3, no public IP/SSH, IMDSv2, SSM, monitoring/alarm, backup selection; both EC2 checks OK | Initial EC2 backup job `1aca94d0-d3fc-4b5d-bde1-b38b62dc8dd8` is RUNNING; completion must be checked |
+| K3s / Argo | K3s `v1.37.1+k3s1`, Helm `v4.3.1`, chart `10.12.1`; Ready components, authenticated public HTTPS/API 401; GitHub read-only deploy key; EKS role + namespace RBAC; post-reboot login/GitHub/EKS checks passed; a fresh controller argocd-k8s-auth token was accepted by EKS without exposing/storing it | Pilot `orders-api-dev` is Healthy / OutOfSync, manual sync only; no application deployment performed |
+| CD ownership | Argo role limited to orders-api; no Secret access or Worker writes. Legacy GitHub identity can read but no longer patch Orders API; legacy script deploy mode blocked | GitHub rejected private-repository reviewer protections (422) and branch protection readback (403). The new workflow fails closed unless all four real reviewer rules and branch protection are verified; no effective gate protection is claimed |
+| CI | Orders test/build/Trivy/ECR workflow configured with SHA tags and repository-scoped AWS OIDC; existing ECR is IMMUTABLE. IaC fmt/validate + read-only OIDC no-refresh plan configured | New workflow runs still report queued/no runner; new image/ECR publication and scan success are NOT claimed. IaC CI plan is not a refreshed deployment plan |
+
+Argo URL: https://argocd.cosmotechsolutions.com.br/ . Admin credential and read-only GitHub key are in Secrets Manager `cosmotech/argocd/admin` and `cosmotech/argocd/github-deploy-key`; values never entered Git, Helm or Terraform. Root-only K3s SQLite/config backup passed integrity/SHA256, daily timer active; daily encrypted EC2 backup reuses the existing vault/plan. No extra ALB, EKS cluster or NAT was created. Bootstrap/rollback/restore details live in the canonical infrastructure README.
+
+Canonical checkouts are under `/home/lab/cosmotech-repositories/`. Only `cosmotech-infrastructure-iac/terraform/environments/dev` now manages the original S3 backend/key; no state migration or duplicate state. Never apply the frozen main-repository Terraform snapshot. Two unrelated legacy Lambda ZIP updates were excluded from reviewed applies and remain for explicit review.
+
+Approximate new baseline: Argo t3.large USD 60.74/month (AWS Pricing API USD 0.0832/hour × 730), 40 GiB gp3 ~USD 3.20, two Secrets ~USD 0.80, Argo WAF rules ~USD 2; Grafana rules add another ~USD 2. Total ~USD 68.74/month incremental before monitoring, snapshots, traffic/logs and taxes. Existing ALB/NAT/EKS costs continue; no spending cap is enforced.
+
+Validation: 77 Python tests and Ruff passed before extraction; targeted bootstrap Ruff and shell syntax passed; Terraform formatting/validation and fresh reviewed non-destructive plans passed; IAM Access Analyzer found no findings in the new read-only CI policy; Kubernetes dry-run and actual authorization checks passed. Published main CI/security runs `41860054555` and `41860053365` succeeded. Later component workflows remain unverified until GitHub allocates runners; do not report them as passed.
+
+Next actions: obtain actual GitHub CI results; resolve runner queue if it persists; verify ECR SHA image before proposing its immutable digest in GitOps; owner configures repository-limited GitHub App (App ID variable + private key secret, never in chat); owner enables a GitHub plan supporting the required private-repository protections and configures/read-backs all four real reviewer rules; real reviewers approve the release before merge/manual Argo sync. Obtain browser-only Grafana confirmation; check initial Argo EC2 backup completion and schedule isolated restore tests. Continue independent Worker/artifact extraction later.
+
+Published code commits in main: `201dba1`, `c6f02e4`, `6f3e67f`. Component publication commits:
+- `cosmotech-infrastructure-iac`: `62a8df2`.
+- `cosmotech-kubernetes-rbac`: `c6c2bbb`.
+- `cosmotech-gitops`: `b7051c5`.
+- `cosmotech-orders-api`: `c5770a2`.
+- `cosmotech-observability`: `4e97c6b`.
+- `cosmotech-automation`: `41c4215`.
+Additional published updates: infrastructure `6791637`, `9d41aa6`; GitOps workflow `05e4214` and fail-closed guard `418af25`; observability `4ad66dd`, `965c55a`; RBAC API write removal `7ab9306`. Documentation/index publication is the final main commit for this continuation.
 
 ## Active continuation — 2026-11-04 15:44 UTC
 

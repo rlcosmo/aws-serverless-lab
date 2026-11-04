@@ -1,5 +1,21 @@
 # AWS Serverless Lab
 
+
+## Canonical repositories
+
+This repository is the lab index and preserves migration snapshots. Active ownership is now:
+
+- [Infrastructure / Terraform](https://github.com/rlcosmo/cosmotech-infrastructure-iac) — the only manager of the existing S3 backend/state.
+- [Kubernetes RBAC](https://github.com/rlcosmo/cosmotech-kubernetes-rbac).
+- [GitOps / Argo CD](https://github.com/rlcosmo/cosmotech-gitops).
+- [Orders API / CI](https://github.com/rlcosmo/cosmotech-orders-api).
+- [Observability / backups](https://github.com/rlcosmo/cosmotech-observability).
+- [GLPI / Kestra Automation](https://github.com/rlcosmo/cosmotech-automation).
+
+All six are private and preserve original commit ancestry. Original files remain as frozen migration snapshots; do not apply Terraform or deploy applications from them. Worker extraction is deferred; the independent MCP repository remains untouched. Some first-party source is retained in IaC as bootstrap/Lambda build snapshots until component artifact references are migrated.
+
+Argo CD: https://argocd.cosmotechsolutions.com.br/ — dedicated private EC2 with K3s, authenticated HTTPS through the existing ALB. GitHub Actions builds/publishes images; Argo CD owns Orders API delivery. Real GMUD/human gates remain mandatory; private-repository protection setup was rejected by the current GitHub plan, so releases remain blocked. See [current execution status](docs/EXECUTION-STATUS.md) and the infrastructure repository README for deploy, backup and rollback procedures.
+
 AWS Serverless Lab is a hands-on lab for operating an event-driven order-processing service with AWS managed services, plus an existing EKS and observability environment. It uses Python 3.12 and Boto3 for application code and Terraform for the serverless resources represented in this repository.
 
 ## Architecture
