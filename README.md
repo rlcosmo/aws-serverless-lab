@@ -9,10 +9,11 @@ This repository is the lab index and preserves migration snapshots. Active owner
 - [Kubernetes RBAC](https://github.com/rlcosmo/cosmotech-kubernetes-rbac).
 - [GitOps / Argo CD](https://github.com/rlcosmo/cosmotech-gitops).
 - [Orders API / CI](https://github.com/rlcosmo/cosmotech-orders-api).
+- [Orders Worker / CI](https://github.com/rlcosmo/cosmotech-orders-worker).
 - [Observability / backups](https://github.com/rlcosmo/cosmotech-observability).
 - [GLPI / Kestra Automation](https://github.com/rlcosmo/cosmotech-automation).
 
-All six are private and preserve original commit ancestry. Original files remain as frozen migration snapshots; do not apply Terraform or deploy applications from them. Worker extraction is deferred; the independent MCP repository remains untouched. Some first-party source is retained in IaC as bootstrap/Lambda build snapshots until component artifact references are migrated.
+All seven are private and preserve original commit ancestry. Original files remain as frozen migration snapshots; do not apply Terraform or deploy applications from them. Worker source and CI are extracted; ECR publication and Argo activation require the scoped delivery prerequisites; the independent MCP repository remains untouched. Some first-party source is retained in IaC as bootstrap/Lambda build snapshots until component artifact references are migrated.
 
 Argo CD: https://argocd.cosmotechsolutions.com.br/ — dedicated private EC2 with K3s, authenticated HTTPS through the existing ALB. GitHub Actions builds/publishes images; Argo CD owns Orders API delivery. The owner authorized the first Orders API DEV pilot without approvals: successful image-only CI promotions merge automatically and Argo CD deploys to EKS. Governance options remain documented for a later phase. See [current execution status](docs/EXECUTION-STATUS.md) and the infrastructure repository README for deploy, backup and rollback procedures.
 
