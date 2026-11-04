@@ -1,6 +1,10 @@
 # CosmoTech AWS Lab — Execution Status
 
-Updated: 2026-11-04 19:13 UTC
+Updated: 2026-11-04 22:40 UTC
+
+## Current — automatic API and worker delivery, 2026-11-04
+
+Owner explicitly requested automatic CI/CD without approvals for both applications; approval stages come later. Worker repository is private and published; all coordinated PRs are merged. API CI [41924915236](https://github.com/rlcosmo/cosmotech-orders-api/actions/runs/41924915236), worker CI [41924664660](https://github.com/rlcosmo/cosmotech-orders-worker/actions/runs/41924664660) and GitOps delivery [41925158406](https://github.com/rlcosmo/cosmotech-gitops/actions/runs/41925158406) succeeded. Automatic image PRs #4/#5 merged through the existing App. Both Argo Applications are automated; both app HPAs and HTTPS hosts are declared and delivered. Hosts: orders-api-dev.cosmotechsolutions.com.br and orders-worker-dev.cosmotechsolutions.com.br (worker health only). Details, evidence, permissions and rollback: [Orders delivery](orders-worker-delivery.md). The older API-only/pending-worker entries below are historical and superseded by this delivery.
 
 ## Current — approval-free DEV CI/CD pilot, 2026-11-04
 
