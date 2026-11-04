@@ -1,6 +1,26 @@
 # CosmoTech AWS Lab — Execution Status
 
-Updated: 2026-11-04 17:28 UTC
+Updated: 2026-11-04 18:47 UTC
+
+## Pending-work validation — 2026-11-04
+
+This checkpoint supersedes the historical continuation sections below. CD is **not complete**: no approved release, authorized merge, Argo sync or new EKS version rollout has occurred.
+
+- **App validated:** ID was stored as a repository Secret, rather than Variable; workflow now supports both without exposing values or replacing the key. Targeted runs [41885072665](https://github.com/rlcosmo/cosmotech-orders-api/actions/runs/41885072665) and [41885793878](https://github.com/rlcosmo/cosmotech-orders-api/actions/runs/41885793878) SUCCESS. They reused the approved image artifact; build/test/scan/publish jobs were skipped. Token explicitly requested only GitOps Contents/Pull requests write + Metadata read; runtime test found exactly one accessible repository and denied access to private infrastructure. Authentication errors stop before checkout/write; no PAT fallback.
+- **Image CI remains approved:** original run `41875936763` SUCCESS; ECR repository IMMUTABLE, tag `sha-106b861dae142628ec0ff5960b65fa4c2e95c563`, digest `sha256:9a45e770876979144754ead545772a7c7225a2e281b6f09eceeda165e441a9e0`. No new image build was required. IaC run `41876857339` is now SUCCESS too; two legacy Lambda ZIP changes were never applied.
+- **GitOps PR [#1](https://github.com/rlcosmo/cosmotech-gitops/pull/1):** OPEN, author `app/rlcosmo-cosmotech-gitops`, head `95ef119a65825ea38fc3b076caa1c9f5792eba5c`; one deployment image-field change only, including SHA tag and pinned digest. Kubernetes server dry-run passed. No approved reviews. verify-protections failed and native approval jobs were skipped; main remains unprotected. No merge or deployment.
+- **Guard fix PR [#2](https://github.com/rlcosmo/cosmotech-gitops/pull/2):** OPEN, branch `fix/fail-closed-release-check`, commit `553ac14`. The final release check must run even when upstream jobs skip/fail and reject any non-success result. Actual negative test: verify-protections FAILURE, four stages SKIPPED, terminal release-approved FAILURE. Not merged; GitOps main still uses the previous guard. A failed workflow is not technical merge protection while main is unprotected.
+- **Governance block:** private branch protection and rulesets return 403; owner type User; dev Environment exists without reviewer rules. PR reviews/checks are not technically mandatory in the current plan. Four-stage private native Environment reviewers require Enterprise, not Pro/Team. The existing public index has the four native reviewer environments. Options A/B/C with costs, trust boundaries and implementation requirements are in [the existing setup guide](github-app-setup.md). No billing, visibility, organization transfer or approval-mechanism change was made. Owner must choose/authorize a solution before release.
+- **Argo/EKS:** authenticated public API and GitHub/EKS connectivity pass; `orders-api-dev` Healthy/OutOfSync, conditions empty, desired main revision `418af25df4b5ae43b0d0e4f7dd77fc963c3e07b5`. Main has not changed: the unmerged PR image is correctly not the desired main release. EKS still runs `otel-20261103-014209`. Auto-sync remains disabled; this is not equivalent to approval enforcement.
+- **Admin secret located:** `arn:aws:secretsmanager:us-east-1:414053644145:secret:cosmotech/argocd/admin-hLO0zy`, name `cosmotech/argocd/admin`, region us-east-1, active, JSON username admin/password present. GetSecretValue succeeded as `arn:aws:iam::414053644145:user/serverless-lab-admin`; no AccessDenied or password reset. No value was printed. Console path: select account 414053644145 → US East (N. Virginia)/us-east-1 → Secrets Manager → Secrets → search exact name → open secret → Retrieve secret value → JSON password field. Use this navigation rather than the failed deep link.
+- **Grafana:** login HTTP 200, `/api/health` database ok. Owner explicitly answered “validado” to admin login, dashboard and datasource-query checks. Password was never retrieved or reset. Container is shell-less, so no diagnostic tool was installed and no service changed.
+- **Automation restore:** SSM `92706722-5919-449e-8c07-a52f9c143262` SUCCESS. Dump capture `20261104T160813Z` restored into a distinct PostgreSQL container/volume, network none, zero published ports. SHA256 passed; restored 25 public tables, 11 flow records, 2 executions, 21 logs. Test container stopped; live DB untouched. Root-only evidence `/opt/cosmotech/backups/restore-tests/automation-20261104T182026Z/evidence.json`; test volume retained. Scope is database recovery; engine boot and local storage artifacts were not exercised.
+- **Argo config restore:** SSM `b2f4a769-c3b5-4db1-b6ce-263210895f41` SUCCESS. Capture `20261104T155928Z` copied/extracted into a new root-only restore directory; checksum/SQLite integrity passed, five config files recovered, Helm/Application/AppProject/repository/cluster records present. Six encrypted Argo Secrets decrypted and format-validated only in memory using the backed-up encryption configuration. No controller started or live data changed; full EC2 boot is not claimed. Evidence under `/opt/cosmotech/backups/argocd/restore-tests/*/evidence.json`. Script lives in canonical IaC `scripts/restore_argocd_config_isolated.py`, outside the bootstrap payload.
+- **Tempo restore evidence reused:** existing AWS restore `78ccf942-4af4-4f8f-844e-be30d35c3d0a` is COMPLETED; snapshot `snap-0da8501e7373d8447`, encrypted restored volume `vol-048aa25041c575363`, prior isolated query returned 20 historical traces/38 blocks at 10:39 UTC. See canonical observability `docs/observability-recovery.md` and protected `tempo-consistent-query-evidence.json`. No repeat restore/new EBS volume was necessary. This proves that prior consistent capture; latest timer snapshot `snap-0f1e942f10d61e0ed` has not separately been restored.
+- **Scope/cost:** no new AWS resources, paid plan, key rotation, component reinstall or application rollout. Existing-host restoration tests used bounded CPU/memory and retained protected copies; source data/volumes and independent MCP remain untouched. Evidence/backup data/secrets were not published.
+- **Published changes:** Orders `8d86312`, `bd2d8c0`; Automation `8cb68d1`; IaC `b2d8c2b`, `03c28ef`; GitOps policy fix `553ac14` only on the unmerged PR #2 branch. Validation: shell/Python/workflow syntax, live App scope/PR creation/idempotency, server dry-run, actual isolated restores and expected negative guard outcome. No full Python suite was repeated.
+
+**Next:** owner selects governance option, enables the corresponding technical controls, records real GLPI/GMUD + DEV/QA/PO-PM/Infra-SRE approvals for the exact PR/head SHA/digest, then authorizes merge. Only after that may Argo sync and EKS version/rollout be validated. No owner approval is inferred from this operational work.
 
 ## Finalization — 2026-11-04
 
@@ -10,9 +30,9 @@ Updated: 2026-11-04 17:28 UTC
 - Current owner dependencies: GitHub App configuration (instructions requested and provided) and private-environment reviewer capability. Owner said the GitHub plan is unchanged. App setup can proceed independently; it cannot approve releases or bypass the missing protections. See [setup guide](github-app-setup.md).
 - New published commits: Orders `106b861`; infrastructure `5c17fcf`, `ea55093`. This finalization created no resources and added no recurring resource cost. Terraform changed only OIDC trust subjects and scoped CI read permissions.
 
-## Latest continuation — 2026-11-04 16:12 UTC
+## Historical continuation — 2026-11-04 16:12 UTC
 
-This is the current checkpoint; all earlier checkpoints below are historical where superseded.
+This checkpoint is historical; the pending-work validation above is authoritative.
 
 | Area | Completed | Pending / blocked |
 |---|---|---|
