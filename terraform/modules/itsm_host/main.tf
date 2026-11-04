@@ -111,7 +111,8 @@ resource "aws_security_group" "this" {
 
   lifecycle {
     create_before_destroy = true
-    ignore_changes        = [egress]
+    # Ingress and egress rules are managed as standalone rule resources.
+    ignore_changes = [egress, ingress]
   }
 }
 

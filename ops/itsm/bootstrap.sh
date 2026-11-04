@@ -69,5 +69,6 @@ aws ssm put-parameter --name /cosmotech/itsm/glpi/admin-password --type SecureSt
 aws ssm put-parameter --name /cosmotech/itsm/kestra/admin-password --type SecureString --overwrite --value "$KESTRA_ADMIN_PASSWORD" >/dev/null
 
 unset GLPI_DB_PASSWORD GLPI_DB_ROOT_PASSWORD KESTRA_DB_PASSWORD GLPI_ADMIN_PASSWORD KESTRA_ADMIN_PASSWORD KESTRA_ENCRYPTION_SECRET_KEY
+bash "$SCRIPT_DIR/install-public-proxy.sh"
 touch /var/lib/cosmotech-itsm-apps-ready
 printf '%s\n' 'CosmoTech ITSM stack is ready; credentials were written to encrypted SSM Parameter Store.'

@@ -20,7 +20,7 @@ kestra:
     basic-auth:
       username: ${KESTRA_ADMIN_USERNAME}
       password: ${KESTRA_ADMIN_PASSWORD}
-    url: http://localhost:8081/
+    url: https://kestra.cosmotechsolutions.com.br/
   security:
     instance-owner:
       username: ${KESTRA_ADMIN_USERNAME}
