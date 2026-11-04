@@ -5,6 +5,7 @@ umask 077
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 DATA_DIR=/opt/cosmotech/itsm
 SECRETS_DIR=/opt/cosmotech/secrets/itsm
+IDENTITY_MARKER=/var/lib/cosmotech-itsm-identities-initialized
 ENV_FILE="$SECRETS_DIR/runtime.env"
 APP_CONFIG="$DATA_DIR/application.yaml"
 COMPOSE=(docker compose --project-name cosmotech-itsm --env-file "$ENV_FILE" --file "$SCRIPT_DIR/docker-compose.yml")
@@ -59,14 +60,16 @@ curl --silent --fail --max-time 5 http://127.0.0.1:8080/ >/dev/null
 
 # GLPI's installer creates well-known sample users. Rotate the administrator
 # password and disable the unused sample accounts before declaring bootstrap done.
-"${COMPOSE[@]}" exec -T glpi php bin/console user:reset_password --no-interaction --password "$GLPI_ADMIN_PASSWORD" glpi >/dev/null
-for username in tech normal post-only; do
-  "${COMPOSE[@]}" exec -T glpi php bin/console user:disable --no-interaction "$username" >/dev/null
-done
-
-# Store only the generated administrator credentials in encrypted Parameter Store.
-aws ssm put-parameter --name /cosmotech/itsm/glpi/admin-password --type SecureString --overwrite --value "$GLPI_ADMIN_PASSWORD" >/dev/null
-aws ssm put-parameter --name /cosmotech/itsm/kestra/admin-password --type SecureString --overwrite --value "$KESTRA_ADMIN_PASSWORD" >/dev/null
+if [ ! -e "$IDENTITY_MARKER" ] && [ ! -e /var/lib/cosmotech-itsm-apps-ready ]; then
+  "${COMPOSE[@]}" exec -T glpi php bin/console user:reset_password --no-interaction --password "$GLPI_ADMIN_PASSWORD" glpi >/dev/null
+  for username in tech normal post-only; do
+    "${COMPOSE[@]}" exec -T glpi php bin/console user:disable --no-interaction "$username" >/dev/null
+  done
+  # Only initial provisioning may write bootstrap administrator credentials.
+  aws ssm put-parameter --name /cosmotech/itsm/glpi/admin-password --type SecureString --overwrite --value "$GLPI_ADMIN_PASSWORD" >/dev/null
+  aws ssm put-parameter --name /cosmotech/itsm/kestra/admin-password --type SecureString --overwrite --value "$KESTRA_ADMIN_PASSWORD" >/dev/null
+fi
+touch "$IDENTITY_MARKER"
 
 unset GLPI_DB_PASSWORD GLPI_DB_ROOT_PASSWORD KESTRA_DB_PASSWORD GLPI_ADMIN_PASSWORD KESTRA_ADMIN_PASSWORD KESTRA_ENCRYPTION_SECRET_KEY
 bash "$SCRIPT_DIR/install-public-proxy.sh"

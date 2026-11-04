@@ -48,6 +48,7 @@ def main() -> None:
         })
     checks = [
         (f"https://glpi.{DOMAIN}/", 200),
+        (f"https://glpi.{DOMAIN}/api.php/v2/Assistance/Ticket", 401),
         (f"https://kestra.{DOMAIN}/api/v1/instance", 401),
         (f"https://grafana.{DOMAIN}/", 403),
         (f"https://prometheus-aws-eks-istio-lab-dev.{DOMAIN}/", 403),

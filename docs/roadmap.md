@@ -1,31 +1,23 @@
-# Implementation backlog
+# Remaining implementation work
 
-The cloud environment already contains live workloads and user data. Changes are made incrementally, with Terraform plans and health checks reviewed before applying. Deletion, replacement of data-bearing resources, and destructive recovery actions are out of scope.
+Current evidence and historical execution are in [EXECUTION-STATUS.md](EXECUTION-STATUS.md). Existing healthy installations must be preserved.
 
-## Completed in this implementation
+## Completed foundation
 
-- Restricted the API Gateway order route to AWS IAM authorization and verified anonymous calls receive 403.
-- Restricted the existing observability ALB ingress to the existing administrator source range.
-- Created a versioned, encrypted, TLS-only private S3 backend with native lock files and migrated DEV Terraform state.
-- Added a reusable Terraform module for a private Ubuntu 24.04 `t3.large` host with encrypted gp3 storage, IMDSv2, dedicated IAM/SG, SSM access, EKS read-only access, and AWS Backup retention.
-- Created the ITSM EC2 in the existing private subnet; SSM and Docker Compose health checks pass after a host restart.
-- Deployed pinned Docker Compose definitions for separate GLPI/MariaDB and Kestra/PostgreSQL services, local-only listeners, generated credentials, and operational runbook. Authenticated Kestra API succeeds. GLPI's UI login and AWS Backup restore remain unverified.
-- Added GitHub Actions validation for Python lint/tests, Lambda artifacts, Terraform formatting, and Terraform configuration validation; the latest run passed.
-- Implemented version 2 full-order queue events, conditional DynamoDB order persistence, versioned idempotency claims, scoped consumer IAM, SQS 1 MiB message limits, and DynamoDB point-in-time recovery. A signed live smoke test posted one synthetic order twice and confirmed a single `RECEIVED` record.
-- Verified Prometheus, Grafana, Loki, Tempo, and OTel pods are ready. Restricted the existing observability ALB ingress to the administrator `/32`; dashboards remain admin-only. Current Helm values and Kubernetes manifests are not yet tracked, no PVCs exist, and alerts have no verified receiver.
+Encrypted observability PVC migration/restart, AWS Backup selection and isolated EBS/database recovery, GLPI technical OAuth and functional test records, confirmed SNS destination and provider delivery, externally hosted TLS/WAF/authentication checks, removal of only the two authorized legacy Deployments, scoped repository OIDC and four protected reviewer environments are implemented. New Orders processing and automation candidates are versioned and unit-tested; live deployment remains gated.
 
-## Active priority work
+## Dependencies and remaining tests
 
-1. Verify GLPI UI login and exercise AWS Backup recovery using a separate restored host/volume; retain the original instance and backups until recovery is proven.
-2. Reconcile the two non-ready duplicate deployments in namespace `orders` after identifying ownership and intended queue/table. Their missing ConfigMap values make them risky to activate alongside the healthy `orders-api` and `orders-worker` deployments.
-3. Create tracked Kubernetes/Helm configuration for workloads and observability, then reconcile it against live objects before changing them. Review Cluster Autoscaler's repeated forbidden reads of storage/resource API groups and match its version to the cluster before changing RBAC or upgrading it.
-4. Configure durable observability storage, retention, and recovery. No PVCs or EBS CSI driver were observed; the only StorageClass is legacy `gp2` with a `Delete` reclaim policy.
-5. Configure an approved, functional notification receiver and test a controlled alert. The receiver identity/endpoint is not present in the repository or AWS environment.
-6. Extend durable order intake into inventory/payment/fulfillment semantics, trace propagation, retry and DLQ recovery tests. The current serverless path only records `RECEIVED` orders; EKS and serverless deployments remain separate.
-7. Add a tightly scoped DEV-only GitHub OIDC deployment workflow only after application/container sources and Kubernetes source-of-truth are tracked. Current CI is validation-only. The existing ECR publish role trusts only the separate `rlcosmo/aws-eks-istio-lab` repository and cannot be reused by this repository as-is.
+1. Resolve officially supported independent Kestra technical authentication. Owner has no Enterprise license; preserve personal Basic Auth and do not disable authentication. Candidate flow is disabled, not engine-tested. Workflow execution, logs, restart persistence and GLPI integration still need authenticated technical tests.
+2. Owner registers/installs a repository-limited GitHub App and securely stores its credential. Complete the GLPI/Kestra/Actions/GLPI integration test before enabling `GMUD_INTEGRATION_READY`.
+3. Owner approves each real DEV, QA, PO/PM and Infra/SRE gate. Approval probe verifies no deploy can start while waiting. OIDC/private EKS tunnel runtime validation must complete after those real approvals. Then review and deploy the Orders candidate and record actual live business/trace evidence.
+4. Match Cluster Autoscaler minor to Kubernetes 1.37 when the upstream 1.37 binary exists. Current 1.36.1 authorization checks pass; the minor mismatch remains unresolved.
+5. Establish scheduled application-consistent Tempo captures; ordinary daily EBS snapshots are crash-consistent. Keep failed/working restore copies until evidence retention is accepted, then review their cost and explicit cleanup authorization.
+6. Perform a separate whole-EC2 restore/boot exercise if full-host recovery evidence is required; current proof covers EBS and isolated logical DB integrity. Review EKS Orders PITR/retention as a separate change.
+7. Owner confirms inbox receipt of both alert and recovery; SNS provider delivery has succeeded. No personal mailbox access is available to automation.
 
-## Validation and operations
+The preserved invalid DLQ message must not be replayed unchanged. Its schema failure, hash and duplication precautions are in [orders processing](orders-processing.md).
 
-- Run Ruff, pytest, compileall, dependency checks, Lambda artifact validation, Terraform format/validate, and Compose config validation locally and in CI.
-- Review every Terraform plan for resource replacement, data impact, network exposure, IAM scope, and cost before apply. Never use Terraform destroy.
-- Keep the parent project and `cosmotech-infrastructure-mcp` repository independent. Do not stage the nested MCP repository from the parent.
+## Change discipline
+
+Review Terraform plans, IAM scope, resource replacement, retained data and cost before changes. Run affected tests and CI. Keep the independent untracked `cosmotech-infrastructure-mcp/` out of parent commits. Never simulate human approvals or rotate existing personal credentials to unblock tests.

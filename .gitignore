@@ -63,3 +63,9 @@ terraform.rc
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Workflow evidence is uploaded as Actions artifacts, not mixed into source.
+/approval-evidence.json
+/change-evidence.json
+/deploy-evidence.json
+/external-security-evidence.json

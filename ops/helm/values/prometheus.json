@@ -39,6 +39,12 @@
             "matchers": [
               "alertname=~\"Watchdog|InfoInhibitor\""
             ]
+          },
+          {
+            "receiver": "null",
+            "matchers": [
+              "alertname=~\"KubeSchedulerDown|KubeControllerManagerDown\""
+            ]
           }
         ]
       },
@@ -54,7 +60,8 @@
               "sigv4": {
                 "region": "us-east-1"
               },
-              "send_resolved": true
+              "send_resolved": true,
+              "subject": "CosmoTech lab notification"
             }
           ]
         }
