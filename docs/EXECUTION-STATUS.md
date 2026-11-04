@@ -1,6 +1,71 @@
 # CosmoTech AWS Lab — Execution Status
 
-Updated: 2026-11-04 10:05 UTC
+Updated: 2026-11-04 11:37 UTC
+
+## Current validated state
+
+This current report supersedes the dated historical checkpoints below. Installed does not imply that every integration has been functionally validated.
+
+| Component | Installed / current evidence | Remaining limitation |
+| --- | --- | --- |
+| EKS / Istio | Three Ready nodes, current Orders API/worker 1/1; healthy installations preserved | Autoscaler 1.36.1 versus Kubernetes 1.37.1; no upstream 1.37 binary found |
+| API Gateway / Lambda / SQS / DynamoDB | Existing IAM-protected intake retained; earlier signed smoke persisted one idempotent order | Complete processing candidate not deployed; one invalid original DLQ message retained |
+| Prometheus / Grafana / Loki / Tempo / Alertmanager | Five encrypted Retain PVCs, 37 GiB, historical recovery and second restart validated | Scheduled EBS snapshots remain crash-consistent; Tempo needs quiescence for proven historical recovery |
+| OTel | Live synthetic SDK → collector → Tempo trace retrieved | Full live business-flow tracing awaits approved Orders deploy |
+| GLPI / MariaDB | Technical OAuth, create/read/update ticket 1 and change 1, restart persistence, isolated restore integrity | Human approvals remain None; no fabricated approval |
+| Kestra / PostgreSQL | Existing authenticated deployment preserved, logical DB restore checked | No Enterprise license; no independent technical account or authenticated flow tests |
+| DNS / TLS / ALB / Nginx / WAF | GitHub-hosted external test passed; internal ports inaccessible, dashboards denied | Latest external run includes anonymous GLPI API denial |
+| Terraform / CI | Formatting and DEV validation pass; 74 tests pass locally | New application artifacts are prepared, not applied through Terraform |
+
+## Completed changes and evidence
+
+- Observability migration inspected actual data/mounts, captured private backups with SHA-256, preserved versions, prepared recovery and verified SQLite/WAL/history before replacing pods. Five live volumes remain encrypted and retained; no original data volume was deleted. Detailed recovery limits and rollback are in [observability-recovery.md](observability-recovery.md).
+- Seven initial EBS backup jobs completed (two source node disks plus five application disks). All five initial isolated restores completed. Prometheus returned 42 historical series; Grafana SQLite integrity was ok; Loki returned historical log data; Alertmanager started with captured empty state.
+- Initial Tempo restored copy was Ready but had malformed metadata/no history: **failed semantic integrity**. Graceful quiesced backup `6bfeae38-3662-4e29-b73e-cc7c2061375f` and isolated restore `78ccf942-4af4-4f8f-844e-be30d35c3d0a` recovered 20 historical traces and 38 blocks. About 37 seconds local write quiescence; daily RPO up to 24 hours plus job duration. No zero-loss or guaranteed RTO claim. Six retained restored volumes total 47 GiB; validation pods removed.
+- MariaDB/PG logical restore test 10:32:58–10:33:26 UTC: 28 seconds, 447 GLPI tables including the test ticket/GMUD, 25 PG public tables, zero MariaDB check errors. GLPI/MariaDB restart took 18 seconds and preserved records. Isolated test containers stopped, volumes retained. An initial fresh EC2 backup completed; final job `fa816a90-2e4f-4cb3-9fde-c2983603461a` completed at 11:34:44 UTC after updated dumps. Whole restored EC2 boot was not tested.
+- GLPI technical user `svc-cosmotech-automation` (id 7), isolated entity/profile, OAuth client and minimal ticket/change/document/followup rights created. Approval rights are zero. Credentials stored at SSM SecureString `/cosmotech/itsm/glpi/automation-credentials`, no secrets published. Personal users/passwords unchanged. Test records clearly labeled; no real ticket changed.
+- Exactly `orders/orders-api` and `orders/orders-worker` were identified as broken legacy components, specifications archived, and removed under explicit owner authorization. Current workloads in their separate namespaces remain healthy. Services, Secrets, namespaces, tables, queues and application PVCs preserved.
+- Encrypted SNS topic, email subscription, CloudWatch ALARM/OK actions and Alertmanager Pod Identity configured. Subscription confirmed. Controlled alert and resolution actions succeeded; two-hour SNS metrics: 15 published, 6 delivered, 0 failed (earlier publishes occurred before confirmation). Prometheus canary now inactive; Alertmanager sends resolved notifications. Owner inbox confirmation remains distinct from provider delivery.
+- Four GitHub environments require real reviewer `rlcosmo`, main only, administrator bypass false. Repository-specific OIDC uses immutable repository/owner IDs, ref and environment. IAM scopes ECR, EKS discovery and a fixed private SSM tunnel; Kubernetes denies Secrets and permits only named Orders Deployment updates. See [ITSM gates](itsm-change-gates.md).
+- Candidate Orders runtime includes simulated payment, atomic inventory, fulfillment, idempotent checkpoints, retries/DLQ and safe OTel propagation. LAB catalog added only to an absent reserved key, without resetting existing stock; existing tables preserved. Live application images remain unchanged pending real approvals. See [Orders details and DLQ investigation](orders-processing.md).
+- GLPI bridge, HMAC metadata validation and disabled Kestra flow are implemented/tested in source. `GMUD_INTEGRATION_READY=false`; no full integration/deploy success is claimed. Owner confirmed no Kestra Enterprise license; no Kestra technical account was created and no personal Basic Auth credential reused. A repository GitHub App is still required.
+- External security run [41812329759](https://github.com/rlcosmo/aws-serverless-lab/actions/runs/41812329759) passed from a GitHub-hosted runner outside the administrator network: verified TLS, redirects, GLPI reachability, Kestra API 401, dashboard/unknown host 403 and closed internal/database ports.
+
+## Validation and resources
+
+74 pytest tests passed, Ruff/compileall/pip dependency checks passed, both Lambda ZIP imports passed, Terraform recursive formatting and DEV validation passed, shell syntax and staged secret-pattern checks passed. New Docker images build locally as UID 10001 with a pinned base digest. Business E2E tests use Moto; live collector/Tempo test is a separate synthetic trace, not a deployed order-processing proof.
+
+New/modified resources: five application EBS volumes/PVCs; six retained recovery volumes; backup selection/restore role; SNS/KMS/subscription/canary and alarm actions; Alertmanager role/Pod Identity; GLPI technical user/profile/entity/OAuth and enabled OAuth API; four protected GitHub environments, OIDC role/EKS access/RBAC, fixed SSM document, worker checkpoint policy and LAB catalog item. No new cluster, node, ALB, NAT or ITSM instance was provisioned. Only the two authorized legacy Deployments were removed.
+
+Initial/bootstrap operations used the existing configured IAM user `serverless-lab-admin`; this is recorded rather than retrospectively claiming role-only access. A restricted maintenance role was then provisioned. Final audit/backup calls use a one-hour STS assumed-role session, read-only EKS access except named Tempo scaling, and no Secret read access. GitHub deployment uses OIDC rather than static AWS keys. No IAM user access keys were changed.
+
+## Costs
+
+Additional 37 GiB live gp3 ≈ USD 2.96/month; retained 47 GiB restoration copies ≈ USD 3.76/month; KMS key reference USD 1/month and one standard alarm reference USD 0.10/month: about **USD 7.82/month incremental fixed/reference cost while copies are retained**, plus snapshots, requests, notifications, data, logs, tax/credits. This is not the whole lab bill. Existing EKS/NAT/EC2/ALB charges continue. Sources: [EBS](https://aws.amazon.com/ebs/pricing/), [KMS](https://aws.amazon.com/kms/pricing/), [CloudWatch](https://aws.amazon.com/cloudwatch/pricing/). Existing USD 100 Budget with 50/80/100 percent alerts remains a notification threshold, not a spending cap.
+
+## Open dependencies
+
+1. Independent officially supported Kestra technical authentication without changing personal access; no Enterprise license available. Authenticated workflow creation/execution/results/logs/restart and GLPI integration remain pending.
+2. Owner installs a repository-limited GitHub App and stores its private credential securely; complete real bridge tests before enabling integration.
+3. Owner supplies four actual GitHub approvals for the probe/deploy. Runtime OIDC/tunnel and new Orders live E2E remain blocked until approval; no simulated approvals.
+4. Cluster Autoscaler matching 1.37 binary release; preserve healthy current cluster in the meantime.
+5. Schedule application-consistent Tempo capture, review EKS Orders PITR/retention and optionally perform full EC2 boot recovery. Original invalid DLQ message must not be replayed unchanged.
+6. Owner confirms actual inbox receipt of alert and recovery. Provider delivery is proven.
+
+## Publications
+
+Published baseline commits: `5b857fb` observability/recovery, `c4d5aca` external security, `84173f9` recoverable Orders/tracing. Subsequent commit/run results are recorded in the final verification section. Independent `cosmotech-infrastructure-mcp/` remains untracked, untouched and excluded from commits. No history rewrite or remote change.
+
+## Final verification — 2026-11-04
+
+- Published `c1b0b61` (`feat(automation): enforce real change gates and scoped oidc deployment`) after `84173f9`. Secret-pattern scans passed and the MCP directory was excluded.
+- CI [41822293068](https://github.com/rlcosmo/aws-serverless-lab/actions/runs/41822293068) passed both Python and Terraform jobs for the automation commit. Previous Orders CI [41822002621](https://github.com/rlcosmo/aws-serverless-lab/actions/runs/41822002621) also passed.
+- Latest external run [41822310511](https://github.com/rlcosmo/aws-serverless-lab/actions/runs/41822310511) succeeded, including anonymous GLPI OAuth API 401 after API enablement. Evidence is retained as the run artifact.
+- Approval probe [41822306059](https://github.com/rlcosmo/aws-serverless-lab/actions/runs/41822306059) passed source/tests/artifacts and read-back protection checks using the runner token. GitHub reports **waiting**, pending environment `dev`, required reviewer `rlcosmo`, zero approvals. No AWS credential/deployment job has begun. Owner must approve all four gates in sequence to test OIDC/private connectivity; this probe never deploys an application even after approval.
+- Final EC2 backup COMPLETED. All three nodes Ready; current Orders workloads 1/1; no legacy Deployment remains in `orders`; six recovery PVCs Bound, recovery validation pods absent. Maintenance role can scale only Tempo and cannot patch Orders Deployments or read Secrets.
+- Remaining daily logical-dump scheduling, application-consistent Tempo scheduling, full EC2 boot recovery and real Kestra orchestration are **not claimed complete**. Existing AWS Backup schedules cover disks; on-demand logical dumps/restores were verified.
+
+## Historical execution checkpoints (superseded)
 
 ## Continuation checkpoint — 2026-11-04
 
