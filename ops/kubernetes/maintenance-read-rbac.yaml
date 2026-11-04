@@ -46,6 +46,9 @@ subjects:
   - kind: Group
     name: cosmotech-maintenance-readers
     apiGroup: rbac.authorization.k8s.io
+  - kind: Group
+    name: cosmotech-tempo-backup
+    apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: Role
   name: cosmotech-tempo-backup-quiesce

@@ -89,7 +89,7 @@ resource "aws_wafv2_ip_set" "observability_admin" {
 
 resource "aws_wafv2_web_acl" "public_ingress" {
   name        = "cosmotech-public-ingress"
-  description = "Expose GLPI and Kestra only. Restrict observability dashboards to the admin CIDR."
+  description = "Expose authenticated ITSM and Grafana. Restrict other dashboards to the admin CIDR."
   scope       = "REGIONAL"
 
   default_action {
@@ -203,6 +203,63 @@ resource "aws_wafv2_web_acl" "public_ingress" {
     }
   }
 
+  # Grafana enforces its own authentication. Other dashboard hosts stay private.
+  rule {
+    name     = "rate-limit-public-grafana"
+    priority = 3
+    action {
+      block {}
+    }
+    statement {
+      rate_based_statement {
+        limit              = 1200
+        aggregate_key_type = "IP"
+        scope_down_statement {
+          byte_match_statement {
+            search_string         = "grafana.cosmotechsolutions.com.br"
+            positional_constraint = "EXACTLY"
+            field_to_match {
+              single_header { name = "host" }
+            }
+            text_transformation {
+              priority = 0
+              type     = "LOWERCASE"
+            }
+          }
+        }
+      }
+    }
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "cosmotech-grafana-rate-limit"
+      sampled_requests_enabled   = false
+    }
+  }
+  rule {
+    name     = "allow-public-grafana"
+    priority = 4
+    action {
+      allow {}
+    }
+    statement {
+      byte_match_statement {
+        search_string         = "grafana.cosmotechsolutions.com.br"
+        positional_constraint = "EXACTLY"
+        field_to_match {
+          single_header { name = "host" }
+        }
+        text_transformation {
+          priority = 0
+          type     = "LOWERCASE"
+        }
+      }
+    }
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "cosmotech-public-grafana"
+      sampled_requests_enabled   = false
+    }
+  }
   rule {
     name     = "allow-admin-observability"
     priority = 2

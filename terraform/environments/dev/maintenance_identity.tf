@@ -31,6 +31,20 @@ resource "aws_iam_role_policy" "maintenance" {
         Resource = "*"
       },
       {
+        Effect = "Allow"
+        Action = ["ssm:SendCommand"]
+        Resource = [
+          aws_ssm_document.logical_backup_schedule.arn,
+          aws_ssm_document.kestra_automation.arn,
+          "arn:aws:ec2:${var.aws_region}:${data.aws_caller_identity.current.account_id}:instance/${module.itsm_host.instance_id}"
+        ]
+      },
+      {
+        Effect   = "Allow"
+        Action   = ["ssm:GetCommandInvocation"]
+        Resource = "*"
+      },
+      {
         Effect   = "Allow"
         Action   = ["eks:DescribeCluster"]
         Resource = data.aws_eks_cluster.lab.arn

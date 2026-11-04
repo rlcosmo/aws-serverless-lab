@@ -1,6 +1,18 @@
 # CosmoTech AWS Lab — Execution Status
 
-Updated: 2026-11-04 11:37 UTC
+Updated: 2026-11-04 15:44 UTC
+
+## Active continuation — 2026-11-04 15:44 UTC
+
+This checkpoint supersedes older status tables and open dependencies below.
+
+- Grafana: WAF previously allowed dashboards only from the EKS administrator CIDR, explaining external 403. Added exact-host Grafana allowance and 1,200 requests/IP/5min limit; other dashboards retain restrictions. Login HTTPS 200, certificate verified, anonymous dashboard API 401. Password unchanged and never retrieved. Current-password login/dashboard/datasource validation needs the owner in a browser; no authenticated success is claimed.
+- Backups: existing systemd runs already succeeded at 11:48/11:50 UTC. Prior failures were AWS CLI Snap writing under read-only `/root/snap`, then missing get permission on Tempo's named PV. Existing fixes preserved and versioned. Logical capture SHA256 checks passed; both timers active. Tempo backup `2313d3cc-9bed-4ed4-9a02-71d5496e0697` COMPLETED, encrypted volume `vol-091bf80370bf3410f`, snapshot `snap-0f1e942f10d61e0ed`. No repeat quiescence was necessary. Restore of this latest snapshot remains pending; earlier isolated restore evidence remains valid for its original capture. Logical archives remain root-only on encrypted EBS and are covered by EC2 backup, not a separate S3 object upload. Retention: Tempo 14 days; logical capture cleanup remains manual.
+- SSM: CloudTrail identifies maintenance-role SendCommand denials at 11:41/11:49 UTC for the target EC2 and fixed Kestra document. Current scoped policy already includes both. New STS session successfully sent command `d4e44e93-2dac-4521-9959-454d7019475f`; no wildcard shell permission or AdministratorAccess added.
+- Kestra Automation: private loopback 8082, independent PostgreSQL/storage/credentials, SSM SecureString. Fixed runner file ownership and transient startup disconnect handling; added engine health check. Execution `5zPbS9yltD4yce0IHarDUH` SUCCESS, GLPI technical integration completed, logs accessible, anonymous API 401, execution persisted after dedicated-engine restart. Personal services unchanged. Existing EC2 has ~3.9 GiB available RAM and 33 GiB free disk; no resize needed.
+- Local validation: 77 Python tests, Ruff, Terraform validation/format, shell syntax and diff checks passed. No MCP repository modification. Fresh Terraform plans used; no old plans reused.
+- WAF increment: two Grafana rules, approximately USD 2/month plus traffic/logs. No new ALB.
+- Next: publish checkpoint, split required repositories incrementally, review fresh dedicated-Argo EC2 plan. Existing four human approval gates still apply to Orders deployment; no approval was simulated.
 
 ## Current validated state
 

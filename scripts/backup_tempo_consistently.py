@@ -17,6 +17,7 @@ def json_command(arguments: list[str]) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--evidence", type=Path, default=Path("dist/tempo-backup-evidence.json"))
+    parser.add_argument("--resume-marker", type=Path)
     args = parser.parse_args()
     caller = json_command(["aws", "sts", "get-caller-identity", "--output", "json"])
     if caller["Account"] != "414053644145" or ":assumed-role/" not in caller["Arn"]:
@@ -35,6 +36,8 @@ def main() -> None:
         raise SystemExit("Expected an encrypted application volume")
     evidence = {"volume_id": volume_id, "caller_role": caller["Arn"]}
     started = time.monotonic()
+    if args.resume_marker:
+        args.resume_marker.write_text("Resume the original Tempo replica after this backup operation.\n")
     try:
         subprocess.run(["kubectl", "scale", "sts/tempo", "-n", "observability", "--replicas=0"], check=True)
         subprocess.run(["kubectl", "wait", "--for=delete", "pod/tempo-0", "-n", "observability",
@@ -71,6 +74,8 @@ def main() -> None:
         args.evidence.write_text(json.dumps(evidence, indent=2) + "\n")
     subprocess.run(["kubectl", "rollout", "status", "sts/tempo", "-n", "observability",
                     "--timeout=120s"], check=True)
+    if args.resume_marker:
+        args.resume_marker.unlink(missing_ok=True)
     evidence["ready_elapsed_seconds"] = round(time.monotonic() - started, 2)
     args.evidence.write_text(json.dumps(evidence, indent=2) + "\n")
     print("Tempo resumed; backup job and timing evidence recorded. Verify backup completion separately.")
