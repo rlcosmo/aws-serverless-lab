@@ -258,6 +258,10 @@ resource "aws_wafv2_web_acl_logging_configuration" "public_ingress" {
   redacted_fields {
     query_string {}
   }
+
+  redacted_fields {
+    uri_path {}
+  }
 }
 
 resource "aws_wafv2_web_acl_association" "observability_alb" {

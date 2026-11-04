@@ -39,8 +39,8 @@ The WAF allow rule publishes the normal GLPI login page and Kestra's authenticat
 
 ## Access logs and privacy
 
-- AWS WAF access logs are sent to CloudWatch Logs group `aws-waf-logs-cosmotech-public-ingress`, with 30-day retention. WAF request sampling is disabled. Authorization headers, Cookie headers, and query strings are redacted in the WAF logs.
-- Nginx writes `/var/log/nginx/itsm-access.log` and `/var/log/nginx/itsm-error.log` on the encrypted EC2 root volume. The access format includes `$uri` but excludes query strings, request headers, request bodies, and referrers.
+- AWS WAF access logs are sent to CloudWatch Logs group `aws-waf-logs-cosmotech-public-ingress`, with 30-day retention. WAF request sampling is disabled. Authorization headers, Cookie headers, URI paths, and query strings are redacted in the WAF logs.
+- Nginx writes `/var/log/nginx/itsm-access.log` and `/var/log/nginx/itsm-error.log` on the encrypted EC2 root volume. Access lines omit URI paths and query strings, request headers, request bodies, and referrers so URL-carried webhook keys are not recorded.
 - WAF logs retain client source IPs; restrict log-group access to authorized operators and follow the 30-day retention setting.
 
 ## Operations

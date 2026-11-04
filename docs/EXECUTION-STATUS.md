@@ -1,13 +1,13 @@
 # CosmoTech AWS Lab — Execution Status
 
-Updated: 2026-11-04 00:50 UTC
+Updated: 2026-11-04 00:53 UTC
 
 ## Scope and preservation
 
 - Main repository: `/opt/aws-serverless-lab`, branch `main`, remote `origin` is `https://github.com/rlcosmo/aws-serverless-lab.git`.
 - Independent MCP directory `cosmotech-infrastructure-mcp/` is pre-existing, untracked in this repository, and has not been inspected, modified, or staged.
 - No destructive Terraform action, data deletion, queue redrive, Git reset/clean/stash, or forced push was performed. Only temporary, newly-created Kubernetes routing objects from the failed external-endpoint experiment were removed. The pre-existing serverless DLQ message remains untouched.
-- Git `main` matches `origin/main` at `6af9abf`; the independent untracked MCP directory remains untouched and unstaged.
+- Git `main` matches `origin/main` at `0382b40` before the current access-log hardening change; the independent untracked MCP directory remains untouched and unstaged.
 - The earlier $100/month cap is removed by the current instruction. Cost checks and the existing $100 AWS Budget alert remain in place; the alert does not cap spending.
 
 ## Initial live audit
@@ -25,13 +25,14 @@ Updated: 2026-11-04 00:50 UTC
 - DNS provider is Cloudflare (`bjorn.ns.cloudflare.com`, `robin.ns.cloudflare.com`). Both required CNAMEs already existed and target `k8s-observability-633f55bc55-702046070.us-east-1.elb.amazonaws.com`; no DNS changes or Cloudflare API credentials were needed.
 - Reused the existing internet-facing ALB and ACM wildcard `*.cosmotechsolutions.com.br` (issued, current expiry May 19, 2027). No second ALB or certificate was created.
 - Added AWS WAF `cosmotech-public-ingress`, associated with the ALB. Default action blocks; public allow is restricted to GLPI and Kestra hostnames; other existing dashboard hosts are allowed only from the EKS administrator CIDR; ITSM requests are rate-limited to 1,200 per source IP per five minutes. Current capacity: 21 WCU.
-- WAF logs are sent to CloudWatch log group `aws-waf-logs-cosmotech-public-ingress`, retention 30 days. Authorization, Cookie, and query strings are redacted; sampled requests are disabled. 71 events were present during initial smoke checks.
+- WAF logs are sent to CloudWatch log group `aws-waf-logs-cosmotech-public-ingress`, retention 30 days. Authorization, Cookie, URI path, and query strings are redacted; sampled requests are disabled. 71 events were present during initial smoke checks.
 - ALB inbound 80/443 is Internet-wide only behind the active WAF. EC2 inbound TCP/8088 is allowed only from the ALB security group. No database or Docker application ports are public.
-- Installed Nginx on the private EC2 through SSM. It proxies to GLPI `127.0.0.1:8080` and Kestra `127.0.0.1:8081`; both Docker host bindings remain loopback-only. MariaDB and PostgreSQL remain internal Docker services without host port mappings. Nginx access logs omit query strings.
+- Installed Nginx on the private EC2 through SSM. It proxies to GLPI `127.0.0.1:8080` and Kestra `127.0.0.1:8081`; both Docker host bindings remain loopback-only. MariaDB and PostgreSQL remain internal Docker services without host port mappings. Nginx access logs are being hardened to omit URI paths and query strings so Kestra webhook keys in URL paths are not retained; the updated config is prepared locally and awaiting deployment to the EC2 host.
 - Kestra canonical URL is `https://kestra.cosmotechsolutions.com.br/`. GLPI uses its login page; Kestra Basic Auth is enabled.
 - Terraform directly manages a private-IP target group, healthy EC2 target `10.20.11.150:8088`, `/healthz` probe, and HTTPS listener rule priority 100 for the two hostnames. The AWS Load Balancer Controller did not register the external EC2 target through a selectorless Service/EndpointSlice; only those temporary objects were removed. No application or data resources were changed.
 - Validation from the current network: both DNS CNAMEs resolve to the ALB; `curl`/`openssl` certificate verification passed for both; HTTP returned 301 to HTTPS; GLPI returned HTTP 200; Kestra UI returned a login redirect; unauthenticated Kestra API returned HTTP 401; target health reports `healthy`; Grafana remains accessible from the configured administrator network.
 - A separate non-administrator vantage was unavailable, so a public-source WAF denial test for Grafana remains unverified. WAF rules and the current administrator `/32` were read back from AWS.
+- Official Kestra documentation confirms webhook trigger keys are embedded in URL paths and can appear in proxy, load balancer, and access logs. No Kestra webhook or GLPI API integration was created until access logs omit paths. The WAF path redaction is applied; the EC2 Nginx config change remains to deploy.
 - AWS WAF published pricing gives a baseline of `$5/month` per ACL and `$1/month` per rule, plus request charges. Current design estimate is `$8/month` base for one ACL and three customer rules, plus request/log usage. Reusing the ALB avoided a new load balancer charge. [AWS WAF pricing](https://aws.amazon.com/waf/pricing/).
 - More complete billing baseline before this phase: Cost Explorer `$9.52` for Nov 1–3 (excluding credits/refunds), subject to billing delay. Published hourly estimates at 730 hours were EKS control plane `$73.00`, one NAT `$32.85`, and on-demand `t3.large` `$60.96`, totaling `$166.80` before Spot compute, EBS, ALB, LCU, data, CloudWatch, Backup, tax, and credits. [EKS](https://aws.amazon.com/eks/pricing/), [VPC](https://aws.amazon.com/vpc/pricing/), [EC2 T3](https://aws.amazon.com/ec2/instance-types/t3/).
 
@@ -42,8 +43,8 @@ Updated: 2026-11-04 00:50 UTC
 - Terraform DEV state contains 58 resources; latest refreshed plan reports no changes. Public routing apply added 3 resources, 0 changed, 0 destroyed; WAF phase added 6 resources and later updated logging redaction in place.
 - `kubectl apply --dry-run=server` passed for the original ingress manifests; temporary failed Service/EndpointSlice/Endpoints/Ingress objects were removed. Existing observability ingress remains declaratively restricted by WAF and CIDR policy.
 - Python unit suite: 43 passed. Ruff: passed. `compileall`: passed. Shell syntax check: passed. `git diff --check`: passed after direct target-group and documentation changes.
-- Staged-file secret scans passed for both public-access commits; no secrets, credentials, or runtime files were published.
-- Commits pushed to `origin/main`: `5045b68 feat(itsm): publish GLPI and Kestra through protected ALB` and `6af9abf feat(itsm): route public domains to private EC2 target`.
+- Staged-file secret scans passed for both public-access commits; no secrets, credentials, or runtime files were published. The current log-hardening change needs its own staged scan and commit.
+- Commits pushed to `origin/main`: `5045b68 feat(itsm): publish GLPI and Kestra through protected ALB`, `6af9abf feat(itsm): route public domains to private EC2 target`, and `0382b40 docs: record public ITSM access implementation`.
 
 ## Costs and budgets
 
