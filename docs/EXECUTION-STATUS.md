@@ -1,77 +1,75 @@
 # CosmoTech AWS Lab — Execution Status
 
-Updated: 2026-11-04 00:35 UTC
+Updated: 2026-11-04 00:47 UTC
 
-## Scope and safety
+## Scope and preservation
 
-- Main repository: `/opt/aws-serverless-lab`, branch `main`.
-- Latest pushed commit at start of this phase: `4c502bc` (`docs: record live lab status and remaining blockers`). Local `main` matches `origin/main`.
-- Existing untracked directory `cosmotech-infrastructure-mcp/` is an independent project and remains untouched and unstaged.
-- Current instruction removes the previous fixed $100 cap. Costs must still be checked, reported, and monitored; the existing AWS Budgets object is now a $100 monthly alert threshold, not an enforcement limit.
-- No destructive operations, Kubernetes mutation, DNS changes, or existing application data changes have been made in this phase. Terraform applied only new public-access protection resources and one private security-group rule; no existing resources were removed or replaced.
-- The pre-existing serverless DLQ message remains unread and untouched.
+- Main repository: `/opt/aws-serverless-lab`, branch `main`, remote `origin` is `https://github.com/rlcosmo/aws-serverless-lab.git`.
+- Independent MCP directory `cosmotech-infrastructure-mcp/` is pre-existing, untracked in this repository, and has not been inspected, modified, or staged.
+- No destructive Terraform action, data deletion, queue redrive, Git reset/clean/stash, or forced push was performed. Only temporary, newly-created Kubernetes routing objects from the failed external-endpoint experiment were removed. The pre-existing serverless DLQ message remains untouched.
+- Git `main` has pending, validated public-access documentation and Terraform changes. The independent untracked MCP directory remains unstaged.
+- The earlier $100/month cap is removed by the current instruction. Cost checks and the existing $100 AWS Budget alert remain in place; the alert does not cap spending.
 
-## State and inventory
+## Initial live audit
 
-- AWS identity: `arn:aws:iam::414053644145:user/serverless-lab-admin`, region `us-east-1`.
-- Git: `main` clean except for the pre-existing untracked MCP directory; remote `origin` is the main repository and is synchronized.
-- Terraform DEV state contains 46 resources; refreshed plan reports no changes.
-- EKS `aws-eks-istio-lab-dev` is ACTIVE on Kubernetes 1.37; public and private API endpoints are enabled, with public CIDR restricted to `45.6.218.165/32`.
-- Managed Spot node group `aws-eks-istio-lab-dev-spot-named`: 3 `c7i-flex.large` nodes Ready, desired 3/max 3, no reported node-group issues.
-- AWS inventory shows one VPC (`10.20.0.0/16`), two public and two private subnets, one available NAT Gateway, three Spot workers, and one private `t3.large` ITSM EC2. The ITSM host has no public IP and an encrypted 50 GiB gp3 volume.
-- SQS source queues are empty. EKS DLQ is empty. Serverless DLQ has one visible pre-existing message; do not inspect, redrive, or delete it without a separate approved procedure.
-- Orders DynamoDB serverless table is ACTIVE, TTL enabled on `expires_at`, point-in-time recovery enabled according to AWS CLI (the inventory MCP omits PITR details). The separate EKS Orders table has no TTL and no PITR.
-- Lambda `aws-serverless-lab-dev-orders-producer` and `...-consumer` are ACTIVE, Python 3.12. API Gateway `POST /orders` uses AWS_IAM.
-- Helm releases Alloy, AWS Load Balancer Controller, Kyverno, Loki, OTel Collector, Prometheus stack, and Tempo are deployed. Prometheus, Grafana, Loki, Tempo, and OTel pods are currently ready.
-- Two legacy deployments in namespace `orders` remain unhealthy: API `0/1`, Worker `0/1`/Error. Their ConfigMap has empty SQS queue and DynamoDB table values; do not activate them until their ownership and intended queue/table are confirmed. Healthy workloads remain in `orders-api` and `orders-worker` namespaces.
-- Prometheus, Alertmanager, Loki, and Tempo use `emptyDir` for their data paths; no PVCs were found. The cluster has only a `gp2` StorageClass, backed by the deprecated in-tree AWS EBS provisioner; EBS CSI driver/add-on is not installed.
-- Cluster Autoscaler logs repeatedly show denied reads for `storage.k8s.io/volumeattachments` and `resource.k8s.io` ResourceSlices/DeviceClasses/ResourceClaims. It is running, but compatibility/RBAC impact needs investigation before changing permissions or upgrading it.
+- AWS identity: `arn:aws:iam::414053644145:user/serverless-lab-admin`; region `us-east-1`.
+- EKS `aws-eks-istio-lab-dev`: ACTIVE, Kubernetes 1.37; three Spot `c7i-flex.large` nodes Ready. Public API CIDR is restricted to the administrator `/32`.
+- One VPC (`10.20.0.0/16`), two public and two private subnets, one available NAT Gateway, existing public observability ALB, and private ITSM `t3.large` EC2 (`i-0def4e806c49cf60e`, `10.20.11.150`) with encrypted 50 GiB gp3 root volume.
+- Prometheus, Grafana, Loki, Tempo, and OTel pods were ready. Observability data paths use `emptyDir`; there is no EBS CSI driver or PVC migration yet.
+- Active serverless API uses API Gateway IAM authorization, Lambda, SQS, and DynamoDB. SQS source queues were empty; EKS DLQ empty; a pre-existing serverless DLQ message remains untouched. Serverless DynamoDB PITR and TTL are enabled; EKS table PITR/TTL are not.
+- Legacy `orders` namespace has two unhealthy deployments with empty queue/table configuration. They remain untouched pending source-of-truth confirmation. Healthy active deployments are in `orders-api` and `orders-worker`.
+- Cluster Autoscaler is running but logs denied reads for `storage.k8s.io/volumeattachments` and `resource.k8s.io` resources; investigate version/RBAC before changing it.
+
+## Public GLPI and Kestra — implemented and verified
+
+- DNS provider is Cloudflare (`bjorn.ns.cloudflare.com`, `robin.ns.cloudflare.com`). Both required CNAMEs already existed and target `k8s-observability-633f55bc55-702046070.us-east-1.elb.amazonaws.com`; no DNS changes or Cloudflare API credentials were needed.
+- Reused the existing internet-facing ALB and ACM wildcard `*.cosmotechsolutions.com.br` (issued, current expiry May 19, 2027). No second ALB or certificate was created.
+- Added AWS WAF `cosmotech-public-ingress`, associated with the ALB. Default action blocks; public allow is restricted to GLPI and Kestra hostnames; other existing dashboard hosts are allowed only from the EKS administrator CIDR; ITSM requests are rate-limited to 1,200 per source IP per five minutes. Current capacity: 21 WCU.
+- WAF logs are sent to CloudWatch log group `aws-waf-logs-cosmotech-public-ingress`, retention 30 days. Authorization, Cookie, and query strings are redacted; sampled requests are disabled. 71 events were present during initial smoke checks.
+- ALB inbound 80/443 is Internet-wide only behind the active WAF. EC2 inbound TCP/8088 is allowed only from the ALB security group. No database or Docker application ports are public.
+- Installed Nginx on the private EC2 through SSM. It proxies to GLPI `127.0.0.1:8080` and Kestra `127.0.0.1:8081`; both Docker host bindings remain loopback-only. MariaDB and PostgreSQL remain internal Docker services without host port mappings. Nginx access logs omit query strings.
+- Kestra canonical URL is `https://kestra.cosmotechsolutions.com.br/`. GLPI uses its login page; Kestra Basic Auth is enabled.
+- Terraform directly manages a private-IP target group, healthy EC2 target `10.20.11.150:8088`, `/healthz` probe, and HTTPS listener rule priority 100 for the two hostnames. The AWS Load Balancer Controller did not register the external EC2 target through a selectorless Service/EndpointSlice; only those temporary objects were removed. No application or data resources were changed.
+- Validation from the current network: both DNS CNAMEs resolve to the ALB; `curl`/`openssl` certificate verification passed for both; HTTP returned 301 to HTTPS; GLPI returned HTTP 200; Kestra UI returned a login redirect; unauthenticated Kestra API returned HTTP 401; target health reports `healthy`; Grafana remains accessible from the configured administrator network.
+- A separate non-administrator vantage was unavailable, so a public-source WAF denial test for Grafana remains unverified. WAF rules and the current administrator `/32` were read back from AWS.
+- AWS WAF published pricing gives a baseline of `$5/month` per ACL and `$1/month` per rule, plus request charges. Current design estimate is `$8/month` base for one ACL and three customer rules, plus request/log usage. Reusing the ALB avoided a new load balancer charge. [AWS WAF pricing](https://aws.amazon.com/waf/pricing/).
+- More complete billing baseline before this phase: Cost Explorer `$9.52` for Nov 1–3 (excluding credits/refunds), subject to billing delay. Published hourly estimates at 730 hours were EKS control plane `$73.00`, one NAT `$32.85`, and on-demand `t3.large` `$60.96`, totaling `$166.80` before Spot compute, EBS, ALB, LCU, data, CloudWatch, Backup, tax, and credits. [EKS](https://aws.amazon.com/eks/pricing/), [VPC](https://aws.amazon.com/vpc/pricing/), [EC2 T3](https://aws.amazon.com/ec2/instance-types/t3/).
+
+## Code and validation
+
+- `terraform fmt -check -recursive`: passed.
+- `terraform validate`: passed.
+- Terraform DEV state contains 58 resources; latest refreshed plan reports no changes. Public routing apply added 3 resources, 0 changed, 0 destroyed; WAF phase added 6 resources and later updated logging redaction in place.
+- `kubectl apply --dry-run=server` passed for the original ingress manifests; temporary failed Service/EndpointSlice/Endpoints/Ingress objects were removed. Existing observability ingress remains declaratively restricted by WAF and CIDR policy.
+- Python unit suite: 43 passed. Ruff: passed. `compileall`: passed. Shell syntax check: passed. `git diff --check`: passed after direct target-group and documentation changes.
+- Staged-file secret scan passed for the first public-access commit; no secrets, credentials, or runtime files were staged. Rerun after the current changes.
+- Commit `5045b68 feat(itsm): publish GLPI and Kestra through protected ALB` was pushed to `origin/main`. Direct Terraform listener/target-group routing and final access documentation are validated and ready for a separate commit and push.
 
 ## Costs and budgets
 
-- Cost Explorer, 2026-11-01 through 2026-11-03, credits/refunds excluded: `$9.52` (EKS `$4.20`, EC2 Other `$2.48`, EC2 Compute `$1.83`, ELB `$0.65`, VPC `$0.35`; other listed services currently `$0.00`). Data is month-to-date and still subject to billing delay.
-- The one AWS Budget, `LAB-SERVERLESS-LIMIT`, was updated to `$100 USD` monthly; three existing alert thresholds were preserved. Budgets do not stop spending. Budget `CalculatedSpend` reported `$0` even while Cost Explorer reported `$9.52`; investigate this reporting lag/discrepancy.
-- Cost Explorer forecast API returned `DataUnavailableException` because there is not enough billing history. Current published hourly baselines (730 hours/month) estimate EKS control plane `$73.00`, NAT Gateway `$32.85`, and existing `t3.large` compute `$60.96`; combined baseline `$166.80`, excluding Spot workers, EBS, load balancers, LCU, data, CloudWatch, Backup, taxes, and credits. Pricing sources: [EKS](https://aws.amazon.com/eks/pricing/), [VPC](https://aws.amazon.com/vpc/pricing/), [T3](https://aws.amazon.com/ec2/instance-types/t3/).
-- No resource creation is blocked by the removed $100 cap, but future resources still require a cost estimate and purpose review.
+- Existing AWS Budget `LAB-SERVERLESS-LIMIT` has a `$100 USD` monthly alert threshold with prior notifications preserved. Current instruction removes the cap; no enforcement change was made.
+- Budget API previously reported `$0` while Cost Explorer reported `$9.52`; billing data lag/discrepancy remains open. Cost Explorer forecast API returned `DataUnavailableException` due to limited billing history.
+- No fixed cap is being enforced. Review current Cost Explorer and WAF/CloudWatch usage before future provisioning.
 
-## Public GLPI/Kestra access — current phase
+## Remaining backlog and human dependencies
 
-- Public DNS NS lookup identifies Cloudflare (`bjorn.ns.cloudflare.com`, `robin.ns.cloudflare.com`). No Cloudflare API credentials or DNS connector are available.
-- Both `glpi.cosmotechsolutions.com.br` and `kestra.cosmotechsolutions.com.br` already have CNAMEs to the internet-facing observability ALB `k8s-observability-633f55bc55-702046070.us-east-1.elb.amazonaws.com`; no DNS record update is currently needed if that ALB can safely be reused.
-- ACM wildcard `*.cosmotechsolutions.com.br` is ISSUED, DNS validated, and attached to the existing ALB; expiry is 2027-05-19. ALB has HTTP→HTTPS redirect and HTTPS host rules for Grafana, Prometheus, Alertmanager, and Tempo. Unmatched hosts return 404.
-- The existing ALB SG restricts HTTP/HTTPS to administrator CIDR `45.6.218.165/32`; `curl` to GLPI/Kestra domains from that allowed source validates TLS but receives 404 because no host routes exist.
-- Created and associated regional WAF `cosmotech-public-ingress` with the existing ALB. Default action blocks. It permits only the two ITSM hostnames publicly, permits existing observability routes only from the current administrator `/32`, and rate-limits ITSM hosts at 1,200 requests per source IP per five minutes. Current capacity is 21 WCU.
-- WAF logs go to CloudWatch Logs with 30-day retention. Authorization, Cookie, and query-string fields are redacted; request sampling is disabled. WAF access logging is enabled.
-- Added a dedicated EC2 security-group rule allowing TCP/8088 from the ALB security group only. No application, MariaDB, or PostgreSQL ports are open to the Internet.
-- WAF association was verified with `get-web-acl-for-resource`; Grafana still returns its expected login redirect from the administrator network. GLPI still returns ALB 404 until its target and host route are installed.
-- Terraform created six resources (WAF, IP set, log group/configuration, ALB association, and ALB-to-EC2 rule) and updated WAF logging redaction in place. Plans contain no deletes or replacements.
-- No dedicated ALB was added. AWS WAF pricing lists a `$5/month` ACL, `$1/month` per customer rule, plus request charges; this design estimates `$8/month` base for one ACL and three rules plus request/log usage (regional pricing and actual usage apply). [AWS WAF pricing](https://aws.amazon.com/waf/pricing/).
-- Added versioned Nginx reverse-proxy configuration and installer. It listens on port 8088, proxies to existing loopback-only ports 8080/8081, logs URI without query string, and configures Kestra's canonical HTTPS URL. EC2 proxy install and public route are not active yet.
-- Added Kubernetes Service/EndpointSlice/Ingress manifests for private EC2 address `10.20.11.150:8088` and a declarative source manifest for the existing observability Ingress, ready to widen ALB CIDRs only after WAF was active.
-- Pre-change backups are stored outside Git at `/tmp/cosmo-public-access-backup-20261104/` (Terraform state backup is mode-restricted). No DNS tokens or service passwords were written there.
-- Next steps: publish reviewed source changes; install and test Nginx on EC2 through SSM; apply endpoint/ingress manifests; verify target health, external HTTPS and HTTP redirect, log flow, login behavior, and admin dashboard restrictions.
+- Durable Prometheus, Alertmanager, Loki, and Tempo storage; EBS CSI install and safe storage migration/restore test.
+- Cluster Autoscaler authorization/version correction, based on compatible least-privilege permissions.
+- Alert destination is not configured/verified; do not invent a recipient or send alerts without a real endpoint.
+- GLPI login is reachable, but UI login, ticket/GMUD creation, workflow, and backup restore exercise remain unverified.
+- Kestra authentication is active, but workflows and GLPI integration are not implemented. Real approver identities for DEV, QA, PO/PM, and Infra/SRE are unavailable; approvals must not be simulated and no GMUD-gated deploy may proceed without them.
+- EKS Orders manifests/source are not tracked in this repo; payment, inventory, fulfillment, end-to-end SQS retry/DLQ/idempotency tests and complete trace propagation remain incomplete.
+- Existing ECR OIDC trust is for a separate GitHub repo, not this repository. Current GitHub Actions validates code only; no deploy workflow or approval gates are ready.
+- Cloudflare DNS was already correct. If records must change later, Cloudflare admin access is a human dependency because no DNS API credentials are available.
 
-## Completed previously
+## Next steps
 
-- API Gateway IAM authorization, observability ingress restriction, versioned/encrypted Terraform S3 state backend, private SSM-only GLPI/Kestra host, and CI validation workflow.
-- Serverless Orders v2 events, idempotent DynamoDB order persistence, scoped IAM, SQS 1 MiB limit, and DynamoDB PITR.
-- Signed live API smoke test posted one synthetic order twice and confirmed one `RECEIVED` record plus a `COMPLETE` idempotency claim.
-- GLPI/MariaDB and Kestra/PostgreSQL containers are healthy; Kestra authenticated API test returned 200; generated credentials are in SSM SecureString. Do not place credentials in this file.
-- Commits: `84081dd` Orders persistence; `4c502bc` live status/backlog.
+1. Stage only reviewed main-repository paths, rerun the staged secret scan, commit, and push without force.
+2. Record the new commit hash here in a follow-up continuity update if needed.
+3. Continue with durable observability and safe recovery plan, then resolve human dependencies for real approval-gated ITSM workflows.
 
-## Open work
+## Rollback notes
 
-- Public GLPI/Kestra host routing, Nginx reverse proxy install, and external HTTPS tests remain pending.
-- Durable observability storage/retention/restore; EBS CSI and storage class setup require tracked manifests and data migration plan.
-- Functional alert receiver is missing; receiver identity/endpoint must be supplied or discovered from approved configuration. Do not invent or message a recipient.
-- GLPI UI login/ticket/GMUD setup and backup restore exercise remain unverified.
-- Kestra flows, GLPI integration, approval-gated GitHub Actions, and deploy workflow are not implemented. Do not fake DEV/QA/PO/PM/Infra/SRE approval identities and do not deploy without real approvals.
-- EKS Orders deployment code/manifests are not tracked in this repository. Payment, inventory, fulfillment, full trace propagation, and EKS source-of-truth remain incomplete.
-- Existing ECR OIDC role trusts the separate `rlcosmo/aws-eks-istio-lab` repository, not this repository.
-- Verify IAM/security-group/NACL/ACM/backup posture in depth; preserve existing resources and data.
-
-## Rollback / continuation
-
-- Public ingress work is staged: (1) WAF is attached and admin access was verified, (2) prepare and test proxy, (3) add target route and widen ALB inbound while WAF remains active, (4) validate public domains. Roll back by restoring the saved Ingress annotations; do not remove the existing ALB or TLS certificate.
-- Restore the pre-change Terraform state only for state corruption recovery, never as a routine rollback. Terraform-managed application resources must use forward plans with no destroys/replacements unless explicitly reviewed.
-- Continue from the `Public GLPI/Kestra access` section; inspect current state before every mutation because cloud state can change independently.
+- Public route rollback: first restore ALB inbound 80/443 to the administrator `/32`; verify dashboard access; then remove the Terraform listener rule/target group and EC2 ALB ingress in a reviewed plan. Keep the shared ALB, ACM certificate, WAF, EC2, and application data.
+- Never delete Docker volumes, databases, state, or the existing serverless DLQ message during access rollback.
+- Backups from before this phase are under `/tmp/cosmo-public-access-backup-20261104/`; the state backup is private and must only be used for state-corruption recovery.

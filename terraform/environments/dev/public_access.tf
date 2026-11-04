@@ -14,6 +14,11 @@ data "aws_lb" "observability" {
   name = "k8s-observability-633f55bc55"
 }
 
+data "aws_lb_listener" "observability_https" {
+  load_balancer_arn = data.aws_lb.observability.arn
+  port              = 443
+}
+
 resource "aws_vpc_security_group_ingress_rule" "itsm_from_observability_alb" {
   security_group_id            = module.itsm_host.security_group_id
   referenced_security_group_id = data.aws_security_group.observability_alb.id
@@ -21,6 +26,56 @@ resource "aws_vpc_security_group_ingress_rule" "itsm_from_observability_alb" {
   from_port                    = 8088
   to_port                      = 8088
   ip_protocol                  = "tcp"
+}
+
+resource "aws_lb_target_group" "itsm_public_proxy" {
+  name                 = "cosmo-itsm-public-proxy"
+  port                 = 8088
+  protocol             = "HTTP"
+  target_type          = "ip"
+  vpc_id               = data.aws_vpc.eks_lab.id
+  deregistration_delay = 30
+
+  health_check {
+    enabled             = true
+    protocol            = "HTTP"
+    port                = "traffic-port"
+    path                = "/healthz"
+    matcher             = "200"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 3
+  }
+
+  tags = merge(local.common_tags, { System = "itsm-public-proxy" })
+}
+
+resource "aws_lb_target_group_attachment" "itsm_public_proxy" {
+  target_group_arn = aws_lb_target_group.itsm_public_proxy.arn
+  target_id        = module.itsm_host.private_ip
+  port             = 8088
+}
+
+resource "aws_lb_listener_rule" "itsm_public" {
+  listener_arn = data.aws_lb_listener.observability_https.arn
+  priority     = 100
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.itsm_public_proxy.arn
+  }
+
+  condition {
+    host_header {
+      values = [
+        "glpi.cosmotechsolutions.com.br",
+        "kestra.cosmotechsolutions.com.br",
+      ]
+    }
+  }
+
+  tags = merge(local.common_tags, { System = "itsm-public-proxy" })
 }
 
 resource "aws_wafv2_ip_set" "observability_admin" {
@@ -223,4 +278,9 @@ output "glpi_url" {
 output "kestra_url" {
   description = "Public Kestra URL."
   value       = "https://kestra.cosmotechsolutions.com.br/"
+}
+
+output "itsm_public_target_group_arn" {
+  description = "Private EC2 reverse-proxy target group behind the protected public ALB."
+  value       = aws_lb_target_group.itsm_public_proxy.arn
 }
