@@ -3,6 +3,14 @@ output "instance_id" {
   value       = aws_instance.this.id
 }
 
+output "backup_plan_id" {
+  value = aws_backup_plan.this.id
+}
+
+output "backup_role_arn" {
+  value = aws_iam_role.backup.arn
+}
+
 output "private_ip" {
   description = "Private address of the ITSM host."
   value       = aws_instance.this.private_ip

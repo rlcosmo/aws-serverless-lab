@@ -1,3 +1,9 @@
+variable "alarm_topic_arns" {
+  description = "SNS topics for alarm and recovery notifications."
+  type        = list(string)
+  default     = []
+}
+
 variable "lambda_names" {
   description = "Lambda function names whose log groups are managed here."
   type        = set(string)

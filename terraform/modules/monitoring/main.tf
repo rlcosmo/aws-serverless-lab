@@ -12,6 +12,8 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
 
   alarm_name          = "${each.value}-errors"
   alarm_description   = "One or more Lambda invocations failed in a five-minute period."
+  alarm_actions       = var.alarm_topic_arns
+  ok_actions          = var.alarm_topic_arns
   namespace           = "AWS/Lambda"
   metric_name         = "Errors"
   dimensions          = { FunctionName = each.value }
@@ -27,6 +29,8 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
 resource "aws_cloudwatch_metric_alarm" "dead_letter_messages" {
   alarm_name          = "${var.dead_letter_queue_name}-messages-visible"
   alarm_description   = "At least one message is waiting in the orders dead-letter queue."
+  alarm_actions       = var.alarm_topic_arns
+  ok_actions          = var.alarm_topic_arns
   namespace           = "AWS/SQS"
   metric_name         = "ApproximateNumberOfMessagesVisible"
   dimensions          = { QueueName = var.dead_letter_queue_name }

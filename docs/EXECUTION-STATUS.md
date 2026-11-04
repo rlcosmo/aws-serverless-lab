@@ -1,6 +1,52 @@
 # CosmoTech AWS Lab — Execution Status
 
-Updated: 2026-11-04 01:21 UTC
+Updated: 2026-11-04 10:05 UTC
+
+## Continuation checkpoint — 2026-11-04
+
+This section supersedes earlier statements about zero PVCs and unknown approvers.
+The previous execution record below is retained as historical evidence.
+
+- Revalidated AWS identity, EKS nodes, Helm releases and actual pod volume mounts.
+  All three EKS nodes were Ready; healthy components were not reinstalled.
+- Migrated Prometheus, Grafana, Alertmanager, Loki and Tempo to five encrypted
+  gp3 PVCs totaling 37 GiB, preserving the existing application versions and
+  recovered data. Isolated WAL/startup/SQLite checks passed before replacing
+  original pods. New pods mount the intended claims. A second restart was run
+  to exercise persistence. See `docs/observability-recovery.md` for limits and
+  rollback; zero RPO is not claimed.
+- All seven on-demand EBS backup jobs (two source node disks and five application
+  disks) reached COMPLETED. Five isolated EBS restore jobs have been started;
+  restored-data validation is still in progress at this checkpoint. Daily backup
+  selection now includes all five observability volumes, with 14-day retention.
+- MariaDB and PostgreSQL consistent logical dumps were restored to separate,
+  network-isolated Docker containers. The 28-second exercise recovered 447 GLPI
+  tables (zero tickets/changes at capture) and 25 Kestra public tables. MariaDB
+  table checks reported zero errors. Restored containers were stopped; their
+  volumes and protected evidence remain on the ITSM host. This does not yet
+  prove functional ticket/workflow recovery. A fresh EC2 backup was requested.
+- Removed exactly `orders/orders-api` and `orders/orders-worker` after preserving
+  their specifications privately and confirming empty queue/table settings.
+  Current deployments in `orders-api` and `orders-worker` remained healthy.
+  No namespace, Service, Secret, queue, table or application PVC was removed.
+- Created GLPI `svc-cosmotech-automation`, an isolated lab entity, restricted
+  profile and OAuth client. OAuth authentication passed. Credentials are in SSM
+  SecureString `/cosmotech/itsm/glpi/automation-credentials`; none are published.
+  Personal users/passwords were preserved. API functional checks are in progress.
+- Provisioned an encrypted SNS alert topic, owner email subscription, CloudWatch
+  canary alarm, existing alarm/recovery actions and a dedicated Alertmanager Pod
+  Identity role. Email remains PendingConfirmation in AWS at this checkpoint.
+  Owner responded to the confirmation request; no delivery is yet claimed.
+- Owner designated real GitHub user `rlcosmo` for all four approval gates for now.
+  Protected environment configuration and OIDC/deploy work are in progress;
+  no human approval has been simulated and no application deploy has occurred.
+- Upstream releases were checked again: latest observed Cluster Autoscaler binary
+  is 1.36.1; a chart 9.60.0 release is not a 1.37 binary. Keep the compatibility
+  gap open. Recent autoscaler logs show normal loops and no forbidden errors.
+- Terraform plans for notifications, backup selection/restore role and Alertmanager
+  identity were reviewed before apply; they contained additions and alarm action
+  updates, without resource destruction or replacement. Formatting and validation
+  passed. Incremental publication and remaining checks are in progress.
 
 ## Scope and preservation
 

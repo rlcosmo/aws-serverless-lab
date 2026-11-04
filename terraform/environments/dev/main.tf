@@ -18,6 +18,8 @@ module "dynamodb" {
 module "monitoring" {
   source = "../../modules/monitoring"
 
+  alarm_topic_arns = [aws_sns_topic.alerts.arn]
+
   lambda_names             = [local.producer_function_name, local.consumer_function_name]
   dead_letter_queue_name   = module.sqs.dead_letter_queue_name
   orders_queue_name        = "${local.name_prefix}-orders"
