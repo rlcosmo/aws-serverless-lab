@@ -22,3 +22,7 @@ Arquivos anteriores preservam evidências históricas. Sem tokens, senhas, conta
 - `kestra-native-view-evidence.json`: login operacional real pelo formulário/API nativo, catálogo idêntico de17 fluxos, logs/execuções/dashboard, negação de alterações e preservação do admin inclusive com adaptador temporariamente indisponível. São resultados HTTP reais; não existe print de browser automatizado nesta rodada.
 
 - `two-replica-release-requests.json`: CIs reais, aliases ECR, propostas HPA2/2, GMUDs9/10 e pausa autenticada; não é prova de implantação ou de novo Canary.
+
+## Retenção por Deployment — 06/11/2026
+
+`replicaset-retention-evidence.json` contém comparação real antes/depois, saúde Argo CD e commits assinados. Não contém capturas de tela nem validação de novo Canary. Consulte `../../replicaset-retention-plan.md` para escopo e limites.

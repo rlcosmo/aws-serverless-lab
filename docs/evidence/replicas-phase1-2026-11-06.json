@@ -1,0 +1,1246 @@
+{
+  "observed_at": "2026-11-06T14:31:01.453432+00:00",
+  "phase": "diagnosis only; no cluster writes or deployments initiated",
+  "cluster": "aws-eks-istio-lab-dev",
+  "namespaces": [
+    "cosmotech-recovery",
+    "default",
+    "external-integration",
+    "istio-system",
+    "kube-node-lease",
+    "kube-public",
+    "kube-system",
+    "kyverno",
+    "loki",
+    "observability",
+    "orders-api",
+    "orders-worker",
+    "platform-system"
+  ],
+  "deployments": [
+    {
+      "namespace": "istio-system",
+      "name": "istio-ingressgateway",
+      "classification": "essential-excluded",
+      "desired": 1,
+      "ready": 1,
+      "available": 1,
+      "version": "1.31.3",
+      "argocd_tracking": null,
+      "helm_release": null,
+      "managed_by": "Helm",
+      "pod_request": {
+        "cpu_m": 100.0,
+        "memory_mib": 128.0
+      },
+      "request_basis": "live pod including Istio/native sidecars",
+      "pod_nodes": [
+        "node-03"
+      ],
+      "pvc_claims": [],
+      "spread_configured": false,
+      "strategy": {
+        "rollingUpdate": {
+          "maxSurge": "100%",
+          "maxUnavailable": "25%"
+        },
+        "type": "RollingUpdate"
+      }
+    },
+    {
+      "namespace": "istio-system",
+      "name": "istiod",
+      "classification": "essential-excluded",
+      "desired": 1,
+      "ready": 1,
+      "available": 1,
+      "version": "1.31.3",
+      "argocd_tracking": null,
+      "helm_release": null,
+      "managed_by": "Helm",
+      "pod_request": {
+        "cpu_m": 500.0,
+        "memory_mib": 2048.0
+      },
+      "request_basis": "live pod including Istio/native sidecars",
+      "pod_nodes": [
+        "node-02"
+      ],
+      "pvc_claims": [],
+      "spread_configured": false,
+      "strategy": {
+        "rollingUpdate": {
+          "maxSurge": "100%",
+          "maxUnavailable": "25%"
+        },
+        "type": "RollingUpdate"
+      }
+    },
+    {
+      "namespace": "kube-system",
+      "name": "aws-load-balancer-controller",
+      "classification": "essential-excluded",
+      "desired": 2,
+      "ready": 2,
+      "available": 2,
+      "version": null,
+      "argocd_tracking": null,
+      "helm_release": "aws-load-balancer-controller",
+      "managed_by": "Helm",
+      "pod_request": {
+        "cpu_m": 0.0,
+        "memory_mib": 0.0
+      },
+      "request_basis": "live pod including Istio/native sidecars",
+      "pod_nodes": [
+        "node-02",
+        "node-03"
+      ],
+      "pvc_claims": [],
+      "spread_configured": true,
+      "strategy": {
+        "rollingUpdate": {
+          "maxSurge": "25%",
+          "maxUnavailable": "25%"
+        },
+        "type": "RollingUpdate"
+      }
+    },
+    {
+      "namespace": "kube-system",
+      "name": "cluster-autoscaler",
+      "classification": "essential-excluded",
+      "desired": 1,
+      "ready": 1,
+      "available": 1,
+      "version": null,
+      "argocd_tracking": null,
+      "helm_release": null,
+      "managed_by": null,
+      "pod_request": {
+        "cpu_m": 100.0,
+        "memory_mib": 150.0
+      },
+      "request_basis": "live pod including Istio/native sidecars",
+      "pod_nodes": [
+        "node-03"
+      ],
+      "pvc_claims": [],
+      "spread_configured": false,
+      "strategy": {
+        "rollingUpdate": {
+          "maxSurge": "25%",
+          "maxUnavailable": "25%"
+        },
+        "type": "RollingUpdate"
+      }
+    },
+    {
+      "namespace": "kube-system",
+      "name": "coredns",
+      "classification": "essential-excluded",
+      "desired": 2,
+      "ready": 2,
+      "available": 2,
+      "version": null,
+      "argocd_tracking": null,
+      "helm_release": null,
+      "managed_by": null,
+      "pod_request": {
+        "cpu_m": 100.0,
+        "memory_mib": 70.0
+      },
+      "request_basis": "live pod including Istio/native sidecars",
+      "pod_nodes": [
+        "node-02",
+        "node-03"
+      ],
+      "pvc_claims": [],
+      "spread_configured": true,
+      "strategy": {
+        "rollingUpdate": {
+          "maxSurge": "25%",
+          "maxUnavailable": 1
+        },
+        "type": "RollingUpdate"
+      }
+    },
+    {
+      "namespace": "kube-system",
+      "name": "ebs-csi-controller",
+      "classification": "essential-excluded",
+      "desired": 2,
+      "ready": 2,
+      "available": 2,
+      "version": "1.67.2",
+      "argocd_tracking": null,
+      "helm_release": null,
+      "managed_by": "EKS",
+      "pod_request": {
+        "cpu_m": 60.0,
+        "memory_mib": 232.0
+      },
+      "request_basis": "live pod including Istio/native sidecars",
+      "pod_nodes": [
+        "node-01",
+        "node-03"
+      ],
+      "pvc_claims": [],
+      "spread_configured": true,
+      "strategy": {
+        "rollingUpdate": {
+          "maxSurge": "25%",
+          "maxUnavailable": 1
+        },
+        "type": "RollingUpdate"
+      }
+    },
+    {
+      "namespace": "kube-system",
+      "name": "metrics-server",
+      "classification": "essential-excluded",
+      "desired": 1,
+      "ready": 1,
+      "available": 1,
+      "version": null,
+      "argocd_tracking": null,
+      "helm_release": null,
+      "managed_by": null,
+      "pod_request": {
+        "cpu_m": 100.0,
+        "memory_mib": 200.0
+      },
+      "request_basis": "live pod including Istio/native sidecars",
+      "pod_nodes": [
+        "node-03"
+      ],
+      "pvc_claims": [],
+      "spread_configured": false,
+      "strategy": {
+        "rollingUpdate": {
+          "maxSurge": "25%",
+          "maxUnavailable": 0
+        },
+        "type": "RollingUpdate"
+      }
+    },
+    {
+      "namespace": "kube-system",
+      "name": "snapshot-controller",
+      "classification": "essential-excluded",
+      "desired": 2,
+      "ready": 2,
+      "available": 2,
+      "version": null,
+      "argocd_tracking": null,
+      "helm_release": null,
+      "managed_by": null,
+      "pod_request": {
+        "cpu_m": 50.0,
+        "memory_mib": 64.0
+      },
+      "request_basis": "live pod including Istio/native sidecars",
+      "pod_nodes": [
+        "node-02",
+        "node-03"
+      ],
+      "pvc_claims": [],
+      "spread_configured": true,
+      "strategy": {
+        "rollingUpdate": {
+          "maxSurge": 0,
+          "maxUnavailable": 1
+        },
+        "type": "RollingUpdate"
+      }
+    },
+    {
+      "namespace": "kyverno",
+      "name": "kyverno-admission-controller",
+      "classification": "essential-excluded",
+      "desired": 1,
+      "ready": 1,
+      "available": 1,
+      "version": "3.9.2",
+      "argocd_tracking": null,
+      "helm_release": "kyverno",
+      "managed_by": "Helm",
+      "pod_request": {
+        "cpu_m": 100.0,
+        "memory_mib": 128.0
+      },
+      "request_basis": "live pod including Istio/native sidecars",
+      "pod_nodes": [
+        "node-03"
+      ],
+      "pvc_claims": [],
+      "spread_configured": false,
+      "strategy": {
+        "rollingUpdate": {
+          "maxSurge": 1,
+          "maxUnavailable": "40%"
+        },
+        "type": "RollingUpdate"
+      }
+    },
+    {
+      "namespace": "kyverno",
+      "name": "kyverno-background-controller",
+      "classification": "essential-excluded",
+      "desired": 1,
+      "ready": 1,
+      "available": 1,
+      "version": "3.9.2",
+      "argocd_tracking": null,
+      "helm_release": "kyverno",
+      "managed_by": "Helm",
+      "pod_request": {
+        "cpu_m": 100.0,
+        "memory_mib": 64.0
+      },
+      "request_basis": "live pod including Istio/native sidecars",
+      "pod_nodes": [
+        "node-02"
+      ],
+      "pvc_claims": [],
+      "spread_configured": false,
+      "strategy": {
+        "rollingUpdate": {
+          "maxSurge": 1,
+          "maxUnavailable": "40%"
+        },
+        "type": "RollingUpdate"
+      }
+    },
+    {
+      "namespace": "kyverno",
+      "name": "kyverno-cleanup-controller",
+      "classification": "essential-excluded",
+      "desired": 1,
+      "ready": 1,
+      "available": 1,
+      "version": "3.9.2",
+      "argocd_tracking": null,
+      "helm_release": "kyverno",
+      "managed_by": "Helm",
+      "pod_request": {
+        "cpu_m": 100.0,
+        "memory_mib": 64.0
+      },
+      "request_basis": "live pod including Istio/native sidecars",
+      "pod_nodes": [
+        "node-02"
+      ],
+      "pvc_claims": [],
+      "spread_configured": false,
+      "strategy": {
+        "rollingUpdate": {
+          "maxSurge": 1,
+          "maxUnavailable": "40%"
+        },
+        "type": "RollingUpdate"
+      }
+    },
+    {
+      "namespace": "kyverno",
+      "name": "kyverno-reports-controller",
+      "classification": "essential-excluded",
+      "desired": 1,
+      "ready": 1,
+      "available": 1,
+      "version": "3.9.2",
+      "argocd_tracking": null,
+      "helm_release": "kyverno",
+      "managed_by": "Helm",
+      "pod_request": {
+        "cpu_m": 100.0,
+        "memory_mib": 64.0
+      },
+      "request_basis": "live pod including Istio/native sidecars",
+      "pod_nodes": [
+        "node-03"
+      ],
+      "pvc_claims": [],
+      "spread_configured": false,
+      "strategy": {
+        "rollingUpdate": {
+          "maxSurge": 1,
+          "maxUnavailable": "40%"
+        },
+        "type": "RollingUpdate"
+      }
+    },
+    {
+      "namespace": "loki",
+      "name": "loki-gateway",
+      "classification": "platform-stateless-review",
+      "desired": 1,
+      "ready": 1,
+      "available": 1,
+      "version": null,
+      "argocd_tracking": null,
+      "helm_release": "loki",
+      "managed_by": "Helm",
+      "pod_request": {
+        "cpu_m": 0.0,
+        "memory_mib": 0.0
+      },
+      "request_basis": "live pod including Istio/native sidecars",
+      "pod_nodes": [
+        "node-02"
+      ],
+      "pvc_claims": [],
+      "spread_configured": true,
+      "strategy": {
+        "rollingUpdate": {
+          "maxSurge": "25%",
+          "maxUnavailable": "25%"
+        },
+        "type": "RollingUpdate"
+      }
+    },
+    {
+      "namespace": "observability",
+      "name": "otel-collector-opentelemetry-collector",
+      "classification": "platform-stateless-review",
+      "desired": 1,
+      "ready": 1,
+      "available": 1,
+      "version": null,
+      "argocd_tracking": null,
+      "helm_release": "otel-collector",
+      "managed_by": "Helm",
+      "pod_request": {
+        "cpu_m": 100.0,
+        "memory_mib": 128.0
+      },
+      "request_basis": "live pod including Istio/native sidecars",
+      "pod_nodes": [
+        "node-01"
+      ],
+      "pvc_claims": [],
+      "spread_configured": false,
+      "strategy": {
+        "rollingUpdate": {
+          "maxSurge": "25%",
+          "maxUnavailable": "25%"
+        },
+        "type": "RollingUpdate"
+      }
+    },
+    {
+      "namespace": "observability",
+      "name": "prometheus-grafana",
+      "classification": "platform-stateful-blocker",
+      "desired": 1,
+      "ready": 1,
+      "available": 1,
+      "version": "13.3.0",
+      "argocd_tracking": null,
+      "helm_release": "prometheus",
+      "managed_by": "Helm",
+      "pod_request": {
+        "cpu_m": 100.0,
+        "memory_mib": 128.0
+      },
+      "request_basis": "live pod including Istio/native sidecars",
+      "pod_nodes": [
+        "node-01"
+      ],
+      "pvc_claims": [
+        "grafana-data"
+      ],
+      "spread_configured": false,
+      "strategy": {
+        "type": "Recreate"
+      }
+    },
+    {
+      "namespace": "observability",
+      "name": "prometheus-kube-prometheus-operator",
+      "classification": "essential-excluded",
+      "desired": 1,
+      "ready": 1,
+      "available": 1,
+      "version": "92.17.0",
+      "argocd_tracking": null,
+      "helm_release": "prometheus",
+      "managed_by": "Helm",
+      "pod_request": {
+        "cpu_m": 50.0,
+        "memory_mib": 96.0
+      },
+      "request_basis": "live pod including Istio/native sidecars",
+      "pod_nodes": [
+        "node-03"
+      ],
+      "pvc_claims": [],
+      "spread_configured": false,
+      "strategy": {
+        "rollingUpdate": {
+          "maxSurge": "25%",
+          "maxUnavailable": "25%"
+        },
+        "type": "RollingUpdate"
+      }
+    },
+    {
+      "namespace": "observability",
+      "name": "prometheus-kube-state-metrics",
+      "classification": "essential-excluded",
+      "desired": 1,
+      "ready": 1,
+      "available": 1,
+      "version": "2.20.0",
+      "argocd_tracking": null,
+      "helm_release": "prometheus",
+      "managed_by": "Helm",
+      "pod_request": {
+        "cpu_m": 50.0,
+        "memory_mib": 64.0
+      },
+      "request_basis": "live pod including Istio/native sidecars",
+      "pod_nodes": [
+        "node-03"
+      ],
+      "pvc_claims": [],
+      "spread_configured": false,
+      "strategy": {
+        "rollingUpdate": {
+          "maxSurge": "25%",
+          "maxUnavailable": "25%"
+        },
+        "type": "RollingUpdate"
+      }
+    },
+    {
+      "namespace": "orders-api",
+      "name": "orders-api",
+      "classification": "application",
+      "desired": 2,
+      "ready": 2,
+      "available": 2,
+      "version": "2.0.4-lab",
+      "argocd_tracking": "orders-api-dev:apps/Deployment:orders-api/orders-api",
+      "helm_release": null,
+      "managed_by": null,
+      "pod_request": {
+        "cpu_m": 150.0,
+        "memory_mib": 192.0
+      },
+      "request_basis": "live pod including Istio/native sidecars",
+      "pod_nodes": [
+        "node-01",
+        "node-03"
+      ],
+      "pvc_claims": [],
+      "spread_configured": false,
+      "strategy": {
+        "rollingUpdate": {
+          "maxSurge": 1,
+          "maxUnavailable": 0
+        },
+        "type": "RollingUpdate"
+      }
+    },
+    {
+      "namespace": "orders-worker",
+      "name": "orders-worker",
+      "classification": "application",
+      "desired": 1,
+      "ready": 1,
+      "available": 1,
+      "version": "1.0.5",
+      "argocd_tracking": "orders-worker-dev:apps/Deployment:orders-worker/orders-worker",
+      "helm_release": null,
+      "managed_by": null,
+      "pod_request": {
+        "cpu_m": 150.0,
+        "memory_mib": 192.0
+      },
+      "request_basis": "live pod including Istio/native sidecars",
+      "pod_nodes": [
+        "node-01"
+      ],
+      "pvc_claims": [],
+      "spread_configured": false,
+      "strategy": {
+        "rollingUpdate": {
+          "maxSurge": 1,
+          "maxUnavailable": 0
+        },
+        "type": "RollingUpdate"
+      }
+    },
+    {
+      "namespace": "orders-worker",
+      "name": "orders-worker-canary",
+      "classification": "canary-exception",
+      "desired": 1,
+      "ready": 1,
+      "available": 1,
+      "version": "1.0.6",
+      "argocd_tracking": "orders-worker-dev:apps/Deployment:orders-worker/orders-worker-canary",
+      "helm_release": null,
+      "managed_by": null,
+      "pod_request": {
+        "cpu_m": 150.0,
+        "memory_mib": 192.0
+      },
+      "request_basis": "live pod including Istio/native sidecars",
+      "pod_nodes": [
+        "node-01"
+      ],
+      "pvc_claims": [],
+      "spread_configured": false,
+      "strategy": {
+        "rollingUpdate": {
+          "maxSurge": 1,
+          "maxUnavailable": 0
+        },
+        "type": "RollingUpdate"
+      }
+    }
+  ],
+  "counts": {
+    "namespaces": 13,
+    "deployments": 20,
+    "helm_releases": 7,
+    "argocd_applications_targeting_eks": 2,
+    "hpas": 4,
+    "statefulsets": 4,
+    "daemonsets": 7,
+    "jobs": 0,
+    "cronjobs": 0,
+    "essential_deployments_excluded": 14
+  },
+  "helm_releases": [
+    {
+      "name": "alloy",
+      "namespace": "observability",
+      "revision": "3",
+      "updated": "2026-11-05 08:04:45.378635035 -0300 -03",
+      "status": "deployed",
+      "chart": "alloy-1.15.0",
+      "app_version": "v1.21.3"
+    },
+    {
+      "name": "aws-load-balancer-controller",
+      "namespace": "kube-system",
+      "revision": "1",
+      "updated": "2026-11-02 20:55:12.721747264 -0300 -03",
+      "status": "deployed",
+      "chart": "aws-load-balancer-controller-3.6.2",
+      "app_version": "v3.6.2"
+    },
+    {
+      "name": "kyverno",
+      "namespace": "kyverno",
+      "revision": "1",
+      "updated": "2026-11-02 12:00:21.660967503 -0300 -03",
+      "status": "deployed",
+      "chart": "kyverno-3.9.2",
+      "app_version": "v1.19.2"
+    },
+    {
+      "name": "loki",
+      "namespace": "loki",
+      "revision": "2",
+      "updated": "2026-11-04 06:55:14.234395909 -0300 -03",
+      "status": "deployed",
+      "chart": "loki-20.2.1",
+      "app_version": "3.7.9"
+    },
+    {
+      "name": "otel-collector",
+      "namespace": "observability",
+      "revision": "3",
+      "updated": "2026-11-05 08:04:22.147397105 -0300 -03",
+      "status": "deployed",
+      "chart": "opentelemetry-collector-0.178.2",
+      "app_version": "0.163.2"
+    },
+    {
+      "name": "prometheus",
+      "namespace": "observability",
+      "revision": "7",
+      "updated": "2026-11-04 07:13:54.201662368 -0300 -03",
+      "status": "deployed",
+      "chart": "kube-prometheus-stack-92.17.0",
+      "app_version": "v0.94.2"
+    },
+    {
+      "name": "tempo",
+      "namespace": "observability",
+      "revision": "2",
+      "updated": "2026-11-04 06:55:13.314437425 -0300 -03",
+      "status": "deployed",
+      "chart": "tempo-3.2.1",
+      "app_version": "3.1.1"
+    }
+  ],
+  "argo_applications": [
+    {
+      "name": "orders-api-dev",
+      "project": "orders-dev",
+      "destination_namespace": "orders-api",
+      "sources": [
+        {
+          "repoURL": "ssh://git@ssh.github.com:443/rlcosmo/cosmotech-gitops.git",
+          "path": "gitops/apps/orders-api/dev",
+          "chart": null,
+          "targetRevision": "main",
+          "helm_valueFiles": null,
+          "helm_parameters": []
+        }
+      ],
+      "ignoreDifferences": [
+        {
+          "group": "apps",
+          "jsonPointers": [
+            "/spec/replicas"
+          ],
+          "kind": "Deployment"
+        }
+      ],
+      "syncPolicy": {
+        "automated": {
+          "enabled": true,
+          "prune": false,
+          "selfHeal": true
+        },
+        "syncOptions": [
+          "CreateNamespace=false",
+          "RespectIgnoreDifferences=true"
+        ]
+      },
+      "sync": {
+        "status": "Synced",
+        "revision": "11051addb5283190af516779ba3b126ab65d47d6"
+      },
+      "health": {
+        "lastTransitionTime": "2026-11-06T14:12:31Z",
+        "status": "Healthy"
+      },
+      "managed_resources": [
+        {
+          "kind": "Deployment",
+          "namespace": "orders-api",
+          "name": "orders-api"
+        },
+        {
+          "kind": "HorizontalPodAutoscaler",
+          "namespace": "orders-api",
+          "name": "orders-api"
+        }
+      ]
+    },
+    {
+      "name": "orders-worker-dev",
+      "project": "orders-dev",
+      "destination_namespace": "orders-worker",
+      "sources": [
+        {
+          "repoURL": "ssh://git@ssh.github.com:443/rlcosmo/cosmotech-gitops.git",
+          "path": "gitops/apps/orders-worker/dev",
+          "chart": null,
+          "targetRevision": "main",
+          "helm_valueFiles": null,
+          "helm_parameters": []
+        }
+      ],
+      "ignoreDifferences": [
+        {
+          "group": "apps",
+          "jsonPointers": [
+            "/spec/replicas"
+          ],
+          "kind": "Deployment"
+        },
+        {
+          "jsonPointers": [
+            "/data/lease.json"
+          ],
+          "kind": "ConfigMap",
+          "name": "orders-worker-canary-control",
+          "namespace": "orders-worker"
+        },
+        {
+          "jsonPointers": [
+            "/data/mode"
+          ],
+          "kind": "ConfigMap",
+          "name": "orders-worker-stable-control",
+          "namespace": "orders-worker"
+        }
+      ],
+      "syncPolicy": {
+        "automated": {
+          "enabled": true,
+          "prune": false,
+          "selfHeal": true
+        },
+        "syncOptions": [
+          "CreateNamespace=false",
+          "RespectIgnoreDifferences=true"
+        ]
+      },
+      "sync": {
+        "status": "Synced",
+        "revision": "11051addb5283190af516779ba3b126ab65d47d6"
+      },
+      "health": {
+        "lastTransitionTime": "2026-11-06T14:13:46Z",
+        "status": "Healthy"
+      },
+      "managed_resources": [
+        {
+          "kind": "Deployment",
+          "namespace": "orders-worker",
+          "name": "orders-worker"
+        },
+        {
+          "kind": "Deployment",
+          "namespace": "orders-worker",
+          "name": "orders-worker-canary"
+        },
+        {
+          "kind": "HorizontalPodAutoscaler",
+          "namespace": "orders-worker",
+          "name": "orders-worker"
+        }
+      ]
+    }
+  ],
+  "autoscaling": {
+    "hpas": [
+      {
+        "namespace": "istio-system",
+        "name": "istio-ingressgateway",
+        "min": 1,
+        "max": 5,
+        "target": "istio-ingressgateway"
+      },
+      {
+        "namespace": "istio-system",
+        "name": "istiod",
+        "min": 1,
+        "max": 5,
+        "target": "istiod"
+      },
+      {
+        "namespace": "orders-api",
+        "name": "orders-api",
+        "min": 2,
+        "max": 2,
+        "target": "orders-api"
+      },
+      {
+        "namespace": "orders-worker",
+        "name": "orders-worker",
+        "min": 1,
+        "max": 1,
+        "target": "orders-worker"
+      }
+    ],
+    "keda_installed": false,
+    "vpa_installed": false,
+    "karpenter_installed": false,
+    "nodegroup": {
+      "name": "aws-eks-istio-lab-dev-spot-named",
+      "scaling": {
+        "minSize": 1,
+        "maxSize": 3,
+        "desiredSize": 3
+      },
+      "capacityType": "SPOT",
+      "instanceTypes": [
+        "c7i-flex.large"
+      ],
+      "diskSize": null,
+      "status": "ACTIVE",
+      "version": "1.37"
+    }
+  },
+  "nodes": [
+    {
+      "node": "node-01",
+      "zone": "us-east-1a",
+      "instance_type": "c7i-flex.large",
+      "capacity_type": "SPOT",
+      "allocatable": {
+        "cpu_m": 1930.0,
+        "memory_mib": 3141.82421875,
+        "pods": 29
+      },
+      "requested": {
+        "cpu_m": 950.0,
+        "memory_mib": 1282.0
+      },
+      "scheduled_pods": 13,
+      "instant_usage": {
+        "cpu_m": 120.0,
+        "memory_mib": 2207.0
+      },
+      "request_headroom": {
+        "cpu_m": 980.0,
+        "memory_mib": 1859.824
+      }
+    },
+    {
+      "node": "node-02",
+      "zone": "us-east-1a",
+      "instance_type": "c7i-flex.large",
+      "capacity_type": "SPOT",
+      "allocatable": {
+        "cpu_m": 1930.0,
+        "memory_mib": 3141.8203125,
+        "pods": 29
+      },
+      "requested": {
+        "cpu_m": 1290.0,
+        "memory_mib": 3040.0
+      },
+      "scheduled_pods": 14,
+      "instant_usage": {
+        "cpu_m": 113.0,
+        "memory_mib": 2068.0
+      },
+      "request_headroom": {
+        "cpu_m": 640.0,
+        "memory_mib": 101.82
+      }
+    },
+    {
+      "node": "node-03",
+      "zone": "us-east-1b",
+      "instance_type": "c7i-flex.large",
+      "capacity_type": "SPOT",
+      "allocatable": {
+        "cpu_m": 1930.0,
+        "memory_mib": 3141.83203125,
+        "pods": 29
+      },
+      "requested": {
+        "cpu_m": 1400.0,
+        "memory_mib": 2318.0
+      },
+      "scheduled_pods": 20,
+      "instant_usage": {
+        "cpu_m": 176.0,
+        "memory_mib": 2249.0
+      },
+      "request_headroom": {
+        "cpu_m": 530.0,
+        "memory_mib": 823.832
+      }
+    }
+  ],
+  "capacity_scenarios_estimates": {
+    "orders_stable_to_two": {
+      "additional_pods": 1,
+      "additional_request": {
+        "cpu_m": 150.0,
+        "memory_mib": 192.0
+      }
+    },
+    "orders_plus_otel_and_gateway": {
+      "additional_pods": 3,
+      "additional_request": {
+        "cpu_m": 250.0,
+        "memory_mib": 320.0
+      }
+    },
+    "including_grafana_conditional_blocked": {
+      "additional_pods": 4,
+      "additional_request": {
+        "cpu_m": 350.0,
+        "memory_mib": 448.0
+      }
+    },
+    "canary_peak": {
+      "worker_stable_pods": 2,
+      "worker_candidate_pods": 2,
+      "worker_total": 4,
+      "orders_api_pods": 2,
+      "all_orders_pods": 6,
+      "extra_canary_request": {
+        "cpu_m": 300.0,
+        "memory_mib": 384.0
+      },
+      "rolling_surge_not_included": true
+    }
+  },
+  "financial_estimates": {
+    "source": "AWS EC2 DescribeSpotPriceHistory and AWS Price List API; not Cost Explorer or actual invoice",
+    "hours_per_month": 730,
+    "additional_node_not_authorized": true,
+    "root_disk_assumption_gib": 20,
+    "spot_hourly_usd_in_current_zones": [
+      "0.030800"
+    ],
+    "spot_monthly_compute_usd": [
+      22.484
+    ],
+    "on_demand_hourly_usd": "0.0847900000",
+    "on_demand_monthly_compute_usd": 61.8967,
+    "gp3_gb_month_usd": "0.0800000000",
+    "extra_root_disk_monthly_usd": 1.6,
+    "additional_node_monthly_spot_plus_disk_usd": [
+      24.084
+    ],
+    "additional_node_monthly_ondemand_plus_disk_usd": 63.4967,
+    "excludes": [
+      "tax",
+      "exchange rate",
+      "extra logging/metrics",
+      "storage outside root disk",
+      "Grafana shared database",
+      "network transfer"
+    ],
+    "assumption": "Conditional extra-node estimate; 20GiB gp3 root disk confirmed in the active launch template. No node provisioned or scaling limits changed.",
+    "root_disk_verified_from_active_launch_template": [
+      {
+        "device": "/dev/xvda",
+        "size_gib": 20,
+        "type": "gp3"
+      }
+    ]
+  },
+  "essential_non_deployments_preserved": [
+    {
+      "kind": "StatefulSet",
+      "namespace": "loki",
+      "name": "loki",
+      "replicas": 1
+    },
+    {
+      "kind": "StatefulSet",
+      "namespace": "observability",
+      "name": "alertmanager-prometheus-kube-prometheus-alertmanager",
+      "replicas": 1
+    },
+    {
+      "kind": "StatefulSet",
+      "namespace": "observability",
+      "name": "prometheus-prometheus-kube-prometheus-prometheus",
+      "replicas": 1
+    },
+    {
+      "kind": "StatefulSet",
+      "namespace": "observability",
+      "name": "tempo",
+      "replicas": 1
+    },
+    {
+      "kind": "DaemonSet",
+      "namespace": "kube-system",
+      "name": "aws-node",
+      "replicas": null
+    },
+    {
+      "kind": "DaemonSet",
+      "namespace": "kube-system",
+      "name": "ebs-csi-node",
+      "replicas": null
+    },
+    {
+      "kind": "DaemonSet",
+      "namespace": "kube-system",
+      "name": "ebs-csi-node-windows",
+      "replicas": null
+    },
+    {
+      "kind": "DaemonSet",
+      "namespace": "kube-system",
+      "name": "eks-pod-identity-agent",
+      "replicas": null
+    },
+    {
+      "kind": "DaemonSet",
+      "namespace": "kube-system",
+      "name": "kube-proxy",
+      "replicas": null
+    },
+    {
+      "kind": "DaemonSet",
+      "namespace": "observability",
+      "name": "alloy",
+      "replicas": null
+    },
+    {
+      "kind": "DaemonSet",
+      "namespace": "observability",
+      "name": "prometheus-prometheus-node-exporter",
+      "replicas": null
+    }
+  ],
+  "pvc_claims": [
+    {
+      "namespace": "cosmotech-recovery",
+      "name": "recovered-alertmanager",
+      "access_modes": [
+        "ReadWriteOnce"
+      ],
+      "storage": "2Gi"
+    },
+    {
+      "namespace": "cosmotech-recovery",
+      "name": "recovered-grafana",
+      "access_modes": [
+        "ReadWriteOnce"
+      ],
+      "storage": "5Gi"
+    },
+    {
+      "namespace": "cosmotech-recovery",
+      "name": "recovered-loki",
+      "access_modes": [
+        "ReadWriteOnce"
+      ],
+      "storage": "10Gi"
+    },
+    {
+      "namespace": "cosmotech-recovery",
+      "name": "recovered-prometheus",
+      "access_modes": [
+        "ReadWriteOnce"
+      ],
+      "storage": "10Gi"
+    },
+    {
+      "namespace": "cosmotech-recovery",
+      "name": "recovered-tempo",
+      "access_modes": [
+        "ReadWriteOnce"
+      ],
+      "storage": "10Gi"
+    },
+    {
+      "namespace": "cosmotech-recovery",
+      "name": "recovered-tempo-consistent",
+      "access_modes": [
+        "ReadWriteOnce"
+      ],
+      "storage": "10Gi"
+    },
+    {
+      "namespace": "loki",
+      "name": "storage-loki-0",
+      "access_modes": [
+        "ReadWriteOnce"
+      ],
+      "storage": "10Gi"
+    },
+    {
+      "namespace": "observability",
+      "name": "alertmanager-prometheus-kube-prometheus-alertmanager-db-alertmanager-prometheus-kube-prometheus-alertmanager-0",
+      "access_modes": [
+        "ReadWriteOnce"
+      ],
+      "storage": "2Gi"
+    },
+    {
+      "namespace": "observability",
+      "name": "grafana-data",
+      "access_modes": [
+        "ReadWriteOnce"
+      ],
+      "storage": "5Gi"
+    },
+    {
+      "namespace": "observability",
+      "name": "prometheus-prometheus-kube-prometheus-prometheus-db-prometheus-prometheus-kube-prometheus-prometheus-0",
+      "access_modes": [
+        "ReadWriteOnce"
+      ],
+      "storage": "10Gi"
+    },
+    {
+      "namespace": "observability",
+      "name": "storage-tempo-0",
+      "access_modes": [
+        "ReadWriteOnce"
+      ],
+      "storage": "10Gi"
+    }
+  ],
+  "admission_policies": [
+    {
+      "kind": "ValidatingPolicy",
+      "name": "require-container-resource-limits",
+      "action": [
+        "Audit"
+      ]
+    }
+  ],
+  "existing_release_pipelines": {
+    "observed_at": "2026-11-06T14:31:03.189810+00:00",
+    "note": "Previously approved releases; this phase only read their state and did not invoke dispatch, tick, promotion or traffic generation.",
+    "releases": [
+      {
+        "gmud_id": "RCL000009",
+        "glpi_id": 13,
+        "application": "orders-api",
+        "version": "2.0.4-lab",
+        "phase": "OBSERVING",
+        "execution_id": "3wN30fLGZrBmhd214817by",
+        "execution_state": "SUCCESS",
+        "canary_stage": null,
+        "approved_hpa": {
+          "min": 2,
+          "max": 2
+        },
+        "rollback_until": "2026-11-07T02:12:36.340917+00:00",
+        "human_approved_at": [
+          "2026-11-06T14:11:43.581318+00:00"
+        ]
+      },
+      {
+        "gmud_id": "RCL000010",
+        "glpi_id": 14,
+        "application": "orders-worker",
+        "version": "1.0.6",
+        "phase": "DEPLOYING",
+        "execution_id": "H7O83ddlbuiIXWI5Izh4L",
+        "execution_state": "SUCCESS",
+        "canary_stage": "CANARY_1",
+        "approved_hpa": {
+          "min": 2,
+          "max": 2
+        },
+        "rollback_until": null,
+        "human_approved_at": [
+          "2026-11-06T14:12:44.673545+00:00"
+        ]
+      }
+    ]
+  },
+  "grafana_database_check": {
+    "database_type_ini": "sqlite3",
+    "database_type_env": [],
+    "claim": "grafana-data",
+    "storage_mode": "ReadWriteOnce"
+  },
+  "kubernetes_version": "1.37",
+  "eks_auto_mode_enabled": false,
+  "gitops_live_revision": "11051addb5283190af516779ba3b126ab65d47d6",
+  "phase1_changes": {
+    "cluster_writes": 0,
+    "terraform_apply": false,
+    "new_deployments_started": 0,
+    "synthetic_traffic_sent": false,
+    "application_source_modified": false,
+    "gitops_manifests_modified": false,
+    "cloud_resources_provisioned": 0,
+    "files_created": "Local planning document and sanitized evidence only."
+  },
+  "limitations": [
+    "Read snapshots at different instants during existing release pipelines; not an atomic cluster snapshot.",
+    "Capacity estimates use declared pod requests and instantaneous top, not a scheduling simulation or workload benchmark.",
+    "Loki gateway declares no CPU/memory requests: its real incremental demand is not zero and cannot be bounded from requests alone.",
+    "Grafana HA database migration and costs not estimated or authorized.",
+    "No new Deployment conformance test, admission deployment or rollback test was performed in Phase1.",
+    "Repository worktrees contain unrelated changes; phase1 does not edit or stage them."
+  ]
+}

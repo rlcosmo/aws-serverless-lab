@@ -1,3 +1,5 @@
+> **Atualização real — 06/11/2026:** retenção aplicada por Deployment: API 11→3, Worker 11→3 e Canary 7→3. Vinte ReplicaSets inativos removidos pelo Kubernetes via GitOps assinado; Argo CD Synced/Healthy. Imagens, pods e HPA preservados. Worker atual 1.0.5; candidato 1.0.6 inativo após rollback anterior a esta manutenção. Não anunciar novo Canary validado. Automação `cdedf49`; GitOps `49e0639`/`0efb05d`. [Evidência sanitizada](assets/replicaset-retention-evidence.json). O restante deste documento e o carrossel preservam seus snapshots históricos; não são capturas deste ajuste.
+
 # CosmoTech Solutions — kit LinkedIn e evidências
 
 **Candidatas com duas réplicas:** API2.0.4-lab/RCL000009 e Worker1.0.6/RCL000010 passaram nas CIs e aguardam aprovação humana. HPA min=max=2 proposto, ainda não implantado. Últimas implantações verificadas/carrossel: RCL000007/8. Evidência atual: `assets/two-replica-release-requests.json`.

@@ -1,0 +1,105 @@
+{
+  "observed_at": "2026-11-06T14:47:09.739785+00:00",
+  "scope": "Read-only inventory of ReplicaSet history; not an implementation",
+  "workloads": [
+    {
+      "namespace": "loki",
+      "deployment": "loki-gateway",
+      "current_revision_history_limit": 10,
+      "replicasets": 1,
+      "active_replicasets": 1,
+      "inactive_replicasets": 0,
+      "desired_pods": 1,
+      "ready_pods": 1
+    },
+    {
+      "namespace": "observability",
+      "deployment": "otel-collector-opentelemetry-collector",
+      "current_revision_history_limit": 10,
+      "replicasets": 5,
+      "active_replicasets": 1,
+      "inactive_replicasets": 4,
+      "desired_pods": 1,
+      "ready_pods": 1
+    },
+    {
+      "namespace": "observability",
+      "deployment": "prometheus-grafana",
+      "current_revision_history_limit": 10,
+      "replicasets": 6,
+      "active_replicasets": 1,
+      "inactive_replicasets": 5,
+      "desired_pods": 1,
+      "ready_pods": 1
+    },
+    {
+      "namespace": "observability",
+      "deployment": "prometheus-kube-prometheus-operator",
+      "current_revision_history_limit": 10,
+      "replicasets": 1,
+      "active_replicasets": 1,
+      "inactive_replicasets": 0,
+      "desired_pods": 1,
+      "ready_pods": 1
+    },
+    {
+      "namespace": "observability",
+      "deployment": "prometheus-kube-state-metrics",
+      "current_revision_history_limit": 10,
+      "replicasets": 1,
+      "active_replicasets": 1,
+      "inactive_replicasets": 0,
+      "desired_pods": 1,
+      "ready_pods": 1
+    },
+    {
+      "namespace": "orders-api",
+      "deployment": "orders-api",
+      "current_revision_history_limit": 10,
+      "replicasets": 11,
+      "active_replicasets": 1,
+      "inactive_replicasets": 10,
+      "desired_pods": 2,
+      "ready_pods": 2
+    },
+    {
+      "namespace": "orders-worker",
+      "deployment": "orders-worker",
+      "current_revision_history_limit": 10,
+      "replicasets": 11,
+      "active_replicasets": 1,
+      "inactive_replicasets": 10,
+      "desired_pods": 1,
+      "ready_pods": 1
+    },
+    {
+      "namespace": "orders-worker",
+      "deployment": "orders-worker-canary",
+      "current_revision_history_limit": 10,
+      "replicasets": 7,
+      "active_replicasets": 1,
+      "inactive_replicasets": 6,
+      "desired_pods": 1,
+      "ready_pods": 1
+    }
+  ],
+  "orders_replicaset_total": 29,
+  "per_deployment_option": {
+    "revisionHistoryLimit": 2,
+    "steady_state_total_per_deployment": 3,
+    "orders_total_for_three_deployments": 9
+  },
+  "per_application_option": {
+    "orders-api": {
+      "history_limit": 2,
+      "steady_replicaset_total": 3
+    },
+    "orders-worker": {
+      "stable_history_limit": 1,
+      "canary_history_limit": 0,
+      "steady_replicaset_total": 3
+    }
+  },
+  "caveat": "Cleanup waits for completed rollout; counts can temporarily exceed the steady-state target. No active ReplicaSet or pod should be deleted.",
+  "writes_to_cluster": 0
+}

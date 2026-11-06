@@ -1,10 +1,10 @@
 {
-  "scope": "Duas réplicas propostas nas GMUDs9/10, aprovação pendente; evidências de implantação anteriores preservadas",
+  "scope": "Snapshots históricos preservados; evidência real de retenção por Deployment adicionada em 06/11/2026",
   "files": [
     {
       "path": "assets/README.md",
-      "sha256": "7a4b9b214653d7b4807d8f4b7329a46e0ad549b0bc82a191588590024e94f951",
-      "bytes": 2587
+      "sha256": "c7b388aa7f2b8e5dc0928a32a1173ac1b733cea2e8466973846c15ec21aeae53",
+      "bytes": 2877
     },
     {
       "path": "assets/aws/cloudwatch.svg",
@@ -130,6 +130,11 @@
       "path": "assets/rcl000008-traffic-evidence.json",
       "sha256": "e9236be68d550b3a7f51aeb98b26539d6c19a21ab26c61a492cb589bb2f1a207",
       "bytes": 274
+    },
+    {
+      "path": "assets/replicaset-retention-evidence.json",
+      "sha256": "c239da8b2c1feb7762d2a21cbc9ca4a70e7788887ae3f5dbc38984cbbd57ceaa",
+      "bytes": 4539
     },
     {
       "path": "assets/tag-only-deployment-evidence.json",

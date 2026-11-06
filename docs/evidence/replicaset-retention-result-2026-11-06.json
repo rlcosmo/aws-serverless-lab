@@ -1,0 +1,170 @@
+{
+  "verified_at": "2026-11-06T15:09:38.829502+00:00",
+  "per_deployment_target": {
+    "current": 1,
+    "historical": 2,
+    "total_steady_state": 3
+  },
+  "deployments": [
+    {
+      "namespace": "orders-api",
+      "deployment": "orders-api",
+      "history_before": 10,
+      "history_after": 2,
+      "replicasets_before": 11,
+      "replicasets_after": 3,
+      "inactive_replicasets_removed": 8,
+      "removed_sets_had_zero_pods": true,
+      "desired_pods": 2,
+      "ready_pods": 2,
+      "image": "aws-eks-istio-lab-dev-orders-api:api-2.0.4-lab-20",
+      "pod_template_unchanged": true,
+      "all_other_spec_fields_unchanged": true,
+      "deployment_uid_unchanged": true
+    },
+    {
+      "namespace": "orders-worker",
+      "deployment": "orders-worker",
+      "history_before": 10,
+      "history_after": 2,
+      "replicasets_before": 11,
+      "replicasets_after": 3,
+      "inactive_replicasets_removed": 8,
+      "removed_sets_had_zero_pods": true,
+      "desired_pods": 1,
+      "ready_pods": 1,
+      "image": "aws-eks-istio-lab-dev-orders-worker:worker-1.0.5-16",
+      "pod_template_unchanged": true,
+      "all_other_spec_fields_unchanged": true,
+      "deployment_uid_unchanged": true
+    },
+    {
+      "namespace": "orders-worker",
+      "deployment": "orders-worker-canary",
+      "history_before": 10,
+      "history_after": 2,
+      "replicasets_before": 7,
+      "replicasets_after": 3,
+      "inactive_replicasets_removed": 4,
+      "removed_sets_had_zero_pods": true,
+      "desired_pods": 0,
+      "ready_pods": 0,
+      "image": "aws-eks-istio-lab-dev-orders-worker:worker-1.0.6-17",
+      "pod_template_unchanged": true,
+      "all_other_spec_fields_unchanged": true,
+      "deployment_uid_unchanged": true
+    }
+  ],
+  "other_deployments_unchanged": [
+    {
+      "namespace": "istio-system",
+      "deployment": "istio-ingressgateway"
+    },
+    {
+      "namespace": "istio-system",
+      "deployment": "istiod"
+    },
+    {
+      "namespace": "kube-system",
+      "deployment": "aws-load-balancer-controller"
+    },
+    {
+      "namespace": "kube-system",
+      "deployment": "cluster-autoscaler"
+    },
+    {
+      "namespace": "kube-system",
+      "deployment": "coredns"
+    },
+    {
+      "namespace": "kube-system",
+      "deployment": "ebs-csi-controller"
+    },
+    {
+      "namespace": "kube-system",
+      "deployment": "metrics-server"
+    },
+    {
+      "namespace": "kube-system",
+      "deployment": "snapshot-controller"
+    },
+    {
+      "namespace": "kyverno",
+      "deployment": "kyverno-admission-controller"
+    },
+    {
+      "namespace": "kyverno",
+      "deployment": "kyverno-background-controller"
+    },
+    {
+      "namespace": "kyverno",
+      "deployment": "kyverno-cleanup-controller"
+    },
+    {
+      "namespace": "kyverno",
+      "deployment": "kyverno-reports-controller"
+    },
+    {
+      "namespace": "loki",
+      "deployment": "loki-gateway"
+    },
+    {
+      "namespace": "observability",
+      "deployment": "otel-collector-opentelemetry-collector"
+    },
+    {
+      "namespace": "observability",
+      "deployment": "prometheus-grafana"
+    },
+    {
+      "namespace": "observability",
+      "deployment": "prometheus-kube-prometheus-operator"
+    },
+    {
+      "namespace": "observability",
+      "deployment": "prometheus-kube-state-metrics"
+    }
+  ],
+  "manual_cluster_patch": false,
+  "manual_rs_deletion": false,
+  "agent_approval_posts": 0,
+  "new_application_images_built": false,
+  "gc": "Native Kubernetes Deployment controller after signed GitOps policy reconciliation",
+  "tests_passed": 232,
+  "subtests_passed": 4,
+  "source_commit": "cdedf49",
+  "argocd": [
+    {
+      "application": "orders-api-dev",
+      "sync": "Synced",
+      "health": "Healthy",
+      "revision": "0efb05d2c14a8c1d561fc15fd74c772304bbba21"
+    },
+    {
+      "application": "orders-worker-dev",
+      "sync": "Synced",
+      "health": "Healthy",
+      "revision": "0efb05d2c14a8c1d561fc15fd74c772304bbba21"
+    }
+  ],
+  "publisher": {
+    "protected_history_limit": 2,
+    "signed_commits_verified": [
+      "49e063910042f7b6b64e3a9d24cee9346613416e",
+      "0efb05d2c14a8c1d561fc15fd74c772304bbba21"
+    ],
+    "effects": [
+      {
+        "revision": "49e063910042f7b6b64e3a9d24cee9346613416e",
+        "state": "success",
+        "effect": "history-limit:2"
+      },
+      {
+        "revision": "0efb05d2c14a8c1d561fc15fd74c772304bbba21",
+        "state": "success",
+        "effect": "history-limit:2"
+      }
+    ],
+    "approval_performed": false
+  }
+}
