@@ -1,0 +1,23 @@
+{
+  "username": "laboratorio@cosmotechsolutions.com.br",
+  "portal_get": 200,
+  "anonymous_get": 401,
+  "invalid_password": 401,
+  "native_kestra_access": "denied",
+  "release_details_checked": 10,
+  "approval_posts": 0,
+  "actual_approver_banner": true,
+  "read_only_execution_logs": true,
+  "cd_links_checked": 10,
+  "anonymous_cd_denied": true,
+  "legacy_redirect": {
+    "legacy_cd_redirect": 308,
+    "correct_route": true,
+    "scope": "HTTP redirect real; rota UI conferida no source oficial Kestra v2.0.8, sem captura de navegador"
+  },
+  "source_commit": "59f602f",
+  "proxy_commit": "2f9eae5",
+  "tests_passed": 200,
+  "subtests_passed": 4,
+  "scope": "GETs HTTPS reais com identidade operacional por e-mail; zero POSTs de aprovação; sem validação de browser capturada"
+}

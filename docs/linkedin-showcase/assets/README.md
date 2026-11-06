@@ -16,3 +16,5 @@
 Arquivos anteriores preservam evidências históricas. Sem tokens, senhas, conta AWS ou endereços internos. Não tratar testes isolados ou placeholders como validação integrada. PDFs e PNGs não contêm prints inventados.
 
 - `tag-only-deployment-evidence.json`: migração real para tags ECR imutáveis sem `@sha256`, commits assinados, digests executados conferidos e janelas preservadas. Atualiza somente o formato das referências; registros tag@digest anteriores permanecem históricos.
+
+- `operational-email-cd-links-evidence.json`: login por e-mail, dez acompanhamentos CD autenticados200, acesso anônimo401 e compatibilidade308 de links antigos; zero decisões no teste.

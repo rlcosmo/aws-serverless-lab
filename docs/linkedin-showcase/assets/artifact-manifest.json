@@ -1,10 +1,10 @@
 {
-  "scope": "Tags ECR imutáveis sem digest no Deployment; observação12h aberta; UI screenshots pendentes",
+  "scope": "Acesso operacional por e-mail e CD corrigidos; observação12h aberta; capturas UI pendentes",
   "files": [
     {
       "path": "assets/README.md",
-      "sha256": "6946fc4ef5507a8eca589f9e04949767139d5e9ceced04bba6b31484a45e3270",
-      "bytes": 1894
+      "sha256": "afbd5d8f24fb67d49c24884669b5ab082f1fe0a6c5cd4cf6e57d51dd3cefd155",
+      "bytes": 2082
     },
     {
       "path": "assets/aws/cloudwatch.svg",
@@ -75,6 +75,11 @@
       "path": "assets/live-legacy-gate-rejection.json",
       "sha256": "30b8ae843d1080be3128a1c2a21385089910dd5612d494489b99600f7481b777",
       "bytes": 159
+    },
+    {
+      "path": "assets/operational-email-cd-links-evidence.json",
+      "sha256": "5efffe849d8e92d74c78f956d4be9f067a1983e687d4d22f474462830244b66b",
+      "bytes": 786
     },
     {
       "path": "assets/operational-release-evidence.json",
