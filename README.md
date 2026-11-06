@@ -1,78 +1,74 @@
-# AWS Serverless Lab
+# CosmoTech — Laboratório AWS Serverless e EKS
 
+Este repositório funciona como **índice do laboratório** e preserva snapshots históricos da migração. O desenvolvimento e a operação ativos foram distribuídos entre repositórios especializados. **Não aplique Terraform nem faça deploy a partir dos snapshots congelados daqui.**
 
-## Canonical repositories
+## Repositórios oficiais
 
-This repository is the lab index and preserves migration snapshots. Active ownership is now:
+- [Infraestrutura e Terraform](https://github.com/rlcosmo/cosmotech-infrastructure-iac): único responsável pelo backend e estado Terraform S3 existentes.
+- [RBAC Kubernetes](https://github.com/rlcosmo/cosmotech-kubernetes-rbac): permissões por namespace.
+- [GitOps e Argo CD](https://github.com/rlcosmo/cosmotech-gitops): configurações declarativas e entrega EKS.
+- [Orders API](https://github.com/rlcosmo/cosmotech-orders-api): API, testes e CI.
+- [Orders Worker](https://github.com/rlcosmo/cosmotech-orders-worker): consumidor SQS, testes e CI.
+- [Observabilidade e backups](https://github.com/rlcosmo/cosmotech-observability): dashboards, telemetria e recuperação.
+- [Automação GLPI e Kestra](https://github.com/rlcosmo/cosmotech-automation): orquestração e gestão de mudanças.
 
-- [Infrastructure / Terraform](https://github.com/rlcosmo/cosmotech-infrastructure-iac) — the only manager of the existing S3 backend/state.
-- [Kubernetes RBAC](https://github.com/rlcosmo/cosmotech-kubernetes-rbac).
-- [GitOps / Argo CD](https://github.com/rlcosmo/cosmotech-gitops).
-- [Orders API / CI](https://github.com/rlcosmo/cosmotech-orders-api).
-- [Orders Worker / CI](https://github.com/rlcosmo/cosmotech-orders-worker).
-- [Observability / backups](https://github.com/rlcosmo/cosmotech-observability).
-- [GLPI / Kestra Automation](https://github.com/rlcosmo/cosmotech-automation).
+Esses sete repositórios foram extraídos com histórico original preservado. Alguns arquivos-fonte permanecem no IaC como snapshots de bootstrap/build Lambda até a migração das referências de artefatos. O projeto MCP independente não foi afetado pela extração.
 
-All seven are private and preserve original commit ancestry. Original files remain as frozen migration snapshots; do not apply Terraform or deploy applications from them. API and worker source, CI publication and Argo delivery are active without approvals; the independent MCP repository remains untouched. Some first-party source is retained in IaC as bootstrap/Lambda build snapshots until component artifact references are migrated.
+## Arquitetura e funcionamento
 
-Argo CD: https://argocd.cosmotechsolutions.com.br/ — dedicated private EC2 with K3s, authenticated HTTPS through the existing ALB. GitHub Actions builds/publishes images; Argo CD owns API and worker delivery. The owner authorized API and worker DEV delivery without approvals: successful image-only CI promotions merge automatically and Argo CD deploys to EKS. Governance options remain documented for a later phase. See [automatic Orders delivery](docs/orders-worker-delivery.md) and [current execution status](docs/EXECUTION-STATUS.md) and the infrastructure repository README for deploy, backup and rollback procedures.
+O laboratório combina Python 3.12/Boto3, Terraform, API Gateway HTTP com IAM, AWS Lambda, SQS, DynamoDB, EKS, Istio e observabilidade. O caminho serverless valida pedidos, publica eventos versionados na SQS e grava registros no DynamoDB com idempotência. O caminho EKS possui aplicações Orders independentes.
 
-AWS Serverless Lab is a hands-on lab for operating an event-driven order-processing service with AWS managed services, plus an existing EKS and observability environment. It uses Python 3.12 and Boto3 for application code and Terraform for the serverless resources represented in this repository.
+O Argo CD é executado numa EC2 privada dedicada com K3s e HTTPS autenticado por ALB existente: https://argocd.cosmotechsolutions.com.br/. O GitHub Actions constrói e publica imagens; o Argo CD entrega API e Worker ao EKS. A política DEV atual dessas aplicações permite promoção automática validada sem aprovação humana. Outras políticas de governança estão documentadas separadamente.
 
-## Architecture
+GLPI e Kestra operam numa EC2 privada, publicados pelo ALB:
+- https://glpi.cosmotechsolutions.com.br/
+- https://kestra.cosmotechsolutions.com.br/
 
-The deployed development environment includes an IAM-authorized HTTP API Gateway route, Lambda, SQS, DynamoDB, EKS, Istio, and an observability stack. GLPI and Kestra run on a private EC2 host and are published through the existing ALB at [glpi.cosmotechsolutions.com.br](https://glpi.cosmotechsolutions.com.br/) and [kestra.cosmotechsolutions.com.br](https://kestra.cosmotechsolutions.com.br/). AWS WAF restricts public hostnames, rate-limits requests, and keeps observability routes restricted to the administrator CIDR. The databases and container ports remain private. See [docs/public-access.md](docs/public-access.md) for DNS, TLS, routing, authentication, logging, and rollback details. Approval-gated change automation prerequisites and current blockers are tracked in [docs/itsm-change-gates.md](docs/itsm-change-gates.md). The Lambda path validates orders, queues versioned events, and stores order records idempotently in DynamoDB. The EKS Orders workloads are separate live deployments whose observed baseline manifests and new candidate container sources are now tracked here. See [docs/architecture.md](docs/architecture.md) for behavior and [docs/initial-audit.md](docs/initial-audit.md) for live evidence and remaining work.
+O AWS WAF restringe hosts públicos, limita requisições e mantém rotas de observabilidade restritas ao CIDR administrativo. Bancos de dados e portas dos contêineres permanecem privados.
 
-## Repository Layout
+Consulte [arquitetura](docs/architecture.md), [acesso público, DNS e TLS](docs/public-access.md), [auditoria inicial](docs/initial-audit.md), [entrega Orders](docs/orders-worker-delivery.md), [estado da execução](docs/EXECUTION-STATUS.md) e [requisitos de aprovação de mudanças](docs/itsm-change-gates.md).
+
+## Estrutura do repositório
 
 ```text
-docs/          Architecture and delivery roadmap
-scripts/       Local development and operational helper scripts
-src/           Python 3.12 application and Lambda handlers
-terraform/     Terraform infrastructure definitions
-tests/         Unit and integration tests
+docs/          Arquitetura, operação e roadmap
+scripts/       Scripts de desenvolvimento e apoio operacional
+src/           Código Python 3.12 e handlers Lambda (snapshot)
+terraform/     Definições Terraform (snapshot; não aplicar daqui)
+tests/         Testes unitários e de integração
 requirements.txt
 ```
 
-## Prerequisites
+## Pré-requisitos para testes locais
 
-- Ubuntu 24.04 LTS on WSL2 or a compatible Linux environment
-- Python 3.12 and `venv`
-- AWS CLI v2 and Terraform 1.17 for later infrastructure work
-- Git for local version control
+- Ubuntu 24.04 no WSL2 ou Linux compatível
+- Python 3.12 com `venv`
+- Git
+- AWS CLI v2 e Terraform 1.17 apenas para tarefas que os exijam
 
-Do not place AWS access keys, session tokens, private keys, or populated secret files in this repository. Prefer short-lived AWS IAM Identity Center or role-based credentials. CI runs validation; a separate protected DEV workflow obtains short-lived OIDC credentials only after four real approvals.
+Não registre chaves AWS, tokens, chaves privadas ou arquivos de segredos preenchidos. Prefira credenciais temporárias IAM Identity Center ou roles.
 
-## Local Development
-
-Create and activate an isolated Python environment, then install the pinned project dependencies:
+## Como executar os testes
 
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
-```
-
-Run the unit test suite with:
-
-```bash
 python -m pytest
 ```
 
-The producer uses `ORDERS_QUEUE_URL` for its SQS destination. Tests run locally with Moto and do not connect to AWS. The consumer requires `ORDERS_TABLE_NAME`, stores orders in DynamoDB, and uses conditional idempotency claims. The live API → SQS → Lambda → DynamoDB flow was smoke-tested with a synthetic order; submitting the same order twice persisted one matching record. The current deployed Lambda path stores intake with `RECEIVED` status. A complete simulated processing candidate is tested but not deployed; see [orders processing](docs/orders-processing.md).
+Os testes locais usam Moto e não acessam AWS. O produtor usa `ORDERS_QUEUE_URL`; o consumidor usa `ORDERS_TABLE_NAME`, DynamoDB e verificações condicionais de idempotência. O fluxo API → SQS → Lambda → DynamoDB foi testado com pedido sintético e duplicidade, persistindo um único registro. O Lambda implantado registra a entrada com estado `RECEIVED`. O processamento completo simulado foi testado, mas não implantado: veja [processamento de pedidos](docs/orders-processing.md).
 
-### Lambda Artifacts
-
-Build and validate both deployment ZIPs with Python 3.12:
+## Artefatos Lambda — apenas validação histórica
 
 ```bash
 python scripts/build_lambda_artifacts.py
 python scripts/validate_lambda_artifacts.py
 ```
 
-The deterministic archives contain only first-party `.py` files from `src/`. They omit pytest, Moto, and SDK packages; the handlers use the boto3/botocore SDK included in the AWS Lambda Python 3.12 runtime. `dist/` is ignored by Git. Rebuild after changing application code and before Terraform validation; Terraform expects both ZIP paths to exist.
+Os ZIPs determinísticos incluem apenas arquivos `.py` próprios de `src/`, sem pytest, Moto ou pacotes SDK; usam boto3/botocore do runtime Lambda Python 3.12. `dist/` é ignorado pelo Git. Reconstrua os artefatos após mudanças de código e antes da validação Terraform histórica.
 
-Build Lambda archives before Terraform planning so it uses the current source. Run Terraform formatting and static validation locally. The DEV backend is an encrypted, versioned, access-restricted S3 bucket with native state locking; use `-backend=false` for local validation that must not read remote state:
+Para validar sintaxe/formatação **sem acessar o estado remoto**:
 
 ```bash
 terraform -chdir=terraform fmt -check -recursive
@@ -80,12 +76,16 @@ terraform -chdir=terraform/environments/dev init -backend=false -input=false
 terraform -chdir=terraform/environments/dev validate
 ```
 
-Terraform backend initialization uses the repository's S3 backend and requires AWS access. Validation can use `-backend=false`; do not commit state, plan files, credentials, or local backups. The `.terraform.lock.hcl` provider lock file is a source artifact that should be versioned.
+**Atenção:** os comandos acima são somente para verificação do snapshot. Aplique mudanças reais exclusivamente pelo repositório `cosmotech-infrastructure-iac`. Não versione state, arquivos de plan, credenciais ou backups. O arquivo `.terraform.lock.hcl` deve ser versionado.
 
-### Cost Notes
+## Custos e operação
 
-AWS resource usage incurs variable charges. The account is currently on the paid plan with promotional credits available. The lab includes EKS, Spot workers, NAT, load balancers, CloudWatch, and a private `t3.large` ITSM host with encrypted gp3 storage and AWS Backup. See the execution report for current costs and verified SNS delivery. No cost ceiling was applied per the current project instruction.
+O laboratório utiliza recursos AWS sujeitos a cobrança, incluindo EKS, nós Spot, NAT, load balancers, CloudWatch e host ITSM privado `t3.large` com gp3 criptografado e AWS Backup. O projeto não possui teto obrigatório de custo; consulte [estado da execução](docs/EXECUTION-STATUS.md) para medições e evidências atualizadas.
 
-## Delivery Plan
+## Entrega, aprovações e recuperação
 
-GitHub Actions validates Python, Lambda artifacts and Terraform. The DEV deployment candidate requires four protected environments reviewed by `rlcosmo`, scoped OIDC and signed GLPI evidence. Full change integration remains disabled pending independent Kestra authentication and a GitHub App. Five observability components now use encrypted Retain PVCs with tested isolated restoration. See [execution status](docs/EXECUTION-STATUS.md), [recovery](docs/observability-recovery.md), and [remaining work](docs/roadmap.md).
+O GitHub Actions valida Python, artefatos Lambda e Terraform. Documentações históricas descrevem um fluxo DEV protegido com quatro aprovações, OIDC e evidências GLPI; **não confunda esse fluxo legado com a política atual de promoção automática da Orders API/Worker**. Integrações de mudança com aprovação podem depender de autenticação Kestra e GitHub App e devem ser verificadas antes do uso.
+
+Cinco componentes de observabilidade utilizam PVCs criptografados com política Retain e restauração isolada testada. Consulte [recuperação de observabilidade](docs/observability-recovery.md) e [roadmap](docs/roadmap.md).
+
+Para deploy, backup e rollback em produção de laboratório, utilize os procedimentos dos **repositórios oficiais**, não os snapshots deste índice.
