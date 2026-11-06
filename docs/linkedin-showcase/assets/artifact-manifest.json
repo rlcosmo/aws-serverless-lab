@@ -1,10 +1,10 @@
 {
-  "scope": "Consulta nativa operacional, admin preservado; observação12h aberta; screenshots UI pendentes",
+  "scope": "Duas réplicas propostas nas GMUDs9/10, aprovação pendente; evidências de implantação anteriores preservadas",
   "files": [
     {
       "path": "assets/README.md",
-      "sha256": "4289a8ea3726f3b46f2670d0d5b5807ca3fc28798dfa659b60dd4d99e9a8d164",
-      "bytes": 2424
+      "sha256": "7a4b9b214653d7b4807d8f4b7329a46e0ad549b0bc82a191588590024e94f951",
+      "bytes": 2587
     },
     {
       "path": "assets/aws/cloudwatch.svg",
@@ -135,6 +135,11 @@
       "path": "assets/tag-only-deployment-evidence.json",
       "sha256": "2dfe6880bd3926b4874a264f1d756a793e58e9dcf3eaf8514c9ba6112c87b6b3",
       "bytes": 3023
+    },
+    {
+      "path": "assets/two-replica-release-requests.json",
+      "sha256": "5aff7b234891734e616ee9c0e5dbe065c70ed764730cd792780ce7cd42c4bff1",
+      "bytes": 3417
     },
     {
       "path": "assets/versioned-pod-images-evidence.json",

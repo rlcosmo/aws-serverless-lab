@@ -20,3 +20,5 @@ Arquivos anteriores preservam evidências históricas. Sem tokens, senhas, conta
 - `operational-email-cd-links-evidence.json`: login por e-mail, dez acompanhamentos CD autenticados200, acesso anônimo401 e compatibilidade308 de links antigos; zero decisões no teste.
 
 - `kestra-native-view-evidence.json`: login operacional real pelo formulário/API nativo, catálogo idêntico de17 fluxos, logs/execuções/dashboard, negação de alterações e preservação do admin inclusive com adaptador temporariamente indisponível. São resultados HTTP reais; não existe print de browser automatizado nesta rodada.
+
+- `two-replica-release-requests.json`: CIs reais, aliases ECR, propostas HPA2/2, GMUDs9/10 e pausa autenticada; não é prova de implantação ou de novo Canary.

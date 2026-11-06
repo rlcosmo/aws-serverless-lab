@@ -1,0 +1,109 @@
+{
+  "verified_at": "2026-11-06T14:08:19.240108+00:00",
+  "source_configuration": "HPA owns scale; min=max=2 for both candidates",
+  "changes": [
+    {
+      "gmud_id": "RCL000009",
+      "glpi_id": 13,
+      "application": "orders-api",
+      "version": "2.0.4-lab",
+      "phase": "HUMAN_REVIEW",
+      "native_status": 10,
+      "criticality": "CRITICAL",
+      "execution_id": "3wN30fLGZrBmhd214817by",
+      "execution_state": "PAUSED",
+      "flow": "release_pipeline",
+      "image_alias": "aws-eks-istio-lab-dev-orders-api:api-2.0.4-lab-20",
+      "source_commit": "3ff206a5acab9aab4b682367ac6540a56c668690",
+      "ci_run_id": "42230662459",
+      "proposed_hpa": {
+        "min": 2,
+        "max": 2
+      },
+      "current_ready_replicas": 1,
+      "sensitive_changes": true,
+      "human_decision": null,
+      "events": [
+        {
+          "at": "2026-11-06T14:06:48.520907+00:00",
+          "type": "created"
+        },
+        {
+          "at": "2026-11-06T14:06:48.520907+00:00",
+          "details": {
+            "reason": "critical_change"
+          },
+          "type": "human_review"
+        }
+      ],
+      "portal": "https://kestra.cosmotechsolutions.com.br/releases/4477da31afa7306f609cec5aa3550c4e24fff5a06899bd80254483eedfcfc6fd",
+      "glpi_url": "https://glpi.cosmotechsolutions.com.br/front/change.form.php?id=13",
+      "rollback_until": null
+    },
+    {
+      "gmud_id": "RCL000010",
+      "glpi_id": 14,
+      "application": "orders-worker",
+      "version": "1.0.6",
+      "phase": "HUMAN_REVIEW",
+      "native_status": 10,
+      "criticality": "NON_CRITICAL",
+      "execution_id": "H7O83ddlbuiIXWI5Izh4L",
+      "execution_state": "PAUSED",
+      "flow": "release_pipeline",
+      "image_alias": "aws-eks-istio-lab-dev-orders-worker:worker-1.0.6-17",
+      "source_commit": "3db4ff4db75394852ce4714d0796c6e36022e7ae",
+      "ci_run_id": "42230662176",
+      "proposed_hpa": {
+        "min": 2,
+        "max": 2
+      },
+      "current_ready_replicas": 1,
+      "sensitive_changes": true,
+      "human_decision": null,
+      "events": [
+        {
+          "at": "2026-11-06T14:06:55.920927+00:00",
+          "type": "created"
+        },
+        {
+          "at": "2026-11-06T14:06:55.920927+00:00",
+          "details": {
+            "reason": "sensitive_change_or_unreviewed_dependencies"
+          },
+          "type": "human_review"
+        }
+      ],
+      "portal": "https://kestra.cosmotechsolutions.com.br/releases/43e5dc66280aa85c1ec7446d61ec19d93d10ffb06583c87b1e73e918f04db2d8",
+      "glpi_url": "https://glpi.cosmotechsolutions.com.br/front/change.form.php?id=14",
+      "rollback_until": null
+    }
+  ],
+  "agent_approval_posts": 0,
+  "local_tests": {
+    "worker": 86,
+    "api": 69,
+    "automation": 222,
+    "automation_subtests": 4
+  },
+  "ci_conclusions": {
+    "42230662176": "success",
+    "42230662459": "success"
+  },
+  "commits": {
+    "worker": "3db4ff4",
+    "api": "3ff206a",
+    "automation": "b104c04"
+  },
+  "current_application_releases_unchanged": {
+    "worker": "1.0.5",
+    "api": "2.0.3-lab"
+  },
+  "current_ready_replicas": {
+    "worker": 1,
+    "api": 1
+  },
+  "scope": "Novas candidatas publicadas no ECR e GMUDs reais; implantação condicionada à aprovação humana. Nenhum Canary ou rollback novo validado.",
+  "new_cloud_nodes": 0,
+  "costs": "CI, armazenamento ECR e chamadas do laboratório; custos incrementais não isolados."
+}
