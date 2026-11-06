@@ -1,10 +1,10 @@
 {
-  "scope": "Revisão operacional real; observação12h aberta; capturas UI pendentes",
+  "scope": "Tags ECR imutáveis sem digest no Deployment; observação12h aberta; UI screenshots pendentes",
   "files": [
     {
       "path": "assets/README.md",
-      "sha256": "e0735de7e26f767a8000dd1316e9f42b572d3fab1ff37d0eb5a348477ec3da1c",
-      "bytes": 1625
+      "sha256": "6946fc4ef5507a8eca589f9e04949767139d5e9ceced04bba6b31484a45e3270",
+      "bytes": 1894
     },
     {
       "path": "assets/aws/cloudwatch.svg",
@@ -120,6 +120,11 @@
       "path": "assets/rcl000008-traffic-evidence.json",
       "sha256": "e9236be68d550b3a7f51aeb98b26539d6c19a21ab26c61a492cb589bb2f1a207",
       "bytes": 274
+    },
+    {
+      "path": "assets/tag-only-deployment-evidence.json",
+      "sha256": "2dfe6880bd3926b4874a264f1d756a793e58e9dcf3eaf8514c9ba6112c87b6b3",
+      "bytes": 3023
     },
     {
       "path": "assets/versioned-pod-images-evidence.json",

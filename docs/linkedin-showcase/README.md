@@ -9,3 +9,5 @@ Revisão06/11/2026: API2.0.3-lab/RCL000007 e Worker1.0.5/RCL000008 implantados, 
 - `14-evidence-index.md`: fontes, IDs, resultados, pendências e distinção entre testes reais e isolados.
 
 Portal operacional: https://kestra.cosmotechsolutions.com.br/releases/ . Login do operador: /releases/login. Segredos e credenciais não fazem parte do kit. Não afirmar encerramento12h ou rollback humano validado antes da prova real.
+
+Atualização de imagem: Deployments agora usam ECR + tag de versão, sem sufixo de digest. A validação independente do digest e a imutabilidade ECR permanecem obrigatórias. Fonte/evidência: `assets/tag-only-deployment-evidence.json`; implementação automation696d8a8.

@@ -14,3 +14,5 @@
 - `artifact-manifest.json`: SHA256/tamanho dos artefatos visuais e evidências.
 
 Arquivos anteriores preservam evidências históricas. Sem tokens, senhas, conta AWS ou endereços internos. Não tratar testes isolados ou placeholders como validação integrada. PDFs e PNGs não contêm prints inventados.
+
+- `tag-only-deployment-evidence.json`: migração real para tags ECR imutáveis sem `@sha256`, commits assinados, digests executados conferidos e janelas preservadas. Atualiza somente o formato das referências; registros tag@digest anteriores permanecem históricos.

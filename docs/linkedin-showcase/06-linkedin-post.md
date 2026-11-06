@@ -1,5 +1,9 @@
 # Texto LinkedIn — revisão operacional
 
+## Referências de imagem por tag — atualização de06/11/2026
+
+Por decisão do proprietário, os Deployments usam o endereço completo do ECR com `worker-1.0.5-16` e `api-2.0.3-lab-19`, sem sufixo `@sha256`. Os dois repositórios são integralmente IMMUTABLE. Digest continua verificado na esteira, registrado nas evidências e utilizado internamente por Canary/rollback. A mudança de formato mantém as versões, decisões e prazos das RCL000007/8; não cria aprovação humana ou nova versão. GitOps continua sendo a fonte oficial. Evidência atual: `assets/tag-only-deployment-evidence.json`. Os exemplos anteriores com tag@digest representam o formato anterior.
+
 🚀 CosmoTech Solutions: governança e entrega contínua na AWS
 
 Minha atuação recente tem sido principalmente com Microsoft Azure/AKS. Neste laboratório, aprofundei a prática com AWS, arquitetura, automação, troubleshooting e SRE.

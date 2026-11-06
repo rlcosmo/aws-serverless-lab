@@ -1,0 +1,101 @@
+{
+  "source_commit": "696d8a8",
+  "runtime_modules_match": 36,
+  "tests_passed": 199,
+  "subtests_passed": 4,
+  "repositories_immutable": true,
+  "changes": [
+    {
+      "gmud_id": "RCL000008",
+      "application": "orders-worker",
+      "gitops_revision": "49276af238c99dda51348297af2549f6fe673db3",
+      "same_digest": true,
+      "argo_healthy": true,
+      "phase": "OBSERVING",
+      "observation_deadline_unchanged": "2026-11-07T00:41:30.249208+00:00",
+      "approval_unchanged": true,
+      "reference_only": true,
+      "approval_posts": 0,
+      "verified_at": "2026-11-06T13:01:39.864765+00:00"
+    },
+    {
+      "gmud_id": "RCL000007",
+      "application": "orders-api",
+      "gitops_revision": "8de8839449b8670282f8fb187ff1effaad6f7c3b",
+      "same_digest": true,
+      "argo_healthy": true,
+      "phase": "OBSERVING",
+      "observation_deadline_unchanged": "2026-11-07T00:44:26.029884+00:00",
+      "approval_unchanged": true,
+      "reference_only": true,
+      "approval_posts": 0,
+      "verified_at": "2026-11-06T13:02:21.072963+00:00"
+    }
+  ],
+  "pod_verification": {
+    "at": "2026-11-06T13:02:52.923316+00:00",
+    "applications": [
+      {
+        "application": "orders-api",
+        "image": "aws-eks-istio-lab-dev-orders-api:api-2.0.3-lab-19",
+        "labels": {
+          "app": "orders-api",
+          "app.kubernetes.io/version": "2.0.3-lab",
+          "cosmotech.io/gmud-id": "RCL000007",
+          "cosmotech.io/release": "api-2.0.3-lab-19"
+        },
+        "ready": 1,
+        "pods": 1,
+        "running_digests": [
+          "sha256:bb714d3f611534bd1f0d712c05d9caf38d73d4b9177de7ce976b1519eb084307"
+        ],
+        "restarts": 0
+      },
+      {
+        "application": "orders-worker",
+        "image": "aws-eks-istio-lab-dev-orders-worker:worker-1.0.5-16",
+        "labels": {
+          "app": "orders-worker",
+          "app.kubernetes.io/version": "1.0.5",
+          "cosmotech.io/channel": "stable",
+          "cosmotech.io/component": "orders-worker",
+          "cosmotech.io/gmud-id": "RCL000008",
+          "cosmotech.io/release": "worker-1.0.5-16"
+        },
+        "ready": 1,
+        "pods": 1,
+        "running_digests": [
+          "sha256:c959c16ca700790691a889b180bd29ea072e23a836d93c9ea0edeeaa0d953895"
+        ],
+        "restarts": 0
+      }
+    ],
+    "canary_replicas": 0,
+    "api_version": {
+      "service": "orders-api",
+      "version": "2.0.3-lab",
+      "deployment_strategy": "rolling"
+    },
+    "synthetic": {
+      "accepted": 800,
+      "http_errors": 0,
+      "stock": 1000,
+      "expected_stock": 1000,
+      "order_samples": [
+        {
+          "index": 0,
+          "status": "COMPLETED"
+        },
+        {
+          "index": 400,
+          "status": "COMPLETED"
+        },
+        {
+          "index": 799,
+          "status": "COMPLETED"
+        }
+      ]
+    }
+  },
+  "scope": "Alteração de referência de imagem, sem mudar versão, aprovador ou janela; ECR hostname mantido, digest somente nas verificações e evidências."
+}
