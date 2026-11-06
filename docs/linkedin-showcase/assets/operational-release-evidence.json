@@ -1,0 +1,621 @@
+{
+  "verified_at": "2026-11-06T12:49:11.880543+00:00",
+  "releases": [
+    {
+      "gmud_id": "RCL000007",
+      "execution_id": "7jyFluWNV09PrJqsDc3kVb",
+      "flow_id": "release_pipeline",
+      "namespace": "cosmotech.promotion",
+      "labels": [
+        {
+          "key": "gmud_id",
+          "value": "RCL000007"
+        },
+        {
+          "key": "application",
+          "value": "orders-api"
+        },
+        {
+          "key": "gmud",
+          "value": "11"
+        },
+        {
+          "key": "release",
+          "value": "orders-api | 2.0.3-lab | RCL000007"
+        },
+        {
+          "key": "execution_type",
+          "value": "release"
+        },
+        {
+          "key": "version",
+          "value": "2.0.3-lab"
+        },
+        {
+          "key": "release_status",
+          "value": "OBSERVING"
+        },
+        {
+          "key": "system.correlationId",
+          "value": "7jyFluWNV09PrJqsDc3kVb"
+        },
+        {
+          "key": "system.from",
+          "value": "api"
+        }
+      ],
+      "stage_events": {
+        "gmud": {
+          "status": "SUCCESS",
+          "started_at": "2026-11-06T12:26:27.857850+00:00",
+          "ended_at": "2026-11-06T12:26:28.700619+00:00",
+          "result": "GMUD RCL000007 criada e conferida no GLPI.",
+          "evidence": null
+        },
+        "policy": {
+          "status": "SUCCESS",
+          "started_at": "2026-11-06T12:26:28.700641+00:00",
+          "ended_at": "2026-11-06T12:26:28.819693+00:00",
+          "result": "Aprovação humana obrigatória.",
+          "evidence": null
+        },
+        "gitops": {
+          "status": "SUCCESS",
+          "started_at": "2026-11-06T12:43:36.539815+00:00",
+          "ended_at": "2026-11-06T12:43:38.138116+00:00",
+          "result": "Commit assinado publicado.",
+          "evidence": "ebc0e173a67b3e6e3494fab49f4b3ceb28c83b96"
+        },
+        "argo": {
+          "status": "SUCCESS",
+          "started_at": "2026-11-06T12:43:38.140152+00:00",
+          "ended_at": "2026-11-06T12:44:23.862873+00:00",
+          "result": "Revisão e saúde confirmadas pelo Argo CD.",
+          "evidence": "ebc0e173a67b3e6e3494fab49f4b3ceb28c83b96"
+        },
+        "validation": {
+          "status": "SUCCESS",
+          "started_at": "2026-11-06T12:44:23.863532+00:00",
+          "ended_at": "2026-11-06T12:44:26.029137+00:00",
+          "result": "Digest e saúde validados com dados reais.",
+          "evidence": null
+        }
+      },
+      "stage_history": [
+        {
+          "key": "gmud",
+          "status": "RUNNING",
+          "at": "2026-11-06T12:26:27.857850+00:00",
+          "result": "Criando ou reconciliando a GMUD oficial.",
+          "evidence": null
+        },
+        {
+          "key": "gmud",
+          "status": "SUCCESS",
+          "at": "2026-11-06T12:26:28.700619+00:00",
+          "result": "GMUD RCL000007 criada e conferida no GLPI.",
+          "evidence": null
+        },
+        {
+          "key": "policy",
+          "status": "RUNNING",
+          "at": "2026-11-06T12:26:28.700641+00:00",
+          "result": "Avaliando criticidade e controles técnicos.",
+          "evidence": null
+        },
+        {
+          "key": "policy",
+          "status": "SUCCESS",
+          "at": "2026-11-06T12:26:28.819693+00:00",
+          "result": "Aprovação humana obrigatória.",
+          "evidence": null
+        },
+        {
+          "key": "gitops",
+          "status": "RUNNING",
+          "at": "2026-11-06T12:43:36.539815+00:00",
+          "result": "Publicando pelo writer exclusivo.",
+          "evidence": "deploy:api"
+        },
+        {
+          "key": "gitops",
+          "status": "SUCCESS",
+          "at": "2026-11-06T12:43:38.138116+00:00",
+          "result": "Commit assinado publicado.",
+          "evidence": "ebc0e173a67b3e6e3494fab49f4b3ceb28c83b96"
+        },
+        {
+          "key": "argo",
+          "status": "RUNNING",
+          "at": "2026-11-06T12:43:38.140152+00:00",
+          "result": "Sincronizando revisão autorizada.",
+          "evidence": "ebc0e173a67b3e6e3494fab49f4b3ceb28c83b96"
+        },
+        {
+          "key": "argo",
+          "status": "SUCCESS",
+          "at": "2026-11-06T12:44:23.862873+00:00",
+          "result": "Revisão e saúde confirmadas pelo Argo CD.",
+          "evidence": "ebc0e173a67b3e6e3494fab49f4b3ceb28c83b96"
+        },
+        {
+          "key": "validation",
+          "status": "RUNNING",
+          "at": "2026-11-06T12:44:23.863532+00:00",
+          "result": "Verificando digest, disponibilidade e métricas.",
+          "evidence": null
+        },
+        {
+          "key": "validation",
+          "status": "SUCCESS",
+          "at": "2026-11-06T12:44:26.029137+00:00",
+          "result": "Digest e saúde validados com dados reais.",
+          "evidence": null
+        }
+      ],
+      "delivery": {
+        "phase": "OBSERVING",
+        "revision": "ebc0e173a67b3e6e3494fab49f4b3ceb28c83b96",
+        "bootstrap": false
+      },
+      "decision": {
+        "principal": "admin@cosmotech.example",
+        "release_id": "727a187df74648640aa296cfbee82f38b774dc271cb53839a7bf83948694c724",
+        "result": "APPROVE",
+        "timestamp": "2026-11-06T12:43:14.980169+00:00",
+        "execution_id": "7jyFluWNV09PrJqsDc3kVb"
+      },
+      "retry_same_execution": true,
+      "canary_events": []
+    },
+    {
+      "gmud_id": "RCL000008",
+      "execution_id": "50dZBEpEZFcQPNS8qv56rI",
+      "flow_id": "release_pipeline",
+      "namespace": "cosmotech.promotion",
+      "labels": [
+        {
+          "key": "gmud_id",
+          "value": "RCL000008"
+        },
+        {
+          "key": "application",
+          "value": "orders-worker"
+        },
+        {
+          "key": "gmud",
+          "value": "12"
+        },
+        {
+          "key": "release",
+          "value": "orders-worker | 1.0.5 | RCL000008"
+        },
+        {
+          "key": "execution_type",
+          "value": "release"
+        },
+        {
+          "key": "version",
+          "value": "1.0.5"
+        },
+        {
+          "key": "release_status",
+          "value": "OBSERVING"
+        },
+        {
+          "key": "system.correlationId",
+          "value": "50dZBEpEZFcQPNS8qv56rI"
+        },
+        {
+          "key": "system.from",
+          "value": "api"
+        }
+      ],
+      "stage_events": {
+        "gmud": {
+          "status": "SUCCESS",
+          "started_at": "2026-11-06T12:26:30.159714+00:00",
+          "ended_at": "2026-11-06T12:26:30.994872+00:00",
+          "result": "GMUD RCL000008 criada e conferida no GLPI.",
+          "evidence": null
+        },
+        "policy": {
+          "status": "SUCCESS",
+          "started_at": "2026-11-06T12:26:30.994891+00:00",
+          "ended_at": "2026-11-06T12:26:32.685674+00:00",
+          "result": "Controles técnicos avaliados.",
+          "evidence": null
+        },
+        "gitops": {
+          "status": "SUCCESS",
+          "started_at": "2026-11-06T12:41:15.281166+00:00",
+          "ended_at": "2026-11-06T12:41:16.839535+00:00",
+          "result": "Commit assinado publicado.",
+          "evidence": "e377f0b797245637cde28a29020267fa4d9e1456"
+        },
+        "argo": {
+          "status": "SUCCESS",
+          "started_at": "2026-11-06T12:41:16.840336+00:00",
+          "ended_at": "2026-11-06T12:41:28.113533+00:00",
+          "result": "Revisão e saúde confirmadas pelo Argo CD.",
+          "evidence": "e377f0b797245637cde28a29020267fa4d9e1456"
+        },
+        "canary": {
+          "status": "SUCCESS",
+          "started_at": "2026-11-06T12:27:01.855879+00:00",
+          "ended_at": "2026-11-06T12:41:28.114676+00:00",
+          "result": "Progressão, promoção e drenagem comprovadas.",
+          "evidence": null
+        },
+        "validation": {
+          "status": "SUCCESS",
+          "started_at": "2026-11-06T12:41:28.116184+00:00",
+          "ended_at": "2026-11-06T12:41:30.245350+00:00",
+          "result": "Digest e saúde validados com dados reais.",
+          "evidence": null
+        }
+      },
+      "stage_history": [
+        {
+          "key": "gmud",
+          "status": "RUNNING",
+          "at": "2026-11-06T12:26:30.159714+00:00",
+          "result": "Criando ou reconciliando a GMUD oficial.",
+          "evidence": null
+        },
+        {
+          "key": "gmud",
+          "status": "SUCCESS",
+          "at": "2026-11-06T12:26:30.994872+00:00",
+          "result": "GMUD RCL000008 criada e conferida no GLPI.",
+          "evidence": null
+        },
+        {
+          "key": "policy",
+          "status": "RUNNING",
+          "at": "2026-11-06T12:26:30.994891+00:00",
+          "result": "Avaliando criticidade e controles técnicos.",
+          "evidence": null
+        },
+        {
+          "key": "policy",
+          "status": "SUCCESS",
+          "at": "2026-11-06T12:26:32.685674+00:00",
+          "result": "Controles técnicos avaliados.",
+          "evidence": null
+        },
+        {
+          "key": "gitops",
+          "status": "RUNNING",
+          "at": "2026-11-06T12:26:50.383138+00:00",
+          "result": "Publicando pelo writer exclusivo.",
+          "evidence": "canary:prepare"
+        },
+        {
+          "key": "gitops",
+          "status": "SUCCESS",
+          "at": "2026-11-06T12:26:52.191337+00:00",
+          "result": "Commit assinado publicado.",
+          "evidence": "aa91d7d76fe8858553b22455a701cbbfa85e0f3b"
+        },
+        {
+          "key": "argo",
+          "status": "RUNNING",
+          "at": "2026-11-06T12:26:52.195457+00:00",
+          "result": "Sincronizando revisão autorizada.",
+          "evidence": "aa91d7d76fe8858553b22455a701cbbfa85e0f3b"
+        },
+        {
+          "key": "argo",
+          "status": "SUCCESS",
+          "at": "2026-11-06T12:27:01.463747+00:00",
+          "result": "Revisão e saúde confirmadas pelo Argo CD.",
+          "evidence": "aa91d7d76fe8858553b22455a701cbbfa85e0f3b"
+        },
+        {
+          "key": "canary",
+          "status": "RUNNING",
+          "at": "2026-11-06T12:27:01.855879+00:00",
+          "result": "Iniciando consumo Canary autorizado e métricas por versão.",
+          "evidence": null
+        },
+        {
+          "key": "gitops",
+          "status": "RUNNING",
+          "at": "2026-11-06T12:38:15.495774+00:00",
+          "result": "Publicando pelo writer exclusivo.",
+          "evidence": "promote:canary"
+        },
+        {
+          "key": "gitops",
+          "status": "SUCCESS",
+          "at": "2026-11-06T12:38:17.040287+00:00",
+          "result": "Commit assinado publicado.",
+          "evidence": "6a7be699ae855b803ad857c03fe1ec1c1a3d521d"
+        },
+        {
+          "key": "argo",
+          "status": "RUNNING",
+          "at": "2026-11-06T12:38:17.042371+00:00",
+          "result": "Sincronizando revisão autorizada.",
+          "evidence": "6a7be699ae855b803ad857c03fe1ec1c1a3d521d"
+        },
+        {
+          "key": "argo",
+          "status": "SUCCESS",
+          "at": "2026-11-06T12:39:27.192696+00:00",
+          "result": "Revisão e saúde confirmadas pelo Argo CD.",
+          "evidence": "6a7be699ae855b803ad857c03fe1ec1c1a3d521d"
+        },
+        {
+          "key": "gitops",
+          "status": "RUNNING",
+          "at": "2026-11-06T12:41:15.281166+00:00",
+          "result": "Publicando pelo writer exclusivo.",
+          "evidence": "drain-complete:canary"
+        },
+        {
+          "key": "gitops",
+          "status": "SUCCESS",
+          "at": "2026-11-06T12:41:16.839535+00:00",
+          "result": "Commit assinado publicado.",
+          "evidence": "e377f0b797245637cde28a29020267fa4d9e1456"
+        },
+        {
+          "key": "argo",
+          "status": "RUNNING",
+          "at": "2026-11-06T12:41:16.840336+00:00",
+          "result": "Sincronizando revisão autorizada.",
+          "evidence": "e377f0b797245637cde28a29020267fa4d9e1456"
+        },
+        {
+          "key": "argo",
+          "status": "SUCCESS",
+          "at": "2026-11-06T12:41:28.113533+00:00",
+          "result": "Revisão e saúde confirmadas pelo Argo CD.",
+          "evidence": "e377f0b797245637cde28a29020267fa4d9e1456"
+        },
+        {
+          "key": "canary",
+          "status": "SUCCESS",
+          "at": "2026-11-06T12:41:28.114676+00:00",
+          "result": "Progressão, promoção e drenagem comprovadas.",
+          "evidence": null
+        },
+        {
+          "key": "validation",
+          "status": "RUNNING",
+          "at": "2026-11-06T12:41:28.116184+00:00",
+          "result": "Verificando digest, disponibilidade e métricas.",
+          "evidence": null
+        },
+        {
+          "key": "validation",
+          "status": "SUCCESS",
+          "at": "2026-11-06T12:41:30.245350+00:00",
+          "result": "Digest e saúde validados com dados reais.",
+          "evidence": null
+        }
+      ],
+      "delivery": {
+        "phase": "OBSERVING",
+        "revision": "6a7be699ae855b803ad857c03fe1ec1c1a3d521d",
+        "bootstrap": false,
+        "canary_stage": "COMPLETE"
+      },
+      "decision": null,
+      "retry_same_execution": true,
+      "canary_events": [
+        {
+          "id": "17157c42d6b01a94a68c0a3430452e7b3170a5d24709372e63d1007edb5134d9",
+          "gmud_id": "RCL000008",
+          "stage": "CANARY_1",
+          "generation": 1,
+          "stable": "sha256:e7a7ba7ffe1da99d67db4faccfbdfd117341ccf8de8f6bf9fe91f9ccaf6e29ea",
+          "candidate": "sha256:c959c16ca700790691a889b180bd29ea072e23a836d93c9ea0edeeaa0d953895",
+          "entered_at": "2026-11-06T12:27:01.842285+00:00",
+          "dlq_baseline": 0,
+          "reason": "authorized_initial_canary",
+          "effect": {
+            "mode": "run",
+            "replicas": 1,
+            "expires_at": 1793968321.842285
+          }
+        },
+        {
+          "id": "17157c42d6b01a94a68c0a3430452e7b3170a5d24709372e63d1007edb5134d9",
+          "gmud_id": "RCL000008",
+          "stage": "CANARY_1",
+          "generation": 2,
+          "stable": "sha256:e7a7ba7ffe1da99d67db4faccfbdfd117341ccf8de8f6bf9fe91f9ccaf6e29ea",
+          "candidate": "sha256:c959c16ca700790691a889b180bd29ea072e23a836d93c9ea0edeeaa0d953895",
+          "entered_at": "2026-11-06T12:27:01.842285+00:00",
+          "dlq_baseline": 0,
+          "reason": "insufficient_business_samples",
+          "effect": {
+            "mode": "run",
+            "replicas": 1,
+            "expires_at": 1793968453.596715
+          }
+        },
+        {
+          "id": "17157c42d6b01a94a68c0a3430452e7b3170a5d24709372e63d1007edb5134d9",
+          "gmud_id": "RCL000008",
+          "stage": "CANARY_1",
+          "generation": 3,
+          "stable": "sha256:e7a7ba7ffe1da99d67db4faccfbdfd117341ccf8de8f6bf9fe91f9ccaf6e29ea",
+          "candidate": "sha256:c959c16ca700790691a889b180bd29ea072e23a836d93c9ea0edeeaa0d953895",
+          "entered_at": "2026-11-06T12:27:01.842285+00:00",
+          "dlq_baseline": 0,
+          "reason": "insufficient_business_samples",
+          "effect": {
+            "mode": "run",
+            "replicas": 1,
+            "expires_at": 1793968515.492359
+          }
+        },
+        {
+          "id": "17157c42d6b01a94a68c0a3430452e7b3170a5d24709372e63d1007edb5134d9",
+          "gmud_id": "RCL000008",
+          "stage": "CANARY_1",
+          "generation": 4,
+          "stable": "sha256:e7a7ba7ffe1da99d67db4faccfbdfd117341ccf8de8f6bf9fe91f9ccaf6e29ea",
+          "candidate": "sha256:c959c16ca700790691a889b180bd29ea072e23a836d93c9ea0edeeaa0d953895",
+          "entered_at": "2026-11-06T12:27:01.842285+00:00",
+          "dlq_baseline": 0,
+          "reason": "insufficient_business_samples",
+          "effect": {
+            "mode": "run",
+            "replicas": 1,
+            "expires_at": 1793968577.103739
+          }
+        },
+        {
+          "id": "17157c42d6b01a94a68c0a3430452e7b3170a5d24709372e63d1007edb5134d9",
+          "gmud_id": "RCL000008",
+          "stage": "CANARY_2",
+          "generation": 5,
+          "stable": "sha256:e7a7ba7ffe1da99d67db4faccfbdfd117341ccf8de8f6bf9fe91f9ccaf6e29ea",
+          "candidate": "sha256:c959c16ca700790691a889b180bd29ea072e23a836d93c9ea0edeeaa0d953895",
+          "entered_at": "2026-11-06T12:32:14.990931+00:00",
+          "dlq_baseline": 0,
+          "reason": "bounded_observation_passed",
+          "effect": {
+            "mode": "run",
+            "replicas": 2,
+            "expires_at": 1793968634.990931
+          }
+        },
+        {
+          "id": "17157c42d6b01a94a68c0a3430452e7b3170a5d24709372e63d1007edb5134d9",
+          "gmud_id": "RCL000008",
+          "stage": "CANARY_2",
+          "generation": 6,
+          "stable": "sha256:e7a7ba7ffe1da99d67db4faccfbdfd117341ccf8de8f6bf9fe91f9ccaf6e29ea",
+          "candidate": "sha256:c959c16ca700790691a889b180bd29ea072e23a836d93c9ea0edeeaa0d953895",
+          "entered_at": "2026-11-06T12:32:14.990931+00:00",
+          "dlq_baseline": 0,
+          "reason": "insufficient_business_samples",
+          "effect": {
+            "mode": "run",
+            "replicas": 2,
+            "expires_at": 1793968754.684683
+          }
+        },
+        {
+          "id": "17157c42d6b01a94a68c0a3430452e7b3170a5d24709372e63d1007edb5134d9",
+          "gmud_id": "RCL000008",
+          "stage": "CANARY_2",
+          "generation": 7,
+          "stable": "sha256:e7a7ba7ffe1da99d67db4faccfbdfd117341ccf8de8f6bf9fe91f9ccaf6e29ea",
+          "candidate": "sha256:c959c16ca700790691a889b180bd29ea072e23a836d93c9ea0edeeaa0d953895",
+          "entered_at": "2026-11-06T12:32:14.990931+00:00",
+          "dlq_baseline": 0,
+          "reason": "insufficient_business_samples",
+          "effect": {
+            "mode": "run",
+            "replicas": 2,
+            "expires_at": 1793968817.534248
+          }
+        },
+        {
+          "id": "17157c42d6b01a94a68c0a3430452e7b3170a5d24709372e63d1007edb5134d9",
+          "gmud_id": "RCL000008",
+          "stage": "CANARY_2",
+          "generation": 8,
+          "stable": "sha256:e7a7ba7ffe1da99d67db4faccfbdfd117341ccf8de8f6bf9fe91f9ccaf6e29ea",
+          "candidate": "sha256:c959c16ca700790691a889b180bd29ea072e23a836d93c9ea0edeeaa0d953895",
+          "entered_at": "2026-11-06T12:32:14.990931+00:00",
+          "dlq_baseline": 0,
+          "reason": "insufficient_business_samples",
+          "effect": {
+            "mode": "run",
+            "replicas": 2,
+            "expires_at": 1793968875.205286
+          }
+        },
+        {
+          "id": "17157c42d6b01a94a68c0a3430452e7b3170a5d24709372e63d1007edb5134d9",
+          "gmud_id": "RCL000008",
+          "stage": "CANARY_2",
+          "generation": 9,
+          "stable": "sha256:e7a7ba7ffe1da99d67db4faccfbdfd117341ccf8de8f6bf9fe91f9ccaf6e29ea",
+          "candidate": "sha256:c959c16ca700790691a889b180bd29ea072e23a836d93c9ea0edeeaa0d953895",
+          "entered_at": "2026-11-06T12:32:14.990931+00:00",
+          "dlq_baseline": 0,
+          "reason": "insufficient_business_samples",
+          "effect": {
+            "mode": "run",
+            "replicas": 2,
+            "expires_at": 1793968935.566398
+          }
+        },
+        {
+          "id": "17157c42d6b01a94a68c0a3430452e7b3170a5d24709372e63d1007edb5134d9",
+          "gmud_id": "RCL000008",
+          "stage": "PROMOTING",
+          "generation": 10,
+          "stable": "sha256:e7a7ba7ffe1da99d67db4faccfbdfd117341ccf8de8f6bf9fe91f9ccaf6e29ea",
+          "candidate": "sha256:c959c16ca700790691a889b180bd29ea072e23a836d93c9ea0edeeaa0d953895",
+          "entered_at": "2026-11-06T12:38:15.083046+00:00",
+          "dlq_baseline": 0,
+          "reason": "bounded_observation_passed",
+          "effect": {
+            "mode": "run",
+            "replicas": 2,
+            "promote_stable": "sha256:c959c16ca700790691a889b180bd29ea072e23a836d93c9ea0edeeaa0d953895",
+            "expires_at": 1793968995.083046
+          }
+        },
+        {
+          "id": "17157c42d6b01a94a68c0a3430452e7b3170a5d24709372e63d1007edb5134d9",
+          "gmud_id": "RCL000008",
+          "stage": "DRAIN_PROMOTED",
+          "generation": 11,
+          "stable": "sha256:e7a7ba7ffe1da99d67db4faccfbdfd117341ccf8de8f6bf9fe91f9ccaf6e29ea",
+          "candidate": "sha256:c959c16ca700790691a889b180bd29ea072e23a836d93c9ea0edeeaa0d953895",
+          "entered_at": "2026-11-06T12:39:56.493932+00:00",
+          "dlq_baseline": 0,
+          "reason": "bounded_observation_passed",
+          "effect": {
+            "mode": "drain",
+            "replicas": 2
+          }
+        },
+        {
+          "id": "17157c42d6b01a94a68c0a3430452e7b3170a5d24709372e63d1007edb5134d9",
+          "gmud_id": "RCL000008",
+          "stage": "DRAIN_PROMOTED",
+          "generation": 12,
+          "stable": "sha256:e7a7ba7ffe1da99d67db4faccfbdfd117341ccf8de8f6bf9fe91f9ccaf6e29ea",
+          "candidate": "sha256:c959c16ca700790691a889b180bd29ea072e23a836d93c9ea0edeeaa0d953895",
+          "entered_at": "2026-11-06T12:39:56.493932+00:00",
+          "dlq_baseline": 0,
+          "reason": "bounded_observation_passed",
+          "effect": {
+            "mode": "drain",
+            "replicas": 2
+          }
+        },
+        {
+          "id": "17157c42d6b01a94a68c0a3430452e7b3170a5d24709372e63d1007edb5134d9",
+          "gmud_id": "RCL000008",
+          "stage": "COMPLETE",
+          "generation": 13,
+          "stable": "sha256:e7a7ba7ffe1da99d67db4faccfbdfd117341ccf8de8f6bf9fe91f9ccaf6e29ea",
+          "candidate": "sha256:c959c16ca700790691a889b180bd29ea072e23a836d93c9ea0edeeaa0d953895",
+          "entered_at": "2026-11-06T12:39:56.493932+00:00",
+          "dlq_baseline": 0,
+          "reason": "bounded_observation_passed",
+          "effect": {
+            "mode": "drain",
+            "replicas": 0,
+            "notify": true
+          }
+        }
+      ]
+    }
+  ],
+  "new_executions_created_by_retry": 0,
+  "approval_posts": 0
+}

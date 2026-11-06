@@ -1,5 +1,16 @@
-# Diagramas e evidências públicas
+# Artefatos e evidências CosmoTech
 
-Os três diagramas SVG/PNG são gerados por scripts/build_rcl_review_kit.py, reutilizando o renderizador existente. Fonte vigente: rcl-live-evidence.json. portal-glpi-verification-20261106.json registra testes reais de login e leitura autenticada; rcl000005-traffic-evidence.json registra a tentativa revertida; rcl000006-traffic-evidence.json registra a rodada corretiva de carga sintética em serviços reais. Nenhum desses arquivos é screenshot. public-evidence.json é snapshot anterior, preservado.
+- `aws-architecture.{svg,png}`: arquitetura existente, com legenda de estado.
+- `cicd-gmud-gitops.{svg,png}`: fluxo CI→GLPI/RCL→Kestra→aprovação→publisher→Argo→observação.
+- `worker-canary.{svg,png}`: consumidores SQS, métricas, promoção, drenagem e rollback.
+- `rcl-live-evidence.json`: consulta GLPI/Kestra e janela Canary real; não é screenshot.
+- `operational-release-evidence.json`: duas execuções release_pipeline, labels, etapas/horários, autoria, retries idempotentes e eventos Canary.
+- `operator-auth-evidence.json`: GETs reais autenticados, acesso anônimo/credencial inválida negado, histórico e logs; zero aprovação pelo teste.
+- `glpi-outage-recovery-evidence.json`: indisponibilidade real breve, cache visível, ações bloqueadas e recuperação sem duplicação.
+- `versioned-pod-images-evidence.json`: imagens tag@digest, labels, versão pública da API, saúde final, saldo e amostras de pedidos.
+- `rcl000008-traffic-evidence.json`:800 pedidos sintéticos aceitos em serviços reais; não representa carga de produção.
+- `rcl000007-000008-probe-evidence.json`: eventos/reinícios dos pods finais, startup15021 com5s.
+- `live-legacy-gate-rejection.json`: execução histórica não autoriza a nova promoção, sem acionar publisher.
+- `artifact-manifest.json`: SHA256/tamanho dos artefatos visuais e evidências.
 
-Ícones oficiais e proveniência em aws/. artifact-manifest.json registra hashes. Limites e cronologia em ../14-evidence-index.md; orientação editorial em ../README.md.
+Arquivos anteriores preservam evidências históricas. Sem tokens, senhas, conta AWS ou endereços internos. Não tratar testes isolados ou placeholders como validação integrada. PDFs e PNGs não contêm prints inventados.

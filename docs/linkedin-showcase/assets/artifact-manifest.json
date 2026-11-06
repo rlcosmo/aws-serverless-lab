@@ -1,10 +1,10 @@
 {
-  "scope": "Kit RCL real parcial; não são screenshots; observação12h aberta",
+  "scope": "Revisão operacional real; observação12h aberta; capturas UI pendentes",
   "files": [
     {
       "path": "assets/README.md",
-      "sha256": "d10d63392c1884db0c9470caab6ecb238b6f5818d724abf9384530f102236917",
-      "bytes": 714
+      "sha256": "e0735de7e26f767a8000dd1316e9f42b572d3fab1ff37d0eb5a348477ec3da1c",
+      "bytes": 1625
     },
     {
       "path": "assets/aws/cloudwatch.svg",
@@ -58,13 +58,33 @@
     },
     {
       "path": "assets/cicd-gmud-gitops.png",
-      "sha256": "2847e6e9ce400046376193083129823515bf6f97ade993e6308445c873a755ba",
-      "bytes": 196176
+      "sha256": "7cd8a9a8a1c130124a473649da55651e85cf70195e5e926a23db436fe7aa2ebe",
+      "bytes": 196131
     },
     {
       "path": "assets/cicd-gmud-gitops.svg",
-      "sha256": "144bf5af2c8468bb46f2e0c8f02eb9481982a2f5e9a19a6e372d999eda0b316c",
+      "sha256": "771152c696a319710bb268621ff7dfab549b97f6ecc74c892062b7bd3c7286a7",
       "bytes": 8477
+    },
+    {
+      "path": "assets/glpi-outage-recovery-evidence.json",
+      "sha256": "10d06413eb5a929904fe3b8212119491008a83808954b7362b269cc985beb45e",
+      "bytes": 724
+    },
+    {
+      "path": "assets/live-legacy-gate-rejection.json",
+      "sha256": "30b8ae843d1080be3128a1c2a21385089910dd5612d494489b99600f7481b777",
+      "bytes": 159
+    },
+    {
+      "path": "assets/operational-release-evidence.json",
+      "sha256": "12ec0bb553a794c38afbb3a79a6f159ebe26e93a1adf4a51b26733756da99687",
+      "bytes": 21849
+    },
+    {
+      "path": "assets/operator-auth-evidence.json",
+      "sha256": "f692ec2bce3a6bbc5b8dce8e48090dc3019ececb4bcc6f8feeb53e54d119c302",
+      "bytes": 266
     },
     {
       "path": "assets/portal-glpi-verification-20261106.json",
@@ -78,8 +98,8 @@
     },
     {
       "path": "assets/rcl-live-evidence.json",
-      "sha256": "6ccc72488ba0354311df5afeda373e9de26beb0c9dcd3fb6d96f1b2b86f93f82",
-      "bytes": 5610
+      "sha256": "653ed5639c7573655bf54821d20de118c54470f01ad3c91b2de1921b9361cd7e",
+      "bytes": 6505
     },
     {
       "path": "assets/rcl000005-traffic-evidence.json",
@@ -90,6 +110,21 @@
       "path": "assets/rcl000006-traffic-evidence.json",
       "sha256": "da01a6a4fa8f48fd051be51dca8fa5ccb75bf0bbaf0c0fc8480f5533700bca5f",
       "bytes": 3601
+    },
+    {
+      "path": "assets/rcl000007-000008-probe-evidence.json",
+      "sha256": "eef00c0de02d8759992f93e8631515827d2a40519ccc7fc16fb243185271784f",
+      "bytes": 741
+    },
+    {
+      "path": "assets/rcl000008-traffic-evidence.json",
+      "sha256": "e9236be68d550b3a7f51aeb98b26539d6c19a21ab26c61a492cb589bb2f1a207",
+      "bytes": 274
+    },
+    {
+      "path": "assets/versioned-pod-images-evidence.json",
+      "sha256": "fa914fec901f3c04ff58ea97d825bf8a0cf6918db2b14ecbba561e5cf51bd238",
+      "bytes": 1544
     },
     {
       "path": "assets/worker-canary.png",
@@ -123,32 +158,32 @@
     },
     {
       "path": "carousel/03-cosmotech.png",
-      "sha256": "9701c9bc41bdf76bf2a5f3895ab7a9540460b0b7ffcc1cdf53f56ac99932b64e",
-      "bytes": 139972
+      "sha256": "67b4e8d907b676215a5d2ebbcfd731106c4883d55dcb27f40bbbacc0e79ce097",
+      "bytes": 139883
     },
     {
       "path": "carousel/03-cosmotech.svg",
-      "sha256": "a52f89424deb52003c2c29bd0d65c92d97f025a3a2bdf424a722b4eef467add9",
-      "bytes": 3826
+      "sha256": "94367cb73da633aff29b9cac84a847b0e2d271dc49939992d92f8da52e61beb8",
+      "bytes": 3827
     },
     {
       "path": "carousel/04-cosmotech.png",
-      "sha256": "a105fc848abf53c281e2a42a0032f39005e41d4eedae8a0e6f33961b82e81c50",
-      "bytes": 164784
+      "sha256": "0556184472c1c7d4f8c9d3b972d0457dc23f12847ff40c6d7ae2a0e45b8605b4",
+      "bytes": 175859
     },
     {
       "path": "carousel/04-cosmotech.svg",
-      "sha256": "b51f436c64f53b3b576de324c1a69a01073b33193d9a604a6ab7f35173adf62c",
-      "bytes": 4591
+      "sha256": "73b30602dfd5091977429a7b44a40a4c50e2b118f77add31e44494c4b6573b83",
+      "bytes": 4795
     },
     {
       "path": "carousel/05-cosmotech.png",
-      "sha256": "4606448848c2657d18c55840c8870a9617567dadee4162bbd0faff90ade5ef5f",
-      "bytes": 149854
+      "sha256": "0e0472197dbc449583adca3559c56f1adb3e2245426dc2f43b5e5adfccc41a7d",
+      "bytes": 149919
     },
     {
       "path": "carousel/05-cosmotech.svg",
-      "sha256": "7f2a1aa5aff5721dbef6b81f59c71f6f96002c96df2f49d04989d21554f531c4",
+      "sha256": "5e0e0669800bdbad7db9b1f882650d31a30edf89ef99a4ce48270966604f36c6",
       "bytes": 3748
     },
     {
@@ -163,23 +198,23 @@
     },
     {
       "path": "carousel/README.md",
-      "sha256": "0fe31d38378c80c0259947a6859706e11888d764bb8501ada0532d8064cde6cd",
-      "bytes": 521
+      "sha256": "42bef88adebb39c5412a08b682954cda44fb02a4fcf1191ceafc6e7656734617",
+      "bytes": 574
     },
     {
       "path": "carousel/contact-sheet.png",
-      "sha256": "ed62f71e01cf2aa26af42312793d0cf4ed337e845374bb422e951b162471ad38",
-      "bytes": 218542
+      "sha256": "eb9250fc8429f56acece8b1129dc5b29fbe4734c301641b6486e9da8272cd2d5",
+      "bytes": 220962
     },
     {
       "path": "carousel/cosmotech-carousel-review.pdf",
-      "sha256": "ee8e07b5451ec7be8923e010bab687cb721c603b7edb9ed1e75cb41aec95b25e",
-      "bytes": 49309
+      "sha256": "9a41e036a0a751d8298352dbbeb965d8c97ea47126ee5ef83189c6428850f5be",
+      "bytes": 49228
     },
     {
       "path": "screenshots/README.md",
-      "sha256": "d85043fe37024abe6a395cbce106770f666b899541483884f04184b464c77820",
-      "bytes": 603
+      "sha256": "567572a7433731220380db7f1bd8700232125378cba0837652253ee05bfa3474",
+      "bytes": 1228
     },
     {
       "path": "screenshots/argocd-placeholder.png",

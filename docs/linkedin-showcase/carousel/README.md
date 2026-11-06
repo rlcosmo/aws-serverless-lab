@@ -1,3 +1,7 @@
-# Carrossel de revisão
+# Carrossel CosmoTech
 
-Seis páginas1080×1350 em PNG/SVG e PDF vetorial de seis páginas; contact-sheet.png permite revisar o conjunto. Ordem: experiência Azure/AKS e AWS; arquitetura; GMUDs reais; portal e acompanhamento CD; Canary e rollback automático; práticas de engenharia e limites. Fonte: ../assets/rcl-live-evidence.json; gerador scripts/build_rcl_review_kit.py. Não são screenshots. Observação12h e rollback solicitado pelo responsável continuam pendentes. Ver ../README.md e ../06-linkedin-post.md.
+Seis páginas1080×1350, em SVG editável e PNG. `cosmotech-carousel-review.pdf` contém as seis páginas para revisão/publicação. `contact-sheet.png` é uma visão de conjunto.
+
+Páginas:1 experiência Azure/AKS e prática AWS;2 arquitetura;3 RCLs reais e estados;4 portal/identidades/etapas;5 Canary e falha histórica;6 segurança/observabilidade e limites.
+
+Não são screenshots de ferramentas. Observação12h, rollback humano e capturas de UI permanecem pendentes. Conferir estados/timestamps em `../14-evidence-index.md` antes de publicar.

@@ -1,0 +1,23 @@
+{
+  "outage": {
+    "actual_glpi_read": "unavailable",
+    "exception_type": "URLError",
+    "cached_records": 8,
+    "recovery_deadline_seconds": 60,
+    "decisions_unchanged": true
+  },
+  "cached_portal_http_status": 200,
+  "history_visible": true,
+  "actions_blocked": true,
+  "recovery": {
+    "glpi_recovered": true,
+    "recovered_at": "2026-11-06T12:17:13.427477+00:00",
+    "native_changes": 8,
+    "human_decisions_unchanged": true,
+    "gitops_effects_unchanged": true,
+    "gmud_duplicates_created": 0
+  },
+  "recovered_portal_http_status": 200,
+  "approval_posts": 0,
+  "test_type": "Indisponibilidade real e breve do GLPI do laboratório, controlada e recuperada; consulta persistida permaneceu disponível."
+}

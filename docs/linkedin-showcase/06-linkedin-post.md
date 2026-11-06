@@ -1,3 +1,70 @@
+# Texto LinkedIn — revisão operacional
+
+🚀 CosmoTech Solutions: governança e entrega contínua na AWS
+
+Minha atuação recente tem sido principalmente com Microsoft Azure/AKS. Neste laboratório, aprofundei a prática com AWS, arquitetura, automação, troubleshooting e SRE.
+
+🔎 Cada release ganhou uma GMUD RCL no GLPI e uma execução principal no Kestra. O portal reúne CI, aprovação, GitOps, Argo CD e observação em português.
+
+🛡️ API crítica exige decisão humana autenticada. Worker pode avançar por políticas determinísticas, mantendo testes, Trivy, assinatura e digest. IA não é requisito nem está ativa.
+
+📊 Worker1.0.5 concluiu Canary com dados sintéticos em serviços reais. API2.0.3-lab foi implantada após aprovação humana. As duas GMUDs seguem em observação por12h — ainda sem anunciar encerramento ou rollback humano validado.
+
+🧭 A engenharia inclui falhas e recuperação: preservei o rollback automático anterior e testei indisponibilidade real do GLPI sem perder o histórico nem liberar promoção pelo cache.
+
+#AWS #DevOps #SRE #GitOps #Kubernetes #ArgoCD #Kestra #GLPI #Azure #AKS
+
+Referências e limites: [índice de evidências](14-evidence-index.md). Carrossel: [PDF de seis páginas](carousel/cosmotech-carousel-review.pdf). Capturas reais de UI ainda pendentes.
+
+<details><summary>Registro técnico e texto anterior preservados</summary>
+
+# LinkedIn — texto revisado conforme as evidências — estado consolidado
+
+## Revisão operacional — 06/11/2026
+
+Estado confirmado em 2026-11-06T12:45:28.826367+00:00. API 2.0.3-lab: aprovação humana autenticada registrada; Worker 1.0.5: aprovação automática pela política. Ambos implantados, Argo CD saudável e em observação. Canary exclusivo Worker concluído com progressão 1→2, promoção e drenagem. Nenhuma aprovação pelo agente.
+
+| RCL | Aplicação / versão | GLPI | Kestra principal | Estado |
+|---|---|---|---|---|
+| RCL000007 | orders-api 2.0.3-lab | 11 | 7jyFluWNV09PrJqsDc3kVb | OBSERVING |
+| RCL000008 | orders-worker 1.0.5 | 12 | 50dZBEpEZFcQPNS8qv56rI | OBSERVING |
+
+Portal principal: https://kestra.cosmotechsolutions.com.br/releases/ · Entrada operacional: https://kestra.cosmotechsolutions.com.br/releases/login. Usuário `laboratorio` criado no portal com hash PBKDF2-SHA256; admin preservado. Kestra OSS 2.0.8 mantém autenticação nativa de administrador; não foi concedido acesso administrativo nativo ao operador. Ações continuam sujeitas a autenticação, CSRF, política e prazo. Decisões futuras como laboratorio dependem da interação real desse usuário; esta API foi aprovada pela identidade admin.
+
+Uma execução `cosmotech.promotion/release_pipeline` por release, com labels RCL/aplicação/versão; scheduler persistente em `cosmotech.operations`. Dez etapas no portal com fatos, horários, duração e evidências; dados históricos sem horário não recebem duração inventada. Execução principal concluída significa entrega inicial, não GMUD encerrada. Filtrar `execution_type=release` para acompanhamento.
+
+Imagens observadas: `worker-1.0.5-16@sha256:…` e `api-2.0.3-lab-19@sha256:…`, com labels de versão e RCL. O número final vem da CI real; a tag aponta para o mesmo digest testado e a referência continua fixada pelo digest. Pods finais: zero reinícios e nenhum Warning na amostra; startup Istio15021 com atraso de5s.
+
+Carga real com dados sintéticos: 800 respostas202, zero erros HTTP, três pedidos consultados como COMPLETED, estoque1800→1000. Janela Canary300s: candidata185,26 e stable101,05 por Prometheus increase; p95≈0,0986s; falhas, poll, visibility e DLQ zero na amostra. Não são contagens exatas de pedidos nem tráfego de produção.
+
+Observação/rollback até 06/11/2026 às21:41:30 (Worker) e21:44:26 (API), horário de São Paulo; UTC07/11 às00:41:30 e00:44:26. Não houve encerramento antecipado. Rollback humano pós-promoção e conclusão real das12h ainda não validados. Rollback automático real da RCL000005 permanece histórico de falha, nunca sucesso.
+
+Indisponibilidade real breve do GLPI foi controlada e recuperada: histórico autenticado200 permaneceu disponível, ações bloqueadas, decisões e efeitos GitOps preservados, zero GMUDs duplicadas. Cache não autoriza promoção. Autenticação real laboratorio: dez detalhes consultados, anônimo/senha incorreta401, acesso nativo Kestra negado e zero POSTs de aprovação no teste.
+
+Sem novos recursos AWS. Custos variáveis de CI, chamadas, mensagens e telemetria não foram isolados. Bedrock desabilitado, sem inferência; NLB/CloudTrail fora do escopo. Capturas reais de UI/anotações permanecem pendentes; diagramas e placeholders não são prints.
+
+### Evidência e utilização deste documento
+
+🚀 CosmoTech Solutions: governança e entrega contínua na AWS
+
+Minha atuação recente tem sido principalmente com Microsoft Azure/AKS. Neste laboratório, aprofundei a prática com AWS, arquitetura, automação, troubleshooting e SRE.
+
+🔎 Cada release ganhou uma GMUD RCL no GLPI e uma execução principal no Kestra. O portal reúne CI, aprovação, GitOps, Argo CD e observação em português.
+
+🛡️ API crítica exige decisão humana autenticada. Worker pode avançar por políticas determinísticas, mantendo testes, Trivy, assinatura e digest. IA não é requisito nem está ativa.
+
+📊 Worker1.0.5 concluiu Canary com dados sintéticos em serviços reais. API2.0.3-lab foi implantada após aprovação humana. As duas GMUDs seguem em observação por12h — ainda sem anunciar encerramento ou rollback humano validado.
+
+🧭 A engenharia inclui falhas e recuperação: preservei o rollback automático anterior e testei indisponibilidade real do GLPI sem perder o histórico nem liberar promoção pelo cache.
+
+#AWS #DevOps #SRE #GitOps #Kubernetes #ArgoCD #Kestra #GLPI #Azure #AKS
+
+### Commits desta rodada
+
+Automation bb6b9c4; infraestrutura774efd0; Workerdf58807; API8e74c1c. GitOpsAPI ebc0e17; Worker final6a7be69, com etapas intermediárias assinadas registradas na evidência.
+
+<details><summary>Histórico técnico preservado — não representa o estado vigente</summary>
+
 # LinkedIn — texto revisado conforme as evidências — estado consolidado
 
 ## Publicação sugerida — relato parcial, com evidência
@@ -96,5 +163,11 @@ Os testes isolados cobrem falhas de IA, evidências incompletas, adulteração e
 </details>
 
 </details>
+
+</details>
+
+
+</details>
+
 
 </details>

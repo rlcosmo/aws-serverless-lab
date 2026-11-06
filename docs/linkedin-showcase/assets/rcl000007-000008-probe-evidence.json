@@ -1,0 +1,24 @@
+[
+  {
+    "observed_at": "2026-11-06T12:46:42.821515+00:00",
+    "application": "orders-api",
+    "pod": "orders-api-57c95595cc-hwq5l",
+    "gmud_id": "RCL000007",
+    "image_digest": "sha256:bb714d3f611534bd1f0d712c05d9caf38d73d4b9177de7ce976b1519eb084307",
+    "startup_initial_delay": 5,
+    "startup_port": 15021,
+    "warning_reasons": [],
+    "restarts": 0
+  },
+  {
+    "observed_at": "2026-11-06T12:46:45.917544+00:00",
+    "application": "orders-worker",
+    "pod": "orders-worker-85574ddfbf-lljxn",
+    "gmud_id": "RCL000008",
+    "image_digest": "sha256:c959c16ca700790691a889b180bd29ea072e23a836d93c9ea0edeeaa0d953895",
+    "startup_initial_delay": 5,
+    "startup_port": 15021,
+    "warning_reasons": [],
+    "restarts": 0
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "username": "laboratorio",
+  "portal_get": 200,
+  "anonymous_get": 401,
+  "invalid_password": 401,
+  "native_kestra_access": "denied",
+  "release_details_checked": 10,
+  "approval_posts": 0,
+  "actual_approver_banner": true,
+  "read_only_execution_logs": true
+}

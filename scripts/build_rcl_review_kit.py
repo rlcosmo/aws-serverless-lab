@@ -130,7 +130,7 @@ def slide3(e):
         mode = (
             "humana autenticada"
             if c["human_decision_exists"]
-            else "automática pela política"
+            else "humana pendente" if c["phase"] == "HUMAN_REVIEW" else "automática pela política"
         )
         body = (
             "GLPI"
@@ -173,15 +173,15 @@ def slide4(e):
             ),
             (
                 "Cards e timeline em português",
-                "CI, Trivy, criticidade, planos e decisões com timestamps.",
+                "Dez etapas reais, início, fim, duração e evidências expansíveis.",
             ),
             (
                 "Acompanhamento CD + Canary",
-                "Links Kestra/Argo CD e selo Canary com etapa real no cabeçalho.",
+                "release_pipeline por GMUD; scheduler técnico separado. Links Kestra/Argo e selo Canary no topo.",
             ),
             (
-                "Ações conforme o estado",
-                "Humano pendente: aprovar/rejeitar. Rollback: somente elegível e dentro do prazo.",
+                "Identidade e decisões visíveis",
+                "laboratorio com acesso operacional. Página reaberta informa quem aprovou. Histórico disponível durante falha do GLPI.",
             ),
         ]
     ):
