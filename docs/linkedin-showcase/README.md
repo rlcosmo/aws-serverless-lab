@@ -1,3 +1,5 @@
+> Atualização06/11 após aprovação: aplicações implantadas em rolling/bootstrap e GMUDs em observação. Este kit visual é o snapshot anterior às aprovações; revisar conteúdo antes de publicar. Estado real atualizado em10/14. Não houve Canary integrado.
+
 # CosmoTech Solutions — kit visual LinkedIn
 
 Revisão de 06/11/2026 UTC. A integração real chegou às aprovações humanas; nenhuma nova imagem das aplicações foi promovida. Este kit permite apresentar o trabalho realizado com os limites visíveis, sem anunciar Canary/rollback integrado ou janela real de12h concluída.

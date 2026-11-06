@@ -1,6 +1,25 @@
 # Estado da implantação e retomada — estado consolidado
 
-> Estado vigente — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
+> Atualização pós-aprovação —06/11/2026: GMUD3/API e4/Worker aprovadas pelo responsável, deploys concluídos e GLPI em OBSERVING/Review8. API e Worker usaram RollingUpdate; Worker foi bootstrap de telemetria, sem Canary. Kestra agora tem labels aplicação/versão/GMUD, inclusive nas duas execuções existentes. Correção da primeira probe Istio aplicada ao injector para novos pods Orders e validada em dois pods reais isolados, sem Warning/restart. Os diagramas/carrossel existentes são snapshots anteriores às aprovações e precisam de revisão antes de publicação definitiva.
+
+> Snapshot anterior às aprovações — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
+
+## Correção após aprovação e deploy
+
+| Aplicação | Versão | GMUD | Estratégia real | Estado |
+|---|---|---|---|---|
+| orders-api |47b408bd448e |3 |RollingUpdate |OBSERVING até20:45:17Z06/11 |
+| orders-worker |a9dac69545cd |4 |Bootstrap rolling de telemetria |OBSERVING até20:46:26Z06/11 |
+
+Nenhum orders-worker-canary ativo. Não anunciar progressão/rollback Canary. Commits de deploy GitOps999f4ad/API e4de7fac/Worker. Nenhuma nova aprovação/release disparada para as correções abaixo.
+
+Infra2e0c30a: atraso inicial5s para startupProbe15021 somente novos pods Orders. A falha anterior ocorreu uma vez por pod, sem restart e com recuperação. Dois pods reais isolados:2/2, zero Warning/restart; removidos após registro. Pods das aplicações e seus eventos antigos preservados.
+
+Automationb02fb01: gate revisão3 validado e fixado; labels application/version/gmud/release antes da aprovação nas próximas releases. Execuções atuais receberam labels via API e readback, sem novo deploy.155 testes e4 subtestes passaram, Ruff passou. Em Executions, exibir coluna Labels se oculta. ID técnico de auditoria permanece imutável.
+
+Canary normal, rollback integrado e janela12h concluída continuam pendentes. Fonte operacional: infrastructure/ops/istio/README.md e automation/docs/gmud-operations.md.
+
+## Plano anterior — snapshot de antes da aprovação
 
 ## Plano vigente e dependência humana
 

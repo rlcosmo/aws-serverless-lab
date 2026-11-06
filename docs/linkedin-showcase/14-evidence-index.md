@@ -1,6 +1,22 @@
 # Índice de evidências reais — estado consolidado
 
-> Estado vigente — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
+> Atualização pós-aprovação —06/11/2026: GMUD3/API e4/Worker aprovadas pelo responsável, deploys concluídos e GLPI em OBSERVING/Review8. API e Worker usaram RollingUpdate; Worker foi bootstrap de telemetria, sem Canary. Kestra agora tem labels aplicação/versão/GMUD, inclusive nas duas execuções existentes. Correção da primeira probe Istio aplicada ao injector para novos pods Orders e validada em dois pods reais isolados, sem Warning/restart. Os diagramas/carrossel existentes são snapshots anteriores às aprovações e precisam de revisão antes de publicação definitiva.
+
+> Snapshot anterior às aprovações — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
+
+## Evidência após as aprovações
+
+| ID | Origem | Resultado real |
+|---|---|---|
+| P01 |SSMd49b7dac-43f2-43c4-b59a-63d3a7ee2575 |Duas decisões autenticadas; Kestra SUCCESS; GMUD3/4 Review8/OBSERVING, errors[] |
+| P02 |GitOps999f4ad e4de7fac |Release API e bootstrap Worker promovidos pelo publisher controlado; ambos RollingUpdate, sem Canary |
+| P03 |kubectl pods/events |Uma falha startup15021 em cada pod, ambos2/2 sem restart. Origem: proxy Istio nativo com atraso0s |
+| P04 |Injector patch server dry-run/replace |Atraso5s somente app orders-api/orders-worker; outras probes e workloads preservados; sem rollout das aplicações |
+| P05 |Dois pods reais isolados em default |Proxy injetado5s, ambosReady, zero Warning e zero restart. Evidência sanitizada em infrastructure/ops/istio/startup-probe-evidence-20261106.json; pods de teste removidos |
+| P06 |SSM1a75aa4f-3096-40f6-8004-5df38bc64153 |Flow revision3 validado sem warnings e labels instalados; execuções3/4 identificadas por aplicação, commit12 e GMUD |
+| P07 |Automation pytest/Ruff |155 passed,4 subtests; Ruff passou após mudança de apresentação |
+
+Essas provas não são validação de Canary/rollback ou conclusão das12h. As linhas G04/G05/G13/G16 abaixo registram o snapshot anterior às aprovações.
 
 ## Evidências vigentes desta etapa
 

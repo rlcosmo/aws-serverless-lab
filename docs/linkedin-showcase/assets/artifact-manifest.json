@@ -68,8 +68,8 @@
     },
     {
       "path": "assets/public-evidence.json",
-      "sha256": "3503295f54e8c3f9aca6a9f6e49f53628d925545ef6c6c513f6ec1c836487c90",
-      "bytes": 619
+      "sha256": "87013fa13f5b16c8d7105935949ce047ba32e99d083e4016f89a2364c46b201d",
+      "bytes": 788
     },
     {
       "path": "assets/worker-canary.png",

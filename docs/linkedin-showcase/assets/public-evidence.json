@@ -7,7 +7,21 @@
   "foreign_signer_rejected": true,
   "control_plane_targets_up": true,
   "gmud_pending_human": 2,
-  "ci_passed": {"api": true, "worker": true},
-  "sources": ["../14-evidence-index.md", "../10-action-plan.md"],
-  "limitations": ["Sem aprovação humana registrada", "Sem deploy de aplicação nesta etapa", "Sem Canary/rollback integrado", "Sem janela real de 12 horas", "Capturas de interfaces pendentes"]
+  "ci_passed": {
+    "api": true,
+    "worker": true
+  },
+  "sources": [
+    "../14-evidence-index.md",
+    "../10-action-plan.md"
+  ],
+  "limitations": [
+    "Sem aprovação humana registrada",
+    "Sem deploy de aplicação nesta etapa",
+    "Sem Canary/rollback integrado",
+    "Sem janela real de 12 horas",
+    "Capturas de interfaces pendentes"
+  ],
+  "snapshot_phase": "pre-approval; superseded for live status",
+  "current_status_reference": "../14-evidence-index.md"
 }
