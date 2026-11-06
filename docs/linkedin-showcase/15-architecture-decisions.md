@@ -1,3 +1,22 @@
+# Decisões arquiteturais — estado consolidado
+
+> Estado vigente — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
+
+## Decisões vigentes
+
+- Kestra determina autorização; Bedrock opcional/desabilitado, sem novas chamadas com quotas zero.
+- Criticidade protegida, GLPI Change nativo, identidade imutável e journal antes dos efeitos. Retry ambíguo exige reconciliação.
+- Histórico real GLPI, cinco sucessos auditáveis distintos por app/ambiente; dados sintéticos excluídos.
+- Publisher exclusivo e assinatura no destino; CI solicita e publica imagem, sem chave GitOps. Administradores permanecem fronteira privilegiada.
+- Canary somente Worker e sem alegação de pesos de tráfego SQS; bootstrap humano explícito e ligação Canary normal pendente.
+- Deploy validado não encerra GMUD: Review8 durante12h, Closed6 apenas após janela limpa; rollback nunca é sucesso.
+- Sem NLB/CloudTrail, novas inferências ou aprovação API pelo agente.
+
+## Histórico preservado — anterior à integração GMUD atual
+
+<details>
+<summary>Consultar registros anteriores (não representam o estado vigente)</summary>
+
 # Decisões arquiteturais
 
 | Decisão | Justificativa | Estado |
@@ -15,3 +34,5 @@
 | Preservar NLB/CloudTrail adiados | Não são dependências indispensáveis demonstradas deste escopo | Nenhuma alteração |
 
 Administradores do host/Kestra/cluster continuam fronteira privilegiada; não prometer resistência a comprometimento administrativo. Os riscos históricos de MFA/telemetria pública permanecem documentados, sem remediação nesta execução.
+
+</details>

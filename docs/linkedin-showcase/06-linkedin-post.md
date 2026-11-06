@@ -1,3 +1,30 @@
+# LinkedIn — texto revisado conforme as evidências — estado consolidado
+
+> Estado vigente — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
+
+## Texto LinkedIn — versão honesta para revisão
+
+☁️ Minha experiência profissional recente tem sido principalmente em Microsoft Azure e AKS. No laboratório pessoal CosmoTech Solutions, estou aprofundando a prática em AWS com uma plataforma de pedidos assíncronos em EKS, SQS e DynamoDB.
+
+🔐 Nesta etapa, conectei CI e Trivy ao Kestra e à criação de GMUDs nativas no GLPI. A autorização segue criticidade protegida: API exige humano; Worker pode seguir automaticamente quando os controles permitem; a política customizada exige cinco mudanças reais e bem-sucedidas da mesma aplicação e ambiente.
+
+GitOps com assinatura exigida no Argo CD, identidade autenticada no portal e notificações SNS formam a trilha de controle. Uma tentativa com outro signatário foi recusada no destino. O Trivy também bloqueou uma imagem vulnerável antes da correção e de novas CIs aprovadas.
+
+📊 O troubleshooting passou por métricas do plano de controle EKS: conectei os endpoints oficiais, preservei alertas e confirmei os targets ativos.
+
+O laboratório ainda está em validação: as duas GMUDs aguardam revisão humana. Canary exclusivo do Worker, rollback com drenagem e observação de 12h têm componentes/testes isolados; a demonstração integrada depende das próximas aprovações. Bedrock permanece opcional e desabilitado.
+
+Arquitetura, automação, segurança, observabilidade e práticas SRE — com evidências e limites documentados.
+
+#AWS #AmazonEKS #Kubernetes #GitOps #ArgoCD #Kestra #GLPI #DevOps #SRE #CloudEngineering #Azure #AKS
+
+Não publicar como projeto integralmente concluído. Para um post de conclusão, substituir esta versão somente após validação integrada e nova revisão das evidências.
+
+## Histórico preservado — anterior à integração GMUD atual
+
+<details>
+<summary>Consultar registros anteriores (não representam o estado vigente)</summary>
+
 # LinkedIn — texto revisado conforme as evidências
 
 Rascunho publicável como relato de evolução. Não anunciar a integração completa de CD/Canary: ainda está pendente. Publicação não realizada.
@@ -17,3 +44,5 @@ Os testes isolados cobrem falhas de IA, evidências incompletas, adulteração e
 É um laboratório de aprendizado e demonstração, com limitações documentadas. O trabalho reforçou uma prática essencial de SRE: verificar o comportamento e tratar a falta de evidência como motivo para bloquear uma promoção.
 
 #AWS #SRE #Kubernetes #GitOps #DevOps #PlatformEngineering
+
+</details>

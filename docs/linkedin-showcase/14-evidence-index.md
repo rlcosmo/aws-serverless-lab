@@ -1,3 +1,41 @@
+# Índice de evidências reais — estado consolidado
+
+> Estado vigente — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
+
+## Evidências vigentes desta etapa
+
+| ID | Execução/artefato | Resultado real e limite |
+|---|---|---|
+| G01 | API CI42147727518 / commit47b408b | Testes/Trivy/publicação ECR e solicitação Kestra verdes; sem deploy |
+| G02 | Worker CI42147729148 / commita9dac69 | Testes/Trivy/publicação ECR e solicitação verdes; sem deploy |
+| G03 | CIs iniciais42145824882/42145826639 | Trivy recusou apt3.0.3/libapt-pkg7.0; corrigidos para pacote apt3.0.4 disponível |
+| G04 | Kestra5hHDHAD5Edszef1FQbH4Cy / GLPI3 | Revisão2; coleta e política SUCCESS; PAUSED; native Approval10; sem decisão humana |
+| G05 | KestraMKVIJ36d4wfJrsh1jml1J / GLPI4 | Revisão2; coleta e política SUCCESS; PAUSED; native Approval10; bootstrap sensível exige humano |
+| G06 | SNS | Duas notificações aceitas, IDs nos ledgers privados; mailbox não comprovada |
+| G07 | GitOps4b6d264cf5c027570387aa0daebf777360ae5770 | Anchor assinado de controle; árvore gitops/apps idêntica ao pai; sem promoção |
+| G08 | Argo verificação negativa | GIT/GPG recusou revisão com outro signatário; zero operações de sync da aplicação diagnóstica |
+| G09 | EKS control-plane ServiceMonitor | Quatro targets up; alertas scheduler/controller-manager resolvidos sem supressão |
+| G10 | Automação pytest/Ruff | 155 passed e4 subtests; Ruff passou. Isolados, mocks/Git/relógio sintético |
+| G11 | API/Worker testes locais | 65/81 passaram; não são testes integrados EKS |
+| G12 | GLPI Change2 | Protocolo nativo testado, sintético e cancelado, sem deploy; nunca conta nos cinco sucessos |
+| G13 | SSM1c087168-8121-4173-80b9-b4b322201981 | Leitura direta das duas execuções confirma pausa, native10 e ausência de decisão |
+| G14 | SSM9d6cd34d-b81e-4415-a7fc-b332c561e1af | Patch de semântica nativa/histórico aplicado; sem publicação de aplicação |
+| G16 | SSMedb1e812-4b72-42d2-91b3-9eaa8a849466 | Leitura real confirmou zero sucessos encerrados; retries GMUD3/4 retornaram IDs existentes, com create bloqueado e zeroPOST |
+| G15 | Kit visual | Diagramas/carrossel/PDF exportados; placeholders explícitos, nenhuma captura de UI fabricada |
+
+| G17 | SSMfd13787e-50ab-400d-8538-335af398ea3d | Os25 módulos Python no host coincidem com automatione3b7cad; portal active/health200, sem autoridade de publicação no portal |
+| G18 | Automation CI42152132774 / e3b7cad | Workflow validate-cluster-pipelines concluído success; não equivale aos155 testes pytest locais |
+| G19 | Infrastructure CI42152134245 / e608f7b | Workflow terraform concluído success; controles aplicados previamente com planos revisados |
+| G20 | Observability CI42152137542 / c2c8a44 | Workflow validate-observability concluído success; dashboard novo continua preparado, não integrado |
+| G21 | kubectl deployments | API1/1 e Worker1/1, sem deployment orders-worker-canary; nenhuma imagem promovida nesta etapa |
+
+Não existentes: cinco GMUDs reais encerradas com sucesso, aprovação humana registrada, deploy integrado desta release, Canary/rollback EKS, janela real12h concluída e capturas definitivas. Valores de custo: ver10. Manifesto de hashes dos arquivos públicos em assets/artifact-manifest.json.
+
+## Histórico preservado — anterior à integração GMUD atual
+
+<details>
+<summary>Consultar registros anteriores (não representam o estado vigente)</summary>
+
 # Índice de evidências reais
 
 Atualização: 2026-11-05T20:24:29.454115+00:00. Evidências de teste são reais resultados locais com dados simulados; não são evidências de implantação AWS.
@@ -101,3 +139,5 @@ substituir as fontes verificadas por claims do CI. Evidência sanitizada adicion
 local: `/tmp/cosmotech-actions-permission-evidence.json`, sem tokens ou chaves.
 
 Commit local automation: `e93bef3 feat(promotion): default to deterministic approval with optional Bedrock`. Registra componentes existentes reutilizados e ajustes determinísticos; sem push. O checkout automation ficou limpo. Workflows preparados nos demais repos continuam locais; não foram publicados ou ativados.
+
+</details>

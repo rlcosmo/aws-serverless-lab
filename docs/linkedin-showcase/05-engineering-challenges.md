@@ -1,3 +1,20 @@
+# Desafios técnicos reais — estado consolidado
+
+> Estado vigente — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
+
+## Troubleshooting comprovado
+
+1. Trivy barrou apt/libapt-pkg7.0 vulnerável: atualização na imagem base fixada, novas CIs verdes.
+2. Validação de URL rejeitava o separador legítimo `compare/a...b`: correção mantém bloqueio de traversal, com regressões.
+3. API Kestra 2.0.8 usa `/actions/restart` e `/actions/resume`: corrigido e retomadas as mesmas execuções, sem nova GMUD.
+4. EKS access entry já existia: preservada e ampliada de forma aditiva, sem importação duplicada ou substituição.
+5. Argo: verificação negativa corrigiu a asserção para o erro GIT/GPG real; zero sync na aplicação diagnóstica.
+
+## Histórico preservado — anterior à integração GMUD atual
+
+<details>
+<summary>Consultar registros anteriores (não representam o estado vigente)</summary>
+
 # Desafios técnicos reais
 
 ## SDK Bedrock sem Converse — corrigido no host
@@ -25,3 +42,5 @@ A inspeção também identificou o sync SSM executando validador/bootstrap da á
 ## Actions read não concedido à instalação — intervenção humana necessária
 
 O App declara Actions read, mas a instalação conserva apenas Contents write, Pull requests write e Metadata read. Tokens por repositório com Actions read retornam422; runs sem essa permissão retornam403. É necessário o proprietário aceitar a atualização da instalação. Não usar claims do CI como evidência confiável nem token pessoal permanente para contornar o bloqueio.
+
+</details>

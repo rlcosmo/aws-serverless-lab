@@ -1,3 +1,24 @@
+# Demonstração reproduzível — estado consolidado
+
+> Estado vigente — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
+
+## Runbook de demonstração atual
+
+1. Consultar GMUD3/4 e execuções Kestra vinculadas; demonstrar CI/Trivy/digest verificados, pausa e decisão ainda ausente.
+2. Mostrar configuração protegida das três políticas e testes isolados. Não criar histórico falso no GLPI.
+3. Mostrar controle assinado e evidência real de signatário recusado. Não disparar nova promoção para capturar print.
+4. Responsável decide no portal autenticado. O agente não opera o formulário em seu nome.
+5. Após autorização e validação do bootstrap, concluir ligação Canary Worker e testar dados sintéticos rastreáveis, métricas, progressão e drenagem.
+6. Validar API somente com autorização humana real; observar12h reais. Não comprimir relógio do ambiente integrado.
+7. Capturar UI sanitizada e substituir placeholders; reexportar slides/PDF somente com evidência correspondente.
+
+Rollback fora do prazo exige nova GMUD; concorrente/duplicado/versão substituída bloqueia. Em falha GLPI/Kestra, preservar intent/ledger e reconciliar o efeito real antes de repetir. Não apagar journal, GMUDs ou dados.
+
+## Histórico preservado — anterior à integração GMUD atual
+
+<details>
+<summary>Consultar registros anteriores (não representam o estado vigente)</summary>
+
 # Demonstração reproduzível
 
 Estado atual em10/14. Não executar novamente o probe histórico: está desabilitado. A quota não é pré-requisito do gate determinístico.
@@ -37,3 +58,5 @@ Após aceitação de Actions read na instalação do GitHub App, concluir as lig
 7. Registrar incidente/notificação, sync/health final e capturas reais sanitizadas.
 
 Não usar credenciais humanas armazenadas para aprovar em nome do proprietário. Não registrar a demonstração completa como executada antes de haver provas. NLB e CloudTrail não fazem parte dessa sequência.
+
+</details>

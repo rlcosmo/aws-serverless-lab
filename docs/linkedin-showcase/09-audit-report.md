@@ -1,3 +1,18 @@
+# Auditoria atualizada — escopo Kestra/IA e Canary — estado consolidado
+
+> Estado vigente — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
+
+## Auditoria desta etapa
+
+Efetivos: políticas/SSM/IAM revistos e aplicados em recursos existentes; AppProject com chave GPG exigida; CI sem segredo GitOps; dois runs CI verdes; GLPI Changes 3 e 4; Kestra revision2 pausado; duas notificações SNS aceitas. Sem aprovação humana registrada ou promoção de imagens das aplicações.
+
+Teste GLPI de protocolo usa Change2 sintético/cancelado, excluído do histórico. Os testes locais usam mocks/relógio sintético; 155 testes e 4 subtestes passaram. Nenhum conjunto artificial de cinco sucessos foi criado no GLPI. Custos adicionais da mudança não foram isolados no faturamento.
+
+## Histórico preservado — anterior à integração GMUD atual
+
+<details>
+<summary>Consultar registros anteriores (não representam o estado vigente)</summary>
+
 # Auditoria atualizada — escopo Kestra/IA e Canary
 
 ## Estado vigente — 2026-11-06T00:44Z
@@ -180,3 +195,5 @@ Os riscos anteriores de MFA e observabilidade pública permanecem abertos e fora
 | Canary / rollback | FUNCIONAL em simulação; EKS NÃO VERIFICADO | 86 testes automação; 79 Worker; demo isolada | Coleta/execução integrada não demonstrada | Fechar bindings antes de deploy | P0 |
 
 Os riscos históricos de MFA ausente e observabilidade anônima não foram corrigidos. NLB e CloudTrail permanecem adiados.
+
+</details>

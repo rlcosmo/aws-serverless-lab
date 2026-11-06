@@ -1,3 +1,18 @@
+# Segurança da publicação — estado consolidado
+
+> Estado vigente — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
+
+## Revisão de publicação atual
+
+O material visual omite conta AWS, ARNs, IPs, tokens e destinatários. Ícones oficiais AWS preservados com proveniência em assets/aws. Acesso aos links de aprovação requer identidade do responsável; nenhum token deve ser incluído em URL/imagem.
+
+Capturas reais ainda não disponíveis. Os quatro placeholders estão rotulados, sem interface simulada, e não devem ser usados como evidência. Antes de substituir, redigir identidade/e-mail, conta, endereços privados, cabeçalhos/cookies/CSRF, secrets e logs sensíveis. Só então adicionar setas/legendas e registrar origem/data/hash.
+
+## Histórico preservado — anterior à integração GMUD atual
+
+<details>
+<summary>Consultar registros anteriores (não representam o estado vigente)</summary>
+
 # Segurança da publicação
 
 ## Estado vigente — 2026-11-06T00:44Z
@@ -37,3 +52,5 @@ O post06 está escrito para o estado atual de implementação local e teste isol
 - [ ] Não publicar chaves GPG/Ed25519 privadas, GNUPGHOME, ledger com identidade, cabeçalhos Basic, challenges CSRF ou credenciais SNS/Kestra.
 - [ ] Revisar diff e fixtures: IDs fictícios dos testes não autorizam publicar IDs reais presentes nos arquivos de configuração.
 - [ ] Manter MFA ausente e endpoints anônimos como riscos internos não resolvidos.
+
+</details>

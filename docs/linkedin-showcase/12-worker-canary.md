@@ -1,3 +1,20 @@
+# Canary real de consumidor SQS — código local, ativação pendente — estado consolidado
+
+> Estado vigente — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
+
+## Limite atual Canary e rollback
+
+Canary é exclusivo do Orders Worker, por consumidores da mesma SQS; não são percentuais de tráfego HTTP. Controller/lease/drain/limites e métricas têm testes isolados. Ainda não há candidata ativa no EKS, progressão real ou rollback integrado. Nenhuma carga sintética foi enviada nesta etapa.
+
+Rollback preparado: responsável autenticado informa justificativa; até 12h após validação; controle de versão atual/CAS, idempotência e exclusão concorrente. Worker deve parar novos polls e comprovar inflight zero antes de restaurar; sem comprovação, bloqueia. Versão substituída ou resultado ambíguo exige análise humana. Após 12h, nova GMUD.
+
+Scheduler persistente Kestra verifica a observação; não há processo temporário esperando 12h. Lacunas de amostragem acima de180s, incidentes, falha ou mudança de digest impedem fechar como sucesso. A janela real não começou.
+
+## Histórico preservado — anterior à integração GMUD atual
+
+<details>
+<summary>Consultar registros anteriores (não representam o estado vigente)</summary>
+
 # Canary real de consumidor SQS — código local, ativação pendente
 
 ## Estado vigente — 2026-11-06T00:44Z
@@ -51,3 +68,5 @@ Disponível: testes unitários de progressão, falhas, drain, restart e rollback
 ## Atualização desta revisão — 2026-11-05T21:04:49.426224+00:00
 
 O executor local aplica somente efeitos vinculados ao ledger confiável, com journal por geração e lease limitada. Resposta de deploy ambígua exige reconciliação, não retry cego. Callbacks de staging/promoção/restauração precisam ser ligados ao publisher exclusivo e ao estado Argo antes de ativar. O mock de rollback não comprova efeitos Kubernetes.
+
+</details>

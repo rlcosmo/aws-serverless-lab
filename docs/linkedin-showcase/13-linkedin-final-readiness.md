@@ -1,3 +1,18 @@
+# Prontidão para publicação — estado consolidado
+
+> Estado vigente — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
+
+## Prontidão para publicação
+
+Material adequado para relato parcial com limites explícitos; não para anunciar laboratório concluído. Entregues diagramas e carrossel/PDF de revisão. Faltam aprovação do responsável, bootstrap Worker, ligação Canary, testes integrados das duas aplicações e janela real12h, além das capturas sanitizadas de UI.
+
+Aprovações não foram realizadas pelo agente. SNS aceitou mensagens, mas recebimento na caixa postal não foi comprovado. Não se atribui a testes locais a condição de integração validada. Actions read já está resolvido; Bedrock não é pré-requisito.
+
+## Histórico preservado — anterior à integração GMUD atual
+
+<details>
+<summary>Consultar registros anteriores (não representam o estado vigente)</summary>
+
 # Prontidão para publicação
 
 **Gate completo, Canary e rollback integrados ainda não estão validados.**
@@ -17,3 +32,5 @@ O texto06 pode ser revisado como relato da evolução, sem alegar integração c
 Liberação de quota Bedrock não é critério de prontidão deste desenho.
 Nenhuma publicação LinkedIn ou push ocorreu nesta retomada. Riscos históricos
 permanecem documentados; não alegar alta disponibilidade ou prontidão de produção.
+
+</details>

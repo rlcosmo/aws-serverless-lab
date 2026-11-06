@@ -1,3 +1,18 @@
+# Observabilidade do Worker — implementação local — estado consolidado
+
+> Estado vigente — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
+
+## Observabilidade efetivamente verificada
+
+Os alertas críticos de scheduler/controller-manager expuseram uma lacuna de scrape no EKS. Foram conectados os endpoints oficiais de métricas do plano de controle, preservando as regras e validação TLS: quatro targets ficaram up e os alertas resolveram. Não houve supressão para liberar o gate.
+
+PodMonitor do Worker foi aplicado, mas séries por versão, amostras, p95 e progressão da candidata dependem do bootstrap autorizado. Dashboard preparado não é dashboard integrado validado. Capturas reais de UI continuam pendentes; os arquivos screenshots são placeholders explícitos.
+
+## Histórico preservado — anterior à integração GMUD atual
+
+<details>
+<summary>Consultar registros anteriores (não representam o estado vigente)</summary>
+
 # Observabilidade do Worker — implementação local
 
 ## Estado vigente — 2026-11-06T00:44Z
@@ -46,3 +61,5 @@ A exposição anônima preexistente de telemetria e MFA ausente continuam no rel
 ## Atualização desta revisão — 2026-11-05T21:04:49.426224+00:00
 
 Revalidação local: dois testes do coletor CloudWatch passaram. Métricas por digest/canal, heartbeat, inflight e draining continuam sem comprovação de séries no cluster. O executor recusa progressão com métricas ausentes; zero inventado não substitui coleta.
+
+</details>

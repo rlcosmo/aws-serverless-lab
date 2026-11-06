@@ -1,0 +1,205 @@
+{
+  "scope": "Public visual review artifacts, not execution screenshots",
+  "files": [
+    {
+      "path": "assets/README.md",
+      "sha256": "714a92cd47a1572b295d985235a5b9803dfeba898a07f57a990e46671e78e84f",
+      "bytes": 401
+    },
+    {
+      "path": "assets/aws/cloudwatch.svg",
+      "sha256": "a84b5b88172ab39170eaa6154345332d755758a37cda6a5580981cf679e01c0b",
+      "bytes": 4292
+    },
+    {
+      "path": "assets/aws/dynamodb.svg",
+      "sha256": "ed169f049cc24c954cfbe3d14695d5b022558c45e5605936a565d1347c14b664",
+      "bytes": 6016
+    },
+    {
+      "path": "assets/aws/ecr.svg",
+      "sha256": "bec34a867cb424de91592470a14e82556dd9b041231b5e070ca846752d1c719f",
+      "bytes": 2509
+    },
+    {
+      "path": "assets/aws/eks.svg",
+      "sha256": "abda372bab3e7e0e873edf2b078972625b2cff255d8626fbf955546e71bdf9cb",
+      "bytes": 2566
+    },
+    {
+      "path": "assets/aws/elb.svg",
+      "sha256": "eaaf3465e26d6e7cfae47d2da7bb8d727fe1bd3a118ed06614349e07039f8caa",
+      "bytes": 1833
+    },
+    {
+      "path": "assets/aws/iam.svg",
+      "sha256": "3135793557c065d0481a3985ccc0574b36278d56a2e2c5d59107d0d28f51b827",
+      "bytes": 2027
+    },
+    {
+      "path": "assets/aws/provenance.json",
+      "sha256": "62d93d66656b931c88e94132cc75932a1ba26537a28e22f9d43a557b22afcfd4",
+      "bytes": 1768
+    },
+    {
+      "path": "assets/aws/sqs.svg",
+      "sha256": "bbab2545dccba2e11aff74e42c7f8078a9051b14b16114e539da1c4b09bdbdcd",
+      "bytes": 6056
+    },
+    {
+      "path": "assets/aws-architecture.png",
+      "sha256": "a8ff745655f60831bc34712f8005be0bc970aa9366bcfab1a53b1d950db5b587",
+      "bytes": 190324
+    },
+    {
+      "path": "assets/aws-architecture.svg",
+      "sha256": "f62b94f46c0633fef0a5ede81f6b18c7872daaa27bdcba772d3104566e2cedb7",
+      "bytes": 39182
+    },
+    {
+      "path": "assets/cicd-gmud-gitops.png",
+      "sha256": "b72d4a74877dd7864d6ea16dc93ea1dea514bc4406cb0fe5e5573999b6b6ec07",
+      "bytes": 208911
+    },
+    {
+      "path": "assets/cicd-gmud-gitops.svg",
+      "sha256": "1cbe6859b2f75f07aa211a4cbe5d49446148d2ca4d64e12e7d4ed54b5a91077b",
+      "bytes": 12309
+    },
+    {
+      "path": "assets/public-evidence.json",
+      "sha256": "3503295f54e8c3f9aca6a9f6e49f53628d925545ef6c6c513f6ec1c836487c90",
+      "bytes": 619
+    },
+    {
+      "path": "assets/worker-canary.png",
+      "sha256": "f409f4470d940665ba5458f4473e9418ceab90c8d3e150fa64dd4919b381f553",
+      "bytes": 214987
+    },
+    {
+      "path": "assets/worker-canary.svg",
+      "sha256": "dc1a340a5a18d8e22a9ff3b18201faf87785887d06989f71c88c5322da9867ab",
+      "bytes": 27237
+    },
+    {
+      "path": "carousel/01-cosmotech.png",
+      "sha256": "fbb543784e3a054b3e506826e7d4398d22b37ec8678da1aacced9772110189ac",
+      "bytes": 155149
+    },
+    {
+      "path": "carousel/01-cosmotech.svg",
+      "sha256": "a495298ee696e03c3904027a9b4fb6b8c28175343d535adb0384108d159583d1",
+      "bytes": 24232
+    },
+    {
+      "path": "carousel/02-cosmotech.png",
+      "sha256": "ed8e14aad15e730ecbf45549c4f2a7079c010b056ef5e58d34b8c759e9387c95",
+      "bytes": 131006
+    },
+    {
+      "path": "carousel/02-cosmotech.svg",
+      "sha256": "0f8c1c656ffdbbaedb69acd109afcf1229c45f3366ecfe6e512b52d8e1ac5c3d",
+      "bytes": 28061
+    },
+    {
+      "path": "carousel/03-cosmotech.png",
+      "sha256": "d6119e42d57523b63a76e200c920a87e2029c60e7505bf3cba81b3464371fabf",
+      "bytes": 130080
+    },
+    {
+      "path": "carousel/03-cosmotech.svg",
+      "sha256": "55cb949eb2cb7be997f05b2071d4735923101cc65856858f1978abe5ac8a7aeb",
+      "bytes": 3668
+    },
+    {
+      "path": "carousel/04-cosmotech.png",
+      "sha256": "82074297d9d4b977f490e9b82cad23a9051b790280bd9b86d31828e95e5c791b",
+      "bytes": 134521
+    },
+    {
+      "path": "carousel/04-cosmotech.svg",
+      "sha256": "1ff4868dda06ce4456a5ddb3174526e823cde86ee3ef9a4d962baf679f068fba",
+      "bytes": 4401
+    },
+    {
+      "path": "carousel/05-cosmotech.png",
+      "sha256": "573be76e15f8138481a6d61254a1ab870a63d9f9ff56a4c1f4840f49de9031c6",
+      "bytes": 145299
+    },
+    {
+      "path": "carousel/05-cosmotech.svg",
+      "sha256": "282dfa5b9068018f2e25fd0198b86843a22cfe1e84a17df0d110c2cf92b21940",
+      "bytes": 19661
+    },
+    {
+      "path": "carousel/06-cosmotech.png",
+      "sha256": "c27459fa7a01c60e63a1d87efb6eded81115ddd61700b0e80b1c891f77cbcf74",
+      "bytes": 162439
+    },
+    {
+      "path": "carousel/06-cosmotech.svg",
+      "sha256": "64b81b52f81e51504d4b94954571f70ac2ff42e640852cc4892f2d99be2b534b",
+      "bytes": 3575
+    },
+    {
+      "path": "carousel/README.md",
+      "sha256": "3652ab23857e99cecef06892126a312b8b6ffc014f1c83c551179f5cab4474f8",
+      "bytes": 409
+    },
+    {
+      "path": "carousel/contact-sheet.png",
+      "sha256": "5d84807f3edf522ea9696f71686db65370437cb99e7d6dd90d19a019bc3d2805",
+      "bytes": 210938
+    },
+    {
+      "path": "carousel/cosmotech-carousel-review.pdf",
+      "sha256": "b7c724ae1331e68a041437ccb8a3afa1147872303aebc80c498ecd7be80c8439",
+      "bytes": 56094
+    },
+    {
+      "path": "screenshots/README.md",
+      "sha256": "d85043fe37024abe6a395cbce106770f666b899541483884f04184b464c77820",
+      "bytes": 603
+    },
+    {
+      "path": "screenshots/argocd-placeholder.png",
+      "sha256": "4c190c733fb5c9199752c3a69157a3d273f6e2c7b437f1fc75259c23eedd0955",
+      "bytes": 69837
+    },
+    {
+      "path": "screenshots/argocd-placeholder.svg",
+      "sha256": "a3a9345667428d3b15dfcfbd6c8efc8ede2363d9f5db88ae0c7f7783f078a26a",
+      "bytes": 1988
+    },
+    {
+      "path": "screenshots/glpi-placeholder.png",
+      "sha256": "7ec337e765fb530620b0ab3b7154e580342bcb456ec58d2bf78396a73747d791",
+      "bytes": 64691
+    },
+    {
+      "path": "screenshots/glpi-placeholder.svg",
+      "sha256": "7f9e2120ef997e69e3cd307eca0ce86e6380fbd27102d74d207d44801fc6e645",
+      "bytes": 1979
+    },
+    {
+      "path": "screenshots/grafana-placeholder.png",
+      "sha256": "b2957ddb4446aa2ab110ad3477f9c933a0635ea19b1dc43b17fd953a4bf92184",
+      "bytes": 73295
+    },
+    {
+      "path": "screenshots/grafana-placeholder.svg",
+      "sha256": "f7726208f1d34751f6a3b57af4043f4b17d44e4a8f28bf22bb1e2e461f60f9ea",
+      "bytes": 1996
+    },
+    {
+      "path": "screenshots/kestra-placeholder.png",
+      "sha256": "f5588176ba4e628a69730158b35b275ba3b630beb6ee74e3586687d6e3a2b708",
+      "bytes": 72489
+    },
+    {
+      "path": "screenshots/kestra-placeholder.svg",
+      "sha256": "d8a06d93197c50c1a6823a67699160089521128e63d66023bbdd9f5d9c949cba",
+      "bytes": 1994
+    }
+  ]
+}

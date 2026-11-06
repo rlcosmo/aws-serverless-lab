@@ -1,3 +1,40 @@
+# Estado da implantação e retomada — estado consolidado
+
+> Estado vigente — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
+
+## Plano vigente e dependência humana
+
+| Prioridade | Resultado | Próximo passo |
+|---|---|---|
+| Gate único Kestra | Ativo, revisão2, coleta/política SUCCESS nas duas releases | Aguardar decisões autenticadas |
+| GLPI/portal/SNS | GMUD3/API e GMUD4/Worker em Approval10; SNS aceitou ambas | Responsável revisar mudanças e dependências |
+| Publisher/Argo | Chave exclusiva, recibos/digest/replay, CI sem chave; signatário alternativo recusado | Exercitar promoção de aplicação autorizada |
+| Canary Worker | Componentes e testes isolados, PodMonitor/RBAC preparados/aplicados | Bootstrap de telemetria autorizado; conectar execução Canary normal |
+| Rollback/12h | Scheduler persistente ativo; lógica testada com relógio sintético | Validar EKS e cumprir 12h reais sem lacunas |
+| LinkedIn | Três diagramas SVG/PNG, seis slides e PDF | Capturas definitivas após os testes integrados |
+
+### Ações exclusivas do responsável
+
+- [Revisar API / GMUD3](https://kestra.cosmotechsolutions.com.br/releases/11532c84f23aaf55829016336d5b7345abbbf6d896484cb2d68325c64f95a37f) — CRITICAL, sempre humana.
+- [Revisar Worker / GMUD4](https://kestra.cosmotechsolutions.com.br/releases/2e4f566818a9216a2aaafd91047e6fd7ebc9c133287e1444d3a4eda6a7987bea) — NON_CRITICAL, mas bootstrap altera workflow e dependências; exige revisão preservada pela política.
+
+O agente não aprovou nenhuma release. Aprovação não sobrepõe falha técnica. O coletor revalida evidências após a pausa; alteração de alvo, versão substituída ou falha bloqueia publicação. O bootstrap Worker é pré-requisito explícito, não comprovação de Canary; o código recusa deploy rolling normal quando métricas versionadas já existem, até a ligação Canary ser ativada.
+
+A permissão Actions read anterior está resolvida. Não há dependência de inferência. Não realizar atividades NLB ou CloudTrail.
+
+### Commits e implantações
+
+Pushed: API59990a5/47b408b, Worker0feb8b7/a9dac69, Automatione93bef3/e3b7cad, Infrastructuree608f7b, Observabilityc2c8a44, GitOps4b6d264. CIs finais das três plataformas concluíram success. Host comparado ao commite3b7cad:25 módulos coincidentes. Kestra gate/scheduler revisão2 e controles IAM/SSM/RBAC/Argo implantados. Nenhuma imagem de aplicação promovida; API/Worker permanecem1/1, sem candidata Canary.
+
+### Custos e limites
+
+Cost Explorer: 2026-11-01 a 2026-11-06 exclusivo, UnblendedCost sem créditos/refunds, USD 33.4835982918, estimado. É o total da conta no período, não custo incremental desta implementação. Não foram criados nós/instâncias/volumes adicionais. Chamadas, notificações e ingestão de telemetria têm custo variável ainda não isolado.
+
+## Histórico preservado — anterior à integração GMUD atual
+
+<details>
+<summary>Consultar registros anteriores (não representam o estado vigente)</summary>
+
 # Estado da implantação e retomada
 
 Atualização: 2026-11-06T00:44Z (05/11 no fuso do proprietário).
@@ -78,3 +115,5 @@ LinkedIn, alteração dos workflows remotos, apply Terraform ou deploy de aplica
 O portal conserva ledger/CSRF e o backup de código no host. Nenhuma fila, tabela,
 volume, estado Terraform ou histórico Git foi removido. A autorização de execução
 anterior e a nova decisão permanecem válidas para a continuação do mesmo escopo.
+
+</details>

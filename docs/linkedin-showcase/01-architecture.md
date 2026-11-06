@@ -1,3 +1,18 @@
+# CosmoTech AWS Lab — arquitetura e estado real — estado consolidado
+
+> Estado vigente — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
+
+## Arquitetura atual
+
+EKS executa Orders API → SQS/DLQ → Orders Worker → DynamoDB. Reutilizamos os serviços de observabilidade e ITSM existentes. O gate de promoção pertence ao Kestra; criticidade protegida não pode ser alterada por CI/IA. GLPI usa o objeto nativo Change, com vínculo imutável de release/commit/digest/aplicação/ambiente/execução.
+
+A assinatura GPG é exigida no projeto Argo. O CI perdeu a chave de escrita GitOps, mantém publicação ECR e solicita promoção por documento SSM fixo. A fronteira administrativa privilegiada permanece; isso não equivale a impedir um administrador de alterar políticas.
+
+## Histórico preservado — anterior à integração GMUD atual
+
+<details>
+<summary>Consultar registros anteriores (não representam o estado vigente)</summary>
+
 # CosmoTech AWS Lab — arquitetura e estado real
 
 ## Estado vigente — 2026-11-06T00:44Z
@@ -42,3 +57,5 @@ O laboratório continua sendo ambiente de aprendizado, com Spot, capacidade limi
 Bedrock regional Nova Micro foi escolhido para recomendação; publisher GPG e portal autenticado foram implementados localmente. O runtime AWS existente não foi modificado. Plano e fronteiras em10/11.
 
 Na retomada atual, seis módulos foram atualizados no host; o portal segue decision-only. O bloqueio vigente é Actions read não concedido à instalação do App; quota Bedrock não é requisito.
+
+</details>

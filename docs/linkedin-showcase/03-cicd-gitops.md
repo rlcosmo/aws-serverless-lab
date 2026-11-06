@@ -1,3 +1,18 @@
+# CI/CD, gate único e criticidade — estado consolidado
+
+> Estado vigente — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
+
+## CI/CD com GMUD
+
+CI aprovado → GMUD única → criticidade protegida → autorização Kestra → publisher GitOps → Argo CD → validação → observação por 12h → encerramento. API sempre humana; Worker automático apenas quando os controles técnicos e de mudanças sensíveis permitem. Esta primeira release Worker altera workflow/dependências e requer humano.
+
+As CIs reais passaram após correção de apt/libapt-pkg7.0 apontada pelo Trivy; o scan não foi relaxado. Fonte fixada por hash do workflow, commit e digest; recibo assinado e journal durável precedem publicação. Um signatário alternativo foi realmente recusado no Argo, sem operação de sync da aplicação diagnóstica. O publisher assinou apenas o commit de controle, sem mudar os manifests das aplicações.
+
+## Histórico preservado — anterior à integração GMUD atual
+
+<details>
+<summary>Consultar registros anteriores (não representam o estado vigente)</summary>
+
 # CI/CD, gate único e criticidade
 
 A decisão vigente usa Kestra e política determinística. Bedrock é opcional,
@@ -27,3 +42,5 @@ aceita claims de checks vindos do solicitante.
 101 testes locais e Ruff passaram; isso não demonstra enforcement no destino,
 Canary ou rollback real. Consulte [11](11-ai-approval-architecture.md) e
 [14](14-evidence-index.md) para fronteiras e provas.
+
+</details>

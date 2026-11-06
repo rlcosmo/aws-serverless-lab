@@ -1,3 +1,20 @@
+# Gate determinístico por criticidade; IA opcional — estado consolidado
+
+> Estado vigente — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
+
+## Aprovação determinística e GMUD
+
+Decisão atual substitui IA obrigatória. Bedrock é opcional/desabilitado; quotas zero não geram novas tentativas. Kestra é o único gate lógico e lê configuração protegida: CRITICAL/API humana; NON_CRITICAL/Worker condicional; CUSTOM_CRITICAL consulta histórico nativo GLPI da mesma app/ambiente.
+
+Custom exige cinco identidades distintas, auditáveis, encerradas com sucesso após 12h, sem erro/rollback. Duplicata/copiação assinada, histórico incompleto, GLPI indisponível ou divergência nativa/journal bloqueiam; ausência de cinco válidas exige humano. CI/IA não fornecem a classificação ou substituem a consulta.
+
+GLPI nativo: New1, Approval10, Accepted7, Testing11, Review8, Closed6, Refused13, Cancelled14. Sucesso técnico entra Review8 por 12h; sucesso final Closed6 só após observação contínua. Falha técnica permanece Review8 com outcome FAILED, sem inventar enum Failed; recusa é Refused13; rollback é Cancelled14 com outcome explícito. Identidade humana é registrada no journal/auditoria do portal; não se fabrica ChangeValidation como se o usuário tivesse autenticado no GLPI.
+
+## Histórico preservado — anterior à integração GMUD atual
+
+<details>
+<summary>Consultar registros anteriores (não representam o estado vigente)</summary>
+
 # Gate determinístico por criticidade; IA opcional
 
 Decisão vigente do proprietário: Bedrock deixa de ser requisito de autorização.
@@ -53,3 +70,5 @@ Bloqueio atual: a instalação do GitHub App ainda precisa conceder Actions read
 já declarado no App. Sem isso não há coleta autenticada dos testes/Trivy.
 Persistência, retenção/backup do ledger, capacidade dos nós, observação por
 versão e rollback real precisam de validação operacional antes da conclusão.
+
+</details>

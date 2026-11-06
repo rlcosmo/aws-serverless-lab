@@ -1,3 +1,20 @@
+# Arquitetura atual e extensão preparada — estado consolidado
+
+> Estado vigente — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
+
+## Diagramas para revisão
+
+- [Arquitetura AWS SVG](assets/aws-architecture.svg) · [PNG](assets/aws-architecture.png)
+- [CI/CD, GMUD e GitOps SVG](assets/cicd-gmud-gitops.svg) · [PNG](assets/cicd-gmud-gitops.png)
+- [Canary Worker SVG](assets/worker-canary.svg) · [PNG](assets/worker-canary.png)
+
+Legenda: ATIVO = componente/controle observado; HUMANO = revisão obrigatória pendente; ISOLADO = teste local; PLANEJADO = ligação/validação ainda pendente. Setas mostram o fluxo pretendido, não provam execução completa. Não há NLB/CloudTrail ou IA ativa no novo desenho.
+
+## Histórico preservado — anterior à integração GMUD atual
+
+<details>
+<summary>Consultar registros anteriores (não representam o estado vigente)</summary>
+
 # Arquitetura atual e extensão preparada
 
 ## Estado vigente — 2026-11-06T00:44Z
@@ -121,3 +138,5 @@ flowchart LR
 ```
 
 O envio foi aceito pelo SNS; entrega no mailbox e decisão humana de release continuam não verificadas. O fluxo principal de promoção, publisher/GPG no destino e Canary EKS continuam preparados ou pendentes, conforme10.
+
+</details>
