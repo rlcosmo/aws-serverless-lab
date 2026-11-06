@@ -1,3 +1,3 @@
 # Carrossel de revisão
 
-Seis páginas1080×1350 em PNG e SVG editável. PDF cosmotech-carousel-review.pdf tem seis páginas4:5; contact-sheet.png facilita revisão do conjunto. Ordem01–06: experiência, arquitetura, políticas GMUD, entrega, Canary pendente, evidências. O PDF relata uma etapa parcial real; não anuncia integração Canary/rollback concluída. Ver ../README.md e ../06-linkedin-post.md.
+Seis páginas1080×1350 em PNG/SVG e PDF vetorial de seis páginas; contact-sheet.png permite revisar o conjunto. Ordem: experiência Azure/AKS e AWS; arquitetura; GMUDs reais; portal e acompanhamento CD; Canary e rollback automático; práticas de engenharia e limites. Fonte: ../assets/rcl-live-evidence.json; gerador scripts/build_rcl_review_kit.py. Não são screenshots. Observação12h e rollback solicitado pelo responsável continuam pendentes. Ver ../README.md e ../06-linkedin-post.md.

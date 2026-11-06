@@ -1,5 +1,27 @@
 # LinkedIn — texto revisado conforme as evidências — estado consolidado
 
+## Publicação sugerida — relato parcial, com evidência
+
+☁️ Minha experiência profissional recente está concentrada em Microsoft Azure/AKS. No laboratório CosmoTech Solutions, estou aprofundando a prática com AWS — arquitetura, automação, troubleshooting, segurança, observabilidade e SRE.
+
+🔁 Uma release percorre CI/Trivy, GMUD nativa no GLPI, política no Kestra, GitOps assinado e Argo CD. O mesmo RCL aparece em toda a trilha. API crítica exige decisão humana autenticada; Worker não crítico pode receber aprovação automática condicionada.
+
+📊 O Canary do Worker usa consumidores SQS e métricas por versão, com progressão, lease e drenagem. O portal mostra criticidade, método de aprovação, etapa Canary e links do CD. Uma falha real no login GLPI também virou investigação, correção guardada e teste de regressão.
+
+Consulta real: 2026-11-06T11:30:15.400580+00:00. API 2.0.2-lab / RCL000004 / GLPI8: OBSERVING, aprovação humana autenticada pelo responsável. Worker 1.0.4 / RCL000006 / GLPI10: OBSERVING, Canary COMPLETE, aprovação automática condicionada. Nenhuma aprovação da API pelo agente.
+
+Carga real com dados sintéticos: 800 respostas202 e 0 erros HTTP; três pedidos consultados como COMPLETED. API/SQS/DynamoDB reais; pagamento e expedição são simulações explícitas do laboratório. Startup Istio15021 com5s, sem a falha de conexão anterior nos testes desta rodada. Readiness503 pode ocorrer durante drain deliberado; reinícios e eventos estão registrados por teste.
+
+As janelas de12h continuam abertas, sem encerramento antecipado. Rollback solicitado pelo responsável após promoção ainda não foi executado. Capturas reais de UI e suas anotações seguem pendentes; placeholders não são prints. Bedrock permanece opcional/desabilitado, sem inferências. Nenhuma operação NLB/CloudTrail ou recurso AWS novo; custo variável de chamadas/carga/telemetria não isolado.
+
+#AWS #AmazonEKS #GitOps #ArgoCD #Kestra #GLPI #SRE #DevOps #Observabilidade #CloudEngineering #Azure #AKS
+
+## Histórico preservado desta atualização
+
+<details><summary>Snapshot anterior (não é o estado vigente)</summary>
+
+# LinkedIn — texto revisado conforme as evidências — estado consolidado
+
 ## Estado RCL —06/11/2026
 
 RCL000001/GLPI5: Worker1.0.1 abortado por evidência inicial insuficiente; candidata drenada e stable preservada. RCL000002/GLPI6: API2.0.1-lab aguarda aprovação humana. RCL000003/GLPI7: Worker1.0.2 concluiu Canary1→2, promoção e drenagem, em observação até22:04:27Z de06/11 (19:04:27 em São Paulo). Nenhum encerramento12h antecipado; nenhuma aprovação API pelo agente. As GMUDs anteriores não foram renumeradas.
@@ -70,6 +92,8 @@ Os testes isolados cobrem falhas de IA, evidências incompletas, adulteração e
 É um laboratório de aprendizado e demonstração, com limitações documentadas. O trabalho reforçou uma prática essencial de SRE: verificar o comportamento e tratar a falta de evidência como motivo para bloquear uma promoção.
 
 #AWS #SRE #Kubernetes #GitOps #DevOps #PlatformEngineering
+
+</details>
 
 </details>
 

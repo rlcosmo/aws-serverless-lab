@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-11-06T10:09:35.900482+00:00",
+  "verified_at": "2026-11-06T11:30:15.400580+00:00",
   "scope": "Novas GMUDs RCL; evidência real parcial",
   "bedrock_enabled": false,
   "changes": [
@@ -25,13 +25,13 @@
       "title": "RCL000002 | DEPLOY | ORDERS-API | DEV | v2.0.1-lab",
       "application": "orders-api",
       "version": "2.0.1-lab",
-      "phase": "HUMAN_REVIEW",
+      "phase": "OBSERVING",
       "execution_id": "6F3UA0J7u0LLIVJJxSQxwP",
-      "execution_state": "PAUSED",
+      "execution_state": "SUCCESS",
       "labels_match": true,
-      "approved_by": null,
-      "human_decision_exists": false,
-      "rollback_until": null,
+      "approved_by": "responsável autenticado",
+      "human_decision_exists": true,
+      "rollback_until": "2026-11-06T22:27:16.815223+00:00",
       "canary_stage": null,
       "portal": "https://kestra.cosmotechsolutions.com.br/releases/33d04c09dea95bb81833b59108cd3266471b2d83da824abae9e099354750227d"
     },
@@ -50,44 +50,80 @@
       "rollback_until": "2026-11-06T22:04:27.774543+00:00",
       "canary_stage": "COMPLETE",
       "portal": "https://kestra.cosmotechsolutions.com.br/releases/8e0e93674b858867cd5945864c5ff61fa8f7e885d744fc517251fb7b3da004b9"
+    },
+    {
+      "gmud_id": "RCL000004",
+      "glpi_id": 8,
+      "title": "RCL000004 | DEPLOY | ORDERS-API | DEV | v2.0.2-lab",
+      "application": "orders-api",
+      "version": "2.0.2-lab",
+      "phase": "OBSERVING",
+      "execution_id": "2wGGXzMxvve2Rv8w0Hokif",
+      "execution_state": "SUCCESS",
+      "labels_match": true,
+      "approved_by": "responsável autenticado",
+      "human_decision_exists": true,
+      "rollback_until": "2026-11-06T22:56:10.666817+00:00",
+      "canary_stage": null,
+      "portal": "https://kestra.cosmotechsolutions.com.br/releases/6923193b600e17a43510d1749c455af6ae9553efe40c4df6e538a7e4283e46b9"
+    },
+    {
+      "gmud_id": "RCL000005",
+      "glpi_id": 9,
+      "title": "RCL000005 | DEPLOY | ORDERS-WORKER | DEV | v1.0.3",
+      "application": "orders-worker",
+      "version": "1.0.3",
+      "phase": "ROLLED_BACK",
+      "execution_id": "12AXgkuanecQ9CAN4j3MsJ",
+      "execution_state": "SUCCESS",
+      "labels_match": true,
+      "approved_by": "policy-engine",
+      "human_decision_exists": false,
+      "rollback_until": null,
+      "canary_stage": "ROLLED_BACK",
+      "portal": "https://kestra.cosmotechsolutions.com.br/releases/6e1f55a94f0cb07b001154684b2a106cfd234644d668346845ffc8cb9680a9f4"
+    },
+    {
+      "gmud_id": "RCL000006",
+      "glpi_id": 10,
+      "title": "RCL000006 | DEPLOY | ORDERS-WORKER | DEV | v1.0.4",
+      "application": "orders-worker",
+      "version": "1.0.4",
+      "phase": "OBSERVING",
+      "execution_id": "7kk9GgJSgE5VkTZWcBp60L",
+      "execution_state": "SUCCESS",
+      "labels_match": true,
+      "approved_by": "policy-engine",
+      "human_decision_exists": false,
+      "rollback_until": "2026-11-06T23:29:37.526989+00:00",
+      "canary_stage": "COMPLETE",
+      "portal": "https://kestra.cosmotechsolutions.com.br/releases/5477512106ac017183953f2c8b846d1451466fbf1c4888e531aa28c348447518"
     }
   ],
   "last_live_canary_metrics": {
-    "version": "sha256:8ef1cb469754c5d6600916dcdbb7af43f2ebe7bd6f26b6ce65392793061dbb65",
-    "sampled_at": "2026-11-06T10:04:11.544103+00:00",
-    "window_seconds": 96,
-    "queue_data_age_seconds": 0,
-    "canary_success": 33.06666666666667,
-    "canary_failure": 0.0,
-    "canary_ack_errors": 0.0,
-    "canary_retries": 0.0,
-    "canary_ddb_errors": 0.0,
-    "stable_success": 46.08,
-    "stable_failure": 0.0,
-    "p95_seconds": 0.0975,
-    "dlq_visible": 0,
-    "queue_visible": 0,
-    "oldest_age_seconds": 0.0,
-    "available_canary": 0,
-    "available_stable": 1,
-    "inflight": 0.0,
+    "version": "sha256:e7a7ba7ffe1da99d67db4faccfbdfd117341ccf8de8f6bf9fe91f9ccaf6e29ea",
+    "sampled_at": "2026-11-06T11:29:21.595460+00:00",
     "draining": true,
-    "stable_version": "sha256:8ef1cb469754c5d6600916dcdbb7af43f2ebe7bd6f26b6ce65392793061dbb65",
+    "inflight": 0.0,
+    "available_stable": 1,
+    "stable_version": "sha256:e7a7ba7ffe1da99d67db4faccfbdfd117341ccf8de8f6bf9fe91f9ccaf6e29ea",
     "stable_synced": true
   },
   "qualified_canary_window": {
-    "version": "sha256:8ef1cb469754c5d6600916dcdbb7af43f2ebe7bd6f26b6ce65392793061dbb65",
-    "sampled_at": "2026-11-06T10:01:11.742741+00:00",
+    "version": "sha256:e7a7ba7ffe1da99d67db4faccfbdfd117341ccf8de8f6bf9fe91f9ccaf6e29ea",
+    "sampled_at": "2026-11-06T11:26:20.493775+00:00",
     "window_seconds": 300,
     "queue_data_age_seconds": 0,
-    "canary_success": 203.15789473684208,
+    "canary_success": 210.52631578947367,
     "canary_failure": 0.0,
     "canary_ack_errors": 0.0,
+    "canary_poll_errors": 0.0,
+    "canary_visibility_errors": 0.0,
     "canary_retries": 0.0,
     "canary_ddb_errors": 0.0,
-    "stable_success": 83.1578947368421,
+    "stable_success": 72.63157894736841,
     "stable_failure": 0.0,
-    "p95_seconds": 0.099024064171123,
+    "p95_seconds": 0.09822335025380712,
     "dlq_visible": 0,
     "queue_visible": 0,
     "oldest_age_seconds": 0,
@@ -95,49 +131,15 @@
     "available_stable": 1,
     "inflight": 0.0,
     "draining": false,
-    "stable_version": "sha256:fcf706efa0936204baa5dbae678cb78accb6b31cf208a8138194710e2d3bd95d",
+    "stable_version": "sha256:8ef1cb469754c5d6600916dcdbb7af43f2ebe7bd6f26b6ce65392793061dbb65",
     "stable_synced": true
   },
   "real_window_completed": false,
-  "synthetic_traffic": {
-    "gmud_id": "RCL000003",
-    "synthetic": true,
-    "sku": "COSMOTECH-RCL000003-SINTETICO",
-    "started_at": "2026-11-06T09:50:09.123610+00:00",
-    "accepted": 800,
-    "errors": [],
-    "order_prefix": "cosmotech-RCL000003-",
-    "finished_at": "2026-11-06T10:04:13.393101+00:00"
-  },
-  "application_checks": {
-    "synthetic_orders": [
-      {
-        "order_id": "cosmotech-RCL000003-0",
-        "status": "COMPLETED",
-        "payment_status": "SIMULATED_CAPTURED",
-        "fulfillment_status": null
-      },
-      {
-        "order_id": "cosmotech-RCL000003-399",
-        "status": "COMPLETED",
-        "payment_status": "SIMULATED_CAPTURED",
-        "fulfillment_status": null
-      },
-      {
-        "order_id": "cosmotech-RCL000003-799",
-        "status": "COMPLETED",
-        "payment_status": "SIMULATED_CAPTURED",
-        "fulfillment_status": null
-      }
-    ],
-    "api_current": {
-      "service": "orders-api",
-      "version": "2.0.0-lab"
-    },
-    "worker_current": {
-      "status": "ok",
-      "service": "orders-worker",
-      "release": "1.0.2"
-    }
+  "commits": {
+    "cosmotech-automation": "c950e3ebea1ecb270578e9d4a9fd5b7e0eb4e2b2",
+    "cosmotech-infrastructure-iac": "9f3d1374e650bd4fb48bab456beb350d45b371f8",
+    "cosmotech-orders-api": "eea8bf90b4418a5292c4c6f6d76f787c1364465f",
+    "cosmotech-orders-worker": "8cdf74bdc6afdb9026a9f1ce0dc0d6ad68bcf3ab",
+    "cosmotech-gitops": "abd7ab77106193454634a98e0d14a53641e8fe6e"
   }
 }

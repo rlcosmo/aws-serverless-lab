@@ -1,5 +1,34 @@
 # Demonstração reproduzível — estado consolidado
 
+## Revisão de execução —06/11/2026
+
+Consulta real: 2026-11-06T11:30:15.400580+00:00. API 2.0.2-lab / RCL000004 / GLPI8: OBSERVING, aprovação humana autenticada pelo responsável. Worker 1.0.4 / RCL000006 / GLPI10: OBSERVING, Canary COMPLETE, aprovação automática condicionada. Nenhuma aprovação da API pelo agente.
+
+Acompanhar as GMUDs pelos links abaixo. Aprovar/rejeitar somente quando a UI indicar revisão humana; concluídas são leitura. Rollback só com identidade autorizada, justificativa, prazo válido e versão atual; após12h usar nova GMUD. Não executar rollback de release já substituída nem aprovar a API em nome do proprietário.
+
+Carga real com dados sintéticos: 800 respostas202 e 0 erros HTTP; três pedidos consultados como COMPLETED. API/SQS/DynamoDB reais; pagamento e expedição são simulações explícitas do laboratório. Startup Istio15021 com5s, sem a falha de conexão anterior nos testes desta rodada. Readiness503 pode ocorrer durante drain deliberado; reinícios e eventos estão registrados por teste.
+
+As janelas de12h continuam abertas, sem encerramento antecipado. Rollback solicitado pelo responsável após promoção ainda não foi executado. Capturas reais de UI e suas anotações seguem pendentes; placeholders não são prints. Bedrock permanece opcional/desabilitado, sem inferências. Nenhuma operação NLB/CloudTrail ou recurso AWS novo; custo variável de chamadas/carga/telemetria não isolado.
+
+| RCL | Aplicação / versão | GLPI | Execução Kestra | Estado |
+|---|---|---|---|---|
+|RCL000001|orders-worker 1.0.1|5|lAvjxmfP9MKrFLukQOWon|ROLLED_BACK / ROLLED_BACK|
+|RCL000002|orders-api 2.0.1-lab|6|6F3UA0J7u0LLIVJJxSQxwP|OBSERVING / RollingUpdate|
+|RCL000003|orders-worker 1.0.2|7|6EzLdoosy2wpJXqZFJPRWU|OBSERVING / COMPLETE|
+|RCL000004|orders-api 2.0.2-lab|8|2wGGXzMxvve2Rv8w0Hokif|OBSERVING / RollingUpdate|
+|RCL000005|orders-worker 1.0.3|9|12AXgkuanecQ9CAN4j3MsJ|ROLLED_BACK / ROLLED_BACK|
+|RCL000006|orders-worker 1.0.4|10|7kk9GgJSgE5VkTZWcBp60L|OBSERVING / COMPLETE|
+
+[API — acompanhamento](https://kestra.cosmotechsolutions.com.br/releases/6923193b600e17a43510d1749c455af6ae9553efe40c4df6e538a7e4283e46b9) · [GLPI8](https://glpi.cosmotechsolutions.com.br/front/change.form.php?id=8) · [Worker — acompanhamento](https://kestra.cosmotechsolutions.com.br/releases/5477512106ac017183953f2c8b846d1451466fbf1c4888e531aa28c348447518) · [GLPI10](https://glpi.cosmotechsolutions.com.br/front/change.form.php?id=10).
+
+Commits enviados: automation80a1b0c/6d808bc/38427a0/c950e3e; infrastructure16e4555/9f3d137; APIeea8bf9; Worker2595cc9/8cdf74b. API GitOps8fc07c8; preparação Canaryda3d9c5. Demais efeitos GitOps ficam nas evidências finais e no repositório assinado.
+
+## Histórico preservado desta atualização
+
+<details><summary>Snapshot anterior (não é o estado vigente)</summary>
+
+# Demonstração reproduzível — estado consolidado
+
 ## Estado RCL —06/11/2026
 
 RCL000001/GLPI5: Worker1.0.1 abortado por evidência inicial insuficiente; candidata drenada e stable preservada. RCL000002/GLPI6: API2.0.1-lab aguarda aprovação humana. RCL000003/GLPI7: Worker1.0.2 concluiu Canary1→2, promoção e drenagem, em observação até22:04:27Z de06/11 (19:04:27 em São Paulo). Nenhum encerramento12h antecipado; nenhuma aprovação API pelo agente. As GMUDs anteriores não foram renumeradas.
@@ -78,6 +107,8 @@ Após aceitação de Actions read na instalação do GitHub App, concluir as lig
 7. Registrar incidente/notificação, sync/health final e capturas reais sanitizadas.
 
 Não usar credenciais humanas armazenadas para aprovar em nome do proprietário. Não registrar a demonstração completa como executada antes de haver provas. NLB e CloudTrail não fazem parte dessa sequência.
+
+</details>
 
 </details>
 

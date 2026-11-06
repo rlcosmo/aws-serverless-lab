@@ -1,5 +1,21 @@
 # Canary real de consumidor SQS — código local, ativação pendente — estado consolidado
 
+## Revisão de execução —06/11/2026
+
+Consulta real: 2026-11-06T11:30:15.400580+00:00. API 2.0.2-lab / RCL000004 / GLPI8: OBSERVING, aprovação humana autenticada pelo responsável. Worker 1.0.4 / RCL000006 / GLPI10: OBSERVING, Canary COMPLETE, aprovação automática condicionada. Nenhuma aprovação da API pelo agente.
+
+RCL000005/Worker1.0.3 sofreu dois reinícios por AccessDenied em ChangeMessageVisibility e rollback após oldest175s exceder120s. A candidata drenou, stable1.0.2 e HPA foram restaurados. A correção IAM tem escopo na fila exata;1.0.4 trata devolução negada sem crash e expõe erros próprios. Poll/visibility errors ou reinícios agora bloqueiam progressão; lease300s já dentro do teto do consumidor acomoda propagação do ConfigMap. RCL000001 abortou por missing_metrics antes da correção de aquecimento. RCL000003 concluiu1→2→promoção→drenagem; a mensagem antiga de coleta não significava rollback dessa release. O runtime agora arquiva erros por etapa/horário e limpa o erro ativo somente após coleta válida, sem reduzir controles. A nova release exercita novamente o fluxo com dados sintéticos reais. A regra de qualidade manteve janela300s,50/10 amostras,p95≤5s e backlog≤120s.
+
+Carga real com dados sintéticos: 800 respostas202 e 0 erros HTTP; três pedidos consultados como COMPLETED. API/SQS/DynamoDB reais; pagamento e expedição são simulações explícitas do laboratório. Startup Istio15021 com5s, sem a falha de conexão anterior nos testes desta rodada. Readiness503 pode ocorrer durante drain deliberado; reinícios e eventos estão registrados por teste.
+
+As janelas de12h continuam abertas, sem encerramento antecipado. Rollback solicitado pelo responsável após promoção ainda não foi executado. Capturas reais de UI e suas anotações seguem pendentes; placeholders não são prints. Bedrock permanece opcional/desabilitado, sem inferências. Nenhuma operação NLB/CloudTrail ou recurso AWS novo; custo variável de chamadas/carga/telemetria não isolado.
+
+## Histórico preservado desta atualização
+
+<details><summary>Snapshot anterior (não é o estado vigente)</summary>
+
+# Canary real de consumidor SQS — código local, ativação pendente — estado consolidado
+
 ## Estado RCL —06/11/2026
 
 RCL000001/GLPI5: Worker1.0.1 abortado por evidência inicial insuficiente; candidata drenada e stable preservada. RCL000002/GLPI6: API2.0.1-lab aguarda aprovação humana. RCL000003/GLPI7: Worker1.0.2 concluiu Canary1→2, promoção e drenagem, em observação até22:04:27Z de06/11 (19:04:27 em São Paulo). Nenhum encerramento12h antecipado; nenhuma aprovação API pelo agente. As GMUDs anteriores não foram renumeradas.
@@ -84,6 +100,8 @@ Disponível: testes unitários de progressão, falhas, drain, restart e rollback
 ## Atualização desta revisão — 2026-11-05T21:04:49.426224+00:00
 
 O executor local aplica somente efeitos vinculados ao ledger confiável, com journal por geração e lease limitada. Resposta de deploy ambígua exige reconciliação, não retry cego. Callbacks de staging/promoção/restauração precisam ser ligados ao publisher exclusivo e ao estado Argo antes de ativar. O mock de rollback não comprova efeitos Kubernetes.
+
+</details>
 
 </details>
 

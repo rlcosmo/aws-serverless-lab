@@ -1,0 +1,123 @@
+{
+  "gmud_id": "RCL000006",
+  "synthetic": true,
+  "sku": "COSMOTECH-RCL000006-SINTETICO",
+  "started_at": "2026-11-06T11:15:42.941839+00:00",
+  "accepted": 800,
+  "errors": [],
+  "order_prefix": "cosmotech-RCL000006-",
+  "finished_at": "2026-11-06T11:29:49.617516+00:00",
+  "canary_timeline": {
+    "gmud_id": "RCL000006",
+    "native_glpi": 10,
+    "native_status": 8,
+    "phase": "OBSERVING",
+    "timeline": [
+      {
+        "stage": "CANARY_1",
+        "generation": 1,
+        "at": "2026-11-06T11:14:53.856785+00:00",
+        "reason": "authorized_initial_canary",
+        "replicas": 1
+      },
+      {
+        "stage": "CANARY_2",
+        "generation": 5,
+        "at": "2026-11-06T11:20:22.245300+00:00",
+        "reason": "bounded_observation_passed",
+        "replicas": 2
+      },
+      {
+        "stage": "PROMOTING",
+        "generation": 10,
+        "at": "2026-11-06T11:26:22.907534+00:00",
+        "reason": "bounded_observation_passed",
+        "replicas": 2
+      },
+      {
+        "stage": "DRAIN_PROMOTED",
+        "generation": 11,
+        "at": "2026-11-06T11:28:02.825101+00:00",
+        "reason": "bounded_observation_passed",
+        "replicas": 2
+      },
+      {
+        "stage": "COMPLETE",
+        "generation": 13,
+        "at": "2026-11-06T11:29:23.741280+00:00",
+        "reason": "bounded_observation_passed",
+        "replicas": 0
+      }
+    ]
+  },
+  "orders_checked": [
+    {
+      "order_id": "cosmotech-RCL000006-0",
+      "status": "COMPLETED",
+      "http_status": 200
+    },
+    {
+      "order_id": "cosmotech-RCL000006-300",
+      "status": "COMPLETED",
+      "http_status": 200
+    },
+    {
+      "order_id": "cosmotech-RCL000006-799",
+      "status": "COMPLETED",
+      "http_status": 200
+    }
+  ],
+  "inventory_check": {
+    "seed": 1800,
+    "remaining": 1000,
+    "expected": 1000,
+    "matches": true
+  },
+  "probe_checks": [
+    {
+      "observed_at": "2026-11-06T11:30:08.519770+00:00",
+      "application": "orders-api",
+      "pod": "orders-api-85c8976756-hm5w2",
+      "gmud_id": "RCL000004",
+      "image_digest": "sha256:f8f78bd8f45ce07bf90cb793e6db197742faae0ce7a0dc6309b6f691bcdd76cd",
+      "startup_initial_delay": 5,
+      "startup_port": 15021,
+      "warning_reasons": [],
+      "restarts": 0
+    },
+    {
+      "observed_at": "2026-11-06T11:21:58.864339+00:00",
+      "application": "orders-worker-canary",
+      "pod": "orders-worker-canary-54997bcc6f-7q5c8",
+      "gmud_id": "RCL000006",
+      "image_digest": "sha256:e7a7ba7ffe1da99d67db4faccfbdfd117341ccf8de8f6bf9fe91f9ccaf6e29ea",
+      "startup_initial_delay": 5,
+      "startup_port": 15021,
+      "warning_reasons": [],
+      "restarts": 0
+    },
+    {
+      "observed_at": "2026-11-06T11:21:57.599709+00:00",
+      "application": "orders-worker-canary",
+      "pod": "orders-worker-canary-54997bcc6f-746fr",
+      "gmud_id": "RCL000006",
+      "image_digest": "sha256:e7a7ba7ffe1da99d67db4faccfbdfd117341ccf8de8f6bf9fe91f9ccaf6e29ea",
+      "startup_initial_delay": 5,
+      "startup_port": 15021,
+      "warning_reasons": [],
+      "restarts": 0
+    },
+    {
+      "observed_at": "2026-11-06T11:30:11.158927+00:00",
+      "application": "orders-worker",
+      "pod": "orders-worker-65678cd898-2sqj6",
+      "gmud_id": "RCL000006",
+      "image_digest": "sha256:e7a7ba7ffe1da99d67db4faccfbdfd117341ccf8de8f6bf9fe91f9ccaf6e29ea",
+      "startup_initial_delay": 5,
+      "startup_port": 15021,
+      "warning_reasons": [],
+      "restarts": 0
+    }
+  ],
+  "business_integrations": "API/SQS/DynamoDB reais; pagamento/expedição simulados explicitamente no laboratório."
+}

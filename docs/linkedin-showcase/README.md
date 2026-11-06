@@ -1,3 +1,15 @@
+# Kit CosmoTech — GMUD, CD e Canary
+
+Consulta real: 2026-11-06T11:30:15.400580+00:00. API 2.0.2-lab / RCL000004 / GLPI8: OBSERVING, aprovação humana autenticada pelo responsável. Worker 1.0.4 / RCL000006 / GLPI10: OBSERVING, Canary COMPLETE, aprovação automática condicionada. Nenhuma aprovação da API pelo agente.
+
+As janelas de12h continuam abertas, sem encerramento antecipado. Rollback solicitado pelo responsável após promoção ainda não foi executado. Capturas reais de UI e suas anotações seguem pendentes; placeholders não são prints. Bedrock permanece opcional/desabilitado, sem inferências. Nenhuma operação NLB/CloudTrail ou recurso AWS novo; custo variável de chamadas/carga/telemetria não isolado.
+
+Artefatos: três diagramas SVG/PNG em assets/; seis slides1080×1350 e PDF em carousel/; placeholders explícitos em screenshots/. Gerador: scripts/build_rcl_review_kit.py. Fonte atual: assets/rcl-live-evidence.json; fontes complementares de login/portal/carga junto aos assets. Ver10-action-plan.md e14-evidence-index.md. O manifesto registra hashes; a publicação LinkedIn não foi executada.
+
+## Histórico preservado desta atualização
+
+<details><summary>Snapshot anterior do kit</summary>
+
 # Kit CosmoTech — revisão RCL06/11/2026
 
 Estado atual: Worker1.0.2 promovido após Canary1→2/drenagem, em observação12h; API2.0.1-lab aguarda aprovação humana. RCL000001 revertida, RCL000002 pendente e RCL000003 em observação. Fonte pública sanitizada: assets/rcl-live-evidence.json; detalhes em10/14.
@@ -39,5 +51,7 @@ Regerar a partir da raiz: `python3 scripts/build_cosmotech_visual_kit.py --evide
 Ícones obtidos no pacote oficial AWS de31/07/2026, preservados em assets/aws. Proveniência, caminhos originais e hashes em assets/aws/provenance.json. A [página oficial AWS Architecture Icons](https://aws.amazon.com/architecture/icons/) disponibiliza-os para diagramas e apresentações; marca AWS permanece de seu titular, sem alegação de parceria/endosso.
 
 Os16 documentos técnicos foram atualizados com estado vigente e histórico preservado em blocos expansíveis. Não publicar o histórico técnico bruto como captura. Bedrock aparece apenas como opcional/desabilitado. A publicação em LinkedIn não foi realizada.
+
+</details>
 
 </details>

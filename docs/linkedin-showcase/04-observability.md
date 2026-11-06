@@ -1,5 +1,21 @@
 # Observabilidade do Worker — implementação local — estado consolidado
 
+## Revisão de execução —06/11/2026
+
+Consulta real: 2026-11-06T11:30:15.400580+00:00. API 2.0.2-lab / RCL000004 / GLPI8: OBSERVING, aprovação humana autenticada pelo responsável. Worker 1.0.4 / RCL000006 / GLPI10: OBSERVING, Canary COMPLETE, aprovação automática condicionada. Nenhuma aprovação da API pelo agente.
+
+A coleta Canary mantém cobertura de pods vivos, métricas frescas, janela mínima300s,50 amostras candidatas/10 stable, p95≤5s e ausência de erros/DLQ. Falta de evidência bloqueia promoção. O portal mostra etapa atual, sem confundir sucesso inicial Kestra com encerramento.
+
+Carga real com dados sintéticos: 800 respostas202 e 0 erros HTTP; três pedidos consultados como COMPLETED. API/SQS/DynamoDB reais; pagamento e expedição são simulações explícitas do laboratório. Startup Istio15021 com5s, sem a falha de conexão anterior nos testes desta rodada. Readiness503 pode ocorrer durante drain deliberado; reinícios e eventos estão registrados por teste.
+
+As janelas de12h continuam abertas, sem encerramento antecipado. Rollback solicitado pelo responsável após promoção ainda não foi executado. Capturas reais de UI e suas anotações seguem pendentes; placeholders não são prints. Bedrock permanece opcional/desabilitado, sem inferências. Nenhuma operação NLB/CloudTrail ou recurso AWS novo; custo variável de chamadas/carga/telemetria não isolado.
+
+## Histórico preservado desta atualização
+
+<details><summary>Snapshot anterior (não é o estado vigente)</summary>
+
+# Observabilidade do Worker — implementação local — estado consolidado
+
 ## Estado RCL —06/11/2026
 
 RCL000001/GLPI5: Worker1.0.1 abortado por evidência inicial insuficiente; candidata drenada e stable preservada. RCL000002/GLPI6: API2.0.1-lab aguarda aprovação humana. RCL000003/GLPI7: Worker1.0.2 concluiu Canary1→2, promoção e drenagem, em observação até22:04:27Z de06/11 (19:04:27 em São Paulo). Nenhum encerramento12h antecipado; nenhuma aprovação API pelo agente. As GMUDs anteriores não foram renumeradas.
@@ -75,6 +91,8 @@ A exposição anônima preexistente de telemetria e MFA ausente continuam no rel
 ## Atualização desta revisão — 2026-11-05T21:04:49.426224+00:00
 
 Revalidação local: dois testes do coletor CloudWatch passaram. Métricas por digest/canal, heartbeat, inflight e draining continuam sem comprovação de séries no cluster. O executor recusa progressão com métricas ausentes; zero inventado não substitui coleta.
+
+</details>
 
 </details>
 

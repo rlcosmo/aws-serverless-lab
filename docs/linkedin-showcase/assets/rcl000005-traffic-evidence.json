@@ -1,0 +1,141 @@
+{
+  "gmud_id": "RCL000005",
+  "synthetic": true,
+  "sku": "COSMOTECH-RCL000005-SINTETICO",
+  "started_at": "2026-11-06T10:55:01.816178+00:00",
+  "accepted": 900,
+  "errors": [],
+  "order_prefix": "cosmotech-RCL000005-",
+  "finished_at": "2026-11-06T11:10:53.154114+00:00",
+  "orders_checked": [
+    {
+      "order_id": "cosmotech-RCL000005-0",
+      "status": "COMPLETED",
+      "http_status": 200
+    },
+    {
+      "order_id": "cosmotech-RCL000005-50",
+      "status": "COMPLETED",
+      "http_status": 200
+    },
+    {
+      "order_id": "cosmotech-RCL000005-100",
+      "status": "COMPLETED",
+      "http_status": 200
+    }
+  ],
+  "probe_checks": [
+    {
+      "application": "orders-api",
+      "pod": "orders-api-85c8976756-hm5w2",
+      "startup_initial_delay": 5,
+      "startup_port": 15021,
+      "warning_reasons": [],
+      "restarts": 0
+    },
+    {
+      "application": "orders-worker-canary",
+      "pod": "orders-worker-canary-6f94474568-7zgl4",
+      "startup_initial_delay": 5,
+      "startup_port": 15021,
+      "warning_reasons": [
+        "Unhealthy"
+      ],
+      "restarts": 1
+    },
+    {
+      "application": "orders-worker",
+      "pod": "orders-worker-9db586d5f-fjzwn",
+      "startup_initial_delay": 5,
+      "startup_port": 15021,
+      "warning_reasons": [],
+      "restarts": 0
+    },
+    {
+      "application": "orders-worker-canary",
+      "pod": "orders-worker-canary-6f94474568-9b8hn",
+      "startup_initial_delay": 5,
+      "startup_port": 15021,
+      "warning_reasons": [],
+      "restarts": 1
+    }
+  ],
+  "failed_live_observations": [
+    {
+      "version": "sha256:64d9522a3f3c707243e115c4a859aa19558ef857e4fe5339ad9e5c6077b494b4",
+      "sampled_at": "2026-11-06T11:07:47.898435+00:00",
+      "window_seconds": 95,
+      "queue_data_age_seconds": 0,
+      "canary_success": 41.16666666666667,
+      "canary_failure": 0.0,
+      "canary_ack_errors": 0.0,
+      "canary_retries": 0.0,
+      "canary_ddb_errors": 0.0,
+      "stable_success": 20.2056,
+      "stable_failure": 0.0,
+      "p95_seconds": 0.09900793650793652,
+      "dlq_visible": 0,
+      "queue_visible": 0,
+      "oldest_age_seconds": 175.0,
+      "available_canary": 2,
+      "available_stable": 1,
+      "inflight": 0.0,
+      "draining": false,
+      "stable_version": "sha256:64d9522a3f3c707243e115c4a859aa19558ef857e4fe5339ad9e5c6077b494b4",
+      "stable_synced": true
+    }
+  ],
+  "no_success_closure": true,
+  "outcome": "ROLLED_BACK",
+  "rollback_reason": "oldest_age_seconds175 exceeded120",
+  "business_integrations": "API/SQS/DynamoDB reais; pagamento/expedição simulados explicitamente pelo laboratório.",
+  "canary_timeline": {
+    "gmud_id": "RCL000005",
+    "native_glpi": 9,
+    "native_status": 14,
+    "phase": "ROLLED_BACK",
+    "timeline": [
+      {
+        "stage": "CANARY_1",
+        "generation": 1,
+        "at": "2026-11-06T10:54:18.323584+00:00",
+        "reason": "authorized_initial_canary",
+        "replicas": 1
+      },
+      {
+        "stage": "CANARY_2",
+        "generation": 6,
+        "at": "2026-11-06T11:00:13.585657+00:00",
+        "reason": "bounded_observation_passed",
+        "replicas": 2
+      },
+      {
+        "stage": "PROMOTING",
+        "generation": 11,
+        "at": "2026-11-06T11:06:12.638659+00:00",
+        "reason": "bounded_observation_passed",
+        "replicas": 2
+      },
+      {
+        "stage": "DRAIN_ROLLBACK",
+        "generation": 12,
+        "at": "2026-11-06T11:07:51.650994+00:00",
+        "reason": "latency_or_backlog_age",
+        "replicas": null
+      },
+      {
+        "stage": "ROLLED_BACK",
+        "generation": 13,
+        "at": "2026-11-06T11:10:50.032502+00:00",
+        "reason": "latency_or_backlog_age",
+        "replicas": 0
+      }
+    ]
+  },
+  "inventory_check": {
+    "seed": 1800,
+    "remaining": 900,
+    "expected": 900,
+    "matches": true
+  }
+}

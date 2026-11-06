@@ -1,3 +1,5 @@
-# Diagramas e evidência pública
+# Diagramas e evidências públicas
 
-Três diagramas em SVG/PNG: aws-architecture, cicd-gmud-gitops e worker-canary. Estados distinguem ativo, humano, isolado e planejado. Fonte de geração: scripts/build_cosmotech_visual_kit.py. Evidências e limites: public-evidence.json e ../14-evidence-index.md. Ícones oficiais e sua proveniência: aws/. Ver ../README.md para uso e condições de publicação.
+Os três diagramas SVG/PNG são gerados por scripts/build_rcl_review_kit.py, reutilizando o renderizador existente. Fonte vigente: rcl-live-evidence.json. portal-glpi-verification-20261106.json registra testes reais de login e leitura autenticada; rcl000005-traffic-evidence.json registra a tentativa revertida; rcl000006-traffic-evidence.json registra a rodada corretiva de carga sintética em serviços reais. Nenhum desses arquivos é screenshot. public-evidence.json é snapshot anterior, preservado.
+
+Ícones oficiais e proveniência em aws/. artifact-manifest.json registra hashes. Limites e cronologia em ../14-evidence-index.md; orientação editorial em ../README.md.

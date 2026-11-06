@@ -1,5 +1,21 @@
 # Gate determinístico por criticidade; IA opcional — estado consolidado
 
+## Revisão de execução —06/11/2026
+
+Consulta real: 2026-11-06T11:30:15.400580+00:00. API 2.0.2-lab / RCL000004 / GLPI8: OBSERVING, aprovação humana autenticada pelo responsável. Worker 1.0.4 / RCL000006 / GLPI10: OBSERVING, Canary COMPLETE, aprovação automática condicionada. Nenhuma aprovação da API pelo agente.
+
+Decisão vigente: aprovação determinística por criticidade protegida. CRÍTICA/API sempre humana; NÃO CRÍTICA/Worker automática somente com controles; CUSTOM exige cinco últimas GMUDs reais concluídas sem falha/rollback da mesma aplicação/ambiente. Histórico incompleto e falhas GLPI/política bloqueiam ou exigem humano; não há cinco sucessos reais encerrados demonstrados.
+
+Carga real com dados sintéticos: 800 respostas202 e 0 erros HTTP; três pedidos consultados como COMPLETED. API/SQS/DynamoDB reais; pagamento e expedição são simulações explícitas do laboratório. Startup Istio15021 com5s, sem a falha de conexão anterior nos testes desta rodada. Readiness503 pode ocorrer durante drain deliberado; reinícios e eventos estão registrados por teste.
+
+As janelas de12h continuam abertas, sem encerramento antecipado. Rollback solicitado pelo responsável após promoção ainda não foi executado. Capturas reais de UI e suas anotações seguem pendentes; placeholders não são prints. Bedrock permanece opcional/desabilitado, sem inferências. Nenhuma operação NLB/CloudTrail ou recurso AWS novo; custo variável de chamadas/carga/telemetria não isolado.
+
+## Histórico preservado desta atualização
+
+<details><summary>Snapshot anterior (não é o estado vigente)</summary>
+
+# Gate determinístico por criticidade; IA opcional — estado consolidado
+
 ## Estado RCL —06/11/2026
 
 RCL000001/GLPI5: Worker1.0.1 abortado por evidência inicial insuficiente; candidata drenada e stable preservada. RCL000002/GLPI6: API2.0.1-lab aguarda aprovação humana. RCL000003/GLPI7: Worker1.0.2 concluiu Canary1→2, promoção e drenagem, em observação até22:04:27Z de06/11 (19:04:27 em São Paulo). Nenhum encerramento12h antecipado; nenhuma aprovação API pelo agente. As GMUDs anteriores não foram renumeradas.
@@ -84,6 +100,8 @@ Bloqueio atual: a instalação do GitHub App ainda precisa conceder Actions read
 já declarado no App. Sem isso não há coleta autenticada dos testes/Trivy.
 Persistência, retenção/backup do ledger, capacidade dos nós, observação por
 versão e rollback real precisam de validação operacional antes da conclusão.
+
+</details>
 
 </details>
 

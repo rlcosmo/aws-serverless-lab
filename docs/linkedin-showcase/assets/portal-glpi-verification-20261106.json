@@ -1,0 +1,89 @@
+{
+  "glpi_login": [
+    {
+      "login_attempt": 1,
+      "uid_rotated": true,
+      "login_status": 200,
+      "change_ui_status": 403,
+      "gmud": "RCL000003",
+      "native_glpi": 7,
+      "service_account_ui_restricted": true,
+      "remember_cookie": true
+    },
+    {
+      "login_attempt": 2,
+      "uid_rotated": true,
+      "login_status": 200,
+      "change_ui_status": 403,
+      "gmud": "RCL000003",
+      "native_glpi": 7,
+      "service_account_ui_restricted": true,
+      "remember_cookie": true
+    },
+    {
+      "remember_cookie_auto_login": true,
+      "uid_preserved_for_cookie_auth": true,
+      "http_status": 200
+    }
+  ],
+  "portal": {
+    "authenticated_get": 200,
+    "anonymous_get": 401,
+    "cd_links_verified": true,
+    "canary_only_worker": true,
+    "human_decisions_unchanged_by_get_checks": true,
+    "pending_human": 0,
+    "automatic_history": 4
+  },
+  "source": {
+    "modules": 28,
+    "automation_commit": "c950e3ebea1ecb270578e9d4a9fd5b7e0eb4e2b2",
+    "match": true
+  },
+  "local_validation": {
+    "automation_tests": 179,
+    "automation_subtests": 4,
+    "api_tests": 65,
+    "worker_tests": 82,
+    "ruff": "passed"
+  },
+  "limitations": [
+    "Leitura UI da Change com conta técnica foi403; não foram ampliadas permissões.",
+    "Login com credencial administrativa armazenada foi recusado; nenhuma credencial foi alterada.",
+    "Não há screenshot real de UI nesta revisão."
+  ],
+  "recorded_at": "2026-11-06T11:31:05.428490+00:00",
+  "checks_provenance": {
+    "portal_links": "SSM bd9cf8dd-d27e-4ff0-81fd-ae5fe028fc75",
+    "source_match": "Verificação SHA256 dos28 módulos da fonte implantada com o commit indicado",
+    "glpi_regression": "Dois logins explícitos técnicos e um auto-login por cookie reais, concluídos nesta sessão.",
+    "source_match_command_id": "974a0724-f16d-4246-9299-135f90691a4e",
+    "final_index": "20ce0c2b-8d1b-4e36-b55d-6bb9b6d5c86c",
+    "final_details": "37974d82-13c6-45e8-a9a5-7a282c365490"
+  },
+  "iam_change": {
+    "terraform_add": 0,
+    "terraform_update": 1,
+    "terraform_destroy": 0,
+    "access_analyzer_findings": 0,
+    "principal_simulation_main_queue": "allowed",
+    "principal_simulation_dlq": "implicitDeny",
+    "action": "sqs:ChangeMessageVisibility",
+    "scope": "somente fila EKS principal"
+  },
+  "version_endpoint_checks": {
+    "orders-api": {
+      "scope": "HTTPS público",
+      "http_status": 200,
+      "version": "2.0.2-lab",
+      "strategy": "rolling"
+    },
+    "orders-worker": {
+      "scope": "HTTP no próprio pod, via kubectl exec autorizado",
+      "http_status": 200,
+      "version": "1.0.4",
+      "channel": "stable",
+      "public_version_path_status": 404
+    }
+  }
+}

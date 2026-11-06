@@ -25,7 +25,16 @@ from build_cosmotech_visual_kit import (
 )
 
 
-def delivery():
+def latest(e, application):
+    return max(
+        (c for c in e["changes"] if c["application"] == application),
+        key=lambda c: int(c["gmud_id"][3:]),
+    )
+
+
+def delivery(e):
+    worker = latest(e, "orders-worker")
+    api = latest(e, "orders-api")
     o = start(
         1600,
         1040,
@@ -38,11 +47,19 @@ def delivery():
         (
             450,
             "GLPI + RCL",
-            "RCL000003 · GLPI7. Reserva antes do POST; retry sem duplicação.",
+            worker["gmud_id"]
+            + " · GLPI"
+            + str(worker["glpi_id"])
+            + ". Retry sem duplicação.",
             "ATIVO",
         ),
         (840, "Kestra", "Label gmud_id. Política protegida por criticidade.", "ATIVO"),
-        (1230, "Portal + SNS", "RCL000002/API exige humano autenticado.", "HUMANO"),
+        (
+            1230,
+            "Portal + SNS",
+            api["gmud_id"] + "/API: decisão humana autenticada.",
+            "HUMANO",
+        ),
     ]:
         o += box(x, 345, 310, 190, title, body, status=status)
     for x in [370, 760, 1150]:
@@ -63,7 +80,7 @@ def delivery():
         (
             840,
             "Observação12h",
-            "RCL000003:12h abertas. Sucesso ainda não encerrado.",
+            "Sucesso técnico inicia12h. Encerramento sem antecipação.",
             "ATIVO",
         ),
         (
@@ -100,33 +117,41 @@ def slide3(e):
         "Sequência global persistente; números não são reutilizados após cancelamento.",
         page="03/06",
     )
-    for y, title, body, status in [
-        (
-            335,
-            "RCL000001 · Worker1.0.1",
-            "GLPI5. Canary abortado, candidata drenada e stable preservada.",
-            "REVERTIDA",
-        ),
-        (
-            600,
-            "RCL000002 · API2.0.1-lab",
-            "GLPI6. Aprovação humana autenticada continua pendente.",
-            "HUMANO",
-        ),
-        (
-            865,
-            "RCL000003 · Worker1.0.2",
-            "GLPI7. Aprovação automática com testes, Trivy e controles aprovados.",
-            "ATIVO",
-        ),
-    ]:
-        o += box(60, y, 960, 225, title, body, status=status)
+    first = next(c for c in e["changes"] if c["gmud_id"] == "RCL000005")
+    for y, c in zip(
+        [335, 600, 865], [first, latest(e, "orders-api"), latest(e, "orders-worker")]
+    ):
+        status = {
+            "OBSERVING": "OBSERVAÇÃO",
+            "HUMAN_REVIEW": "HUMANO",
+            "ROLLED_BACK": "REVERTIDA",
+        }.get(c["phase"], "EM TESTE")
+        app = "API" if c["application"] == "orders-api" else "Worker"
+        mode = (
+            "humana autenticada"
+            if c["human_decision_exists"]
+            else "automática pela política"
+        )
+        body = (
+            "GLPI"
+            + str(c["glpi_id"])
+            + ". Aprovação "
+            + mode
+            + ". Estado real: "
+            + c["phase"]
+            + "."
+        )
+        o += box(
+            60,
+            y,
+            960,
+            225,
+            c["gmud_id"] + " · " + app + " " + c["version"],
+            body,
+            status=status,
+        )
     o += text(
-        65,
-        1190,
-        "IDs GLPI/Kestra imutáveis. Histórico anterior sem renumeração.",
-        22,
-        MUTED,
+        65, 1190, "IDs GLPI/Kestra imutáveis. Histórico anterior preservado.", 22, MUTED
     )
     return o + "</svg>"
 
@@ -151,8 +176,8 @@ def slide4(e):
                 "CI, Trivy, criticidade, planos e decisões com timestamps.",
             ),
             (
-                "Detalhes sob demanda",
-                "Commit e digests expansíveis, com opção de copiar.",
+                "Acompanhamento CD + Canary",
+                "Links Kestra/Argo CD e selo Canary com etapa real no cabeçalho.",
             ),
             (
                 "Ações conforme o estado",
@@ -166,7 +191,7 @@ def slide4(e):
 
 
 def slide5(e):
-    c = next(x for x in e["changes"] if x["gmud_id"] == "RCL000003")
+    c = latest(e, "orders-worker")
     stage = {
         "CANARY_1": "Canary com1 consumidor",
         "CANARY_2": "Canary com2 consumidores",
@@ -188,8 +213,8 @@ def slide5(e):
         345,
         960,
         200,
-        "RCL000001: proteção em ação",
-        "Primeira coleta sem evidência suficiente: aborto e drenagem. Stable preservada.",
+        "RCL000005: rollback automático",
+        "Backlog175s excedeu120s. Candidata drenada, stable restaurada e HPA recuperado.",
         status="ATIVO",
     )
     o += box(
@@ -197,8 +222,10 @@ def slide5(e):
         620,
         960,
         200,
-        "RCL000003: " + stage,
-        "Worker1.0.2 promovido após janelas mínimas, amostras, p95, erros, fila e DLQ.",
+        c["gmud_id"] + ": " + stage,
+        "Worker "
+        + c["version"]
+        + ". Etapa real registrada; progressão exige amostras, p95, erros, fila e DLQ.",
         status="ATIVO",
     )
     o += box(
@@ -207,7 +234,7 @@ def slide5(e):
         960,
         200,
         "Limites explícitos",
-        "Não equivale a rollback de stable já promovida nem a uma janela12h concluída.",
+        "Solicitação humana de rollback e encerramento real12h ainda pendentes.",
         status="ISOLADO",
     )
     o += text(
@@ -248,7 +275,7 @@ def slide6(e):
         (
             985,
             "PRÓXIMAS PROVAS",
-            "API aguarda humano. Worker em observação12h; rollback responsável pós-promoção ainda pendente.",
+            "Observação12h sem encerramento antecipado; rollback responsável pós-promoção ainda pendente.",
         ),
     ]:
         o += text(65, y, title, 19, ORANGE, 700) + wrap(
@@ -260,7 +287,7 @@ def slide6(e):
 def main():
     e = json.loads((ROOT / "assets/rcl-live-evidence.json").read_text())
     assert e["bedrock_enabled"] is False and e["real_window_completed"] is False
-    assert {x["gmud_id"] for x in e["changes"]} == {
+    assert {x["gmud_id"] for x in e["changes"]} >= {
         "RCL000001",
         "RCL000002",
         "RCL000003",
@@ -271,18 +298,18 @@ def main():
         (
             "aws-architecture",
             architecture().replace(
-                "Canary ainda não validado no EKS.",
-                "Canary Worker concluído; observação12h aberta.",
+                "Ativo = componente observado • Humano = promoção aguardando decisão • Canary ainda não validado no EKS.",
+                "Ativo = observado • Humano = aprovação exigida • Canary Worker validado;12h abertas.",
             ),
             1020,
         ),
-        ("cicd-gmud-gitops", delivery(), 1040),
+        ("cicd-gmud-gitops", delivery(e), 1040),
         (
             "worker-canary",
             canary()
             .replace(
                 "Desenho e componentes testados isoladamente. Progressão e rollback EKS ainda não demonstrados.",
-                "RCL000001: aborto e drenagem reais. RCL000003: progressão concluída; observação12h aberta.",
+                "RCL000005: rollback automático real. Nova release corretiva acompanhada por métricas.",
             )
             .replace("PLANEJADO", "EM TESTE")
             .replace("ISOLADO", "EM TESTE"),
