@@ -1,5 +1,33 @@
 # Índice de evidências reais — estado consolidado
 
+## Estado RCL —06/11/2026
+
+RCL000001/GLPI5: Worker1.0.1 abortado por evidência inicial insuficiente; candidata drenada e stable preservada. RCL000002/GLPI6: API2.0.1-lab aguarda aprovação humana. RCL000003/GLPI7: Worker1.0.2 concluiu Canary1→2, promoção e drenagem, em observação até22:04:27Z de06/11 (19:04:27 em São Paulo). Nenhum encerramento12h antecipado; nenhuma aprovação API pelo agente. As GMUDs anteriores não foram renumeradas.
+
+| ID | Fonte | Evidência real |
+|---|---|---|
+|RCL01|GLPI5 / lAvjxmfP9MKrFLukQOWon|RCL000001; autoaprovação; Canary abortado por evidência inicial insuficiente; candidata drenada e stable mantida; native Cancelled14|
+|RCL02|GLPI6 /6F3UA0J7u0LLIVJJxSQxwP|RCL000002; titlev2.0.1-lab; HUMAN_REVIEW/PAUSED, sem decisão humana|
+|RCL03|GLPI7 /6EzLdoosy2wpJXqZFJPRWU|RCL000003; policy-engine; Worker1.0.2;1→2→promoção→drain; OBSERVING/Review8 até22:04:27Z|
+|RCL04|CIs42196287796/42196288505/42197528788|Testes, Trivy, publicação e solicitação reais aprovados; não confundir com API implantada|
+|RCL05|SSMd013d61a-2e8a-4e43-91d7-6a2443587ca8|Flow4 validado sem warnings, backup privado, zero GMUD histórica renumerada|
+|RCL06|SSM7b45de21-b869-41cd-9ce7-a1dce434f6b1|Portal GET200 autenticado/401 anônimo nas três RCLs, correspondência de identidade, nenhum POST de aprovação pelo agente|
+|RCL07|SSMde5d2167-7462-4a87-aab1-875229ecd7dd|28 módulos do host coincidem com19cb384; sequência3/3; RCL000003 na série Prometheus stable|
+|RCL08|assets/rcl-live-evidence.json|Estados consultados e janela real de300s: increase≈203,16 candidatos/83,16 estáveis, p95≈0,099s, erros/retries/DLQ0 naquela amostra|
+|RCL09|Carga limitada + GET/Orders|800 pedidos sintéticos HTTP202, zero erros de envio; amostras0/399/799 COMPLETED, pagamento SIMULATED_CAPTURED|
+|RCL10|Grafana API|Dashboard orders-worker-canary instalado/lido;12 painéis. Painéis exporter SQS ainda parciais SEM DADOS|
+|RCL12|GitOps assinados|98cab14/f41651f: candidata e capacidade da RCL000001;3e19c1f/df1c979/09e52d1: preparação, promoção e drenagem/capacidade da RCL000003|
+|RCL13|CIs plataforma|Automation42200997321 e observability42201001293 concluídos success; validação Terraform local passou|
+|RCL11|pytest/Ruff|168 passed,4 subtests; Ruff passou. Concorrência/retry/restore/CSRF/rollback/janelas isolados; não são prova de12h reais|
+
+Evidências que permanecem ausentes: aprovação API candidata, deploy desta API, observação12h concluída, rollback responsável pós-promoção e capturas de UI definitivas. Artefatos visuais são diagramas/editorial, não prints.
+
+## Snapshots anteriores preservados
+
+<details><summary>Histórico técnico anterior (não é o estado vigente)</summary>
+
+# Índice de evidências reais — estado consolidado
+
 > Atualização pós-aprovação —06/11/2026: GMUD3/API e4/Worker aprovadas pelo responsável, deploys concluídos e GLPI em OBSERVING/Review8. API e Worker usaram RollingUpdate; Worker foi bootstrap de telemetria, sem Canary. Kestra agora tem labels aplicação/versão/GMUD, inclusive nas duas execuções existentes. Correção da primeira probe Istio aplicada ao injector para novos pods Orders e validada em dois pods reais isolados, sem Warning/restart. Os diagramas/carrossel existentes são snapshots anteriores às aprovações e precisam de revisão antes de publicação definitiva.
 
 > Snapshot anterior às aprovações — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
@@ -155,5 +183,7 @@ substituir as fontes verificadas por claims do CI. Evidência sanitizada adicion
 local: `/tmp/cosmotech-actions-permission-evidence.json`, sem tokens ou chaves.
 
 Commit local automation: `e93bef3 feat(promotion): default to deterministic approval with optional Bedrock`. Registra componentes existentes reutilizados e ajustes determinísticos; sem push. O checkout automation ficou limpo. Workflows preparados nos demais repos continuam locais; não foram publicados ou ativados.
+
+</details>
 
 </details>

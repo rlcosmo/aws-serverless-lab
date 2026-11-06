@@ -1,5 +1,29 @@
 # LinkedIn — texto revisado conforme as evidências — estado consolidado
 
+## Estado RCL —06/11/2026
+
+RCL000001/GLPI5: Worker1.0.1 abortado por evidência inicial insuficiente; candidata drenada e stable preservada. RCL000002/GLPI6: API2.0.1-lab aguarda aprovação humana. RCL000003/GLPI7: Worker1.0.2 concluiu Canary1→2, promoção e drenagem, em observação até22:04:27Z de06/11 (19:04:27 em São Paulo). Nenhum encerramento12h antecipado; nenhuma aprovação API pelo agente. As GMUDs anteriores não foram renumeradas.
+
+### Texto LinkedIn — revisão com resultado parcial real
+
+☁️ Minha experiência profissional recente tem sido principalmente em Microsoft Azure e AKS. No laboratório CosmoTech Solutions, estou aprofundando a prática em AWS com EKS, SQS e DynamoDB.
+
+Nesta etapa implementei GMUDs nativas no GLPI com identificador corporativo RCL sequencial, persistente e atômico. O mesmo RCL aparece no Kestra, portal, notificações, GitOps e métricas. A aprovação segue criticidade protegida: API sempre humana; Worker automático quando todos os controles permitem.
+
+🔐 O portal ganhou interface em português, timeline e ações contextuais, preservando autenticação, CSRF e auditoria. O publisher continua exclusivo e o Argo exige assinatura.
+
+A primeira tentativa Canary foi abortada por falta de evidência suficiente e drenou a candidata. Após corrigir a inicialização, o Worker1.0.2 passou por1→2 consumidores, promoção e drenagem reais. A carga terminou com800 pedidos sintéticos aceitos; três amostras consultadas pela API estavam COMPLETED. Pagamento/fulfillment são simulados pela aplicação de laboratório; CI, SQS, DynamoDB, métricas e GitOps foram executados de verdade.
+
+O trabalho continua: API2.0.1-lab aguarda aprovação humana e a janela real de12h do Worker permanece aberta. Não apresento isso como encerramento completo do laboratório.
+
+#AWS #AmazonEKS #Kubernetes #GitOps #ArgoCD #Kestra #GLPI #DevOps #SRE #CloudEngineering #Azure #AKS
+
+## Snapshots anteriores preservados
+
+<details><summary>Histórico técnico anterior (não é o estado vigente)</summary>
+
+# LinkedIn — texto revisado conforme as evidências — estado consolidado
+
 > Atualização pós-aprovação —06/11/2026: GMUD3/API e4/Worker aprovadas pelo responsável, deploys concluídos e GLPI em OBSERVING/Review8. API e Worker usaram RollingUpdate; Worker foi bootstrap de telemetria, sem Canary. Kestra agora tem labels aplicação/versão/GMUD, inclusive nas duas execuções existentes. Correção da primeira probe Istio aplicada ao injector para novos pods Orders e validada em dois pods reais isolados, sem Warning/restart. Os diagramas/carrossel existentes são snapshots anteriores às aprovações e precisam de revisão antes de publicação definitiva.
 
 > Snapshot anterior às aprovações — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
@@ -46,5 +70,7 @@ Os testes isolados cobrem falhas de IA, evidências incompletas, adulteração e
 É um laboratório de aprendizado e demonstração, com limitações documentadas. O trabalho reforçou uma prática essencial de SRE: verificar o comportamento e tratar a falta de evidência como motivo para bloquear uma promoção.
 
 #AWS #SRE #Kubernetes #GitOps #DevOps #PlatformEngineering
+
+</details>
 
 </details>

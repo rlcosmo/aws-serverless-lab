@@ -1,3 +1,15 @@
+# Kit CosmoTech — revisão RCL06/11/2026
+
+Estado atual: Worker1.0.2 promovido após Canary1→2/drenagem, em observação12h; API2.0.1-lab aguarda aprovação humana. RCL000001 revertida, RCL000002 pendente e RCL000003 em observação. Fonte pública sanitizada: assets/rcl-live-evidence.json; detalhes em10/14.
+
+Três diagramas SVG/PNG e carrossel de seis páginas1080×1350/PDF foram atualizados com esses resultados. Gerador vigente: `python3 scripts/build_rcl_review_kit.py`, reutilizando o renderizador existente. public-evidence.json e o gerador antigo ficam como snapshot anterior; não usá-los como estado atual. O novo gerador exige evidência consultada e não produz screenshots.
+
+Capturas reais de UI continuam pendentes; screenshots/*-placeholder é reserva identificada e não comprova execução. Não publicar como laboratório integralmente concluído ou janela12h encerrada. Ver texto LinkedIn06 e instruções de segurança08.
+
+## Instruções anteriores preservadas
+
+<details><summary>Kit anterior e proveniência AWS</summary>
+
 > Atualização06/11 após aprovação: aplicações implantadas em rolling/bootstrap e GMUDs em observação. Este kit visual é o snapshot anterior às aprovações; revisar conteúdo antes de publicar. Estado real atualizado em10/14. Não houve Canary integrado.
 
 # CosmoTech Solutions — kit visual LinkedIn
@@ -27,3 +39,5 @@ Regerar a partir da raiz: `python3 scripts/build_cosmotech_visual_kit.py --evide
 Ícones obtidos no pacote oficial AWS de31/07/2026, preservados em assets/aws. Proveniência, caminhos originais e hashes em assets/aws/provenance.json. A [página oficial AWS Architecture Icons](https://aws.amazon.com/architecture/icons/) disponibiliza-os para diagramas e apresentações; marca AWS permanece de seu titular, sem alegação de parceria/endosso.
 
 Os16 documentos técnicos foram atualizados com estado vigente e histórico preservado em blocos expansíveis. Não publicar o histórico técnico bruto como captura. Bedrock aparece apenas como opcional/desabilitado. A publicação em LinkedIn não foi realizada.
+
+</details>

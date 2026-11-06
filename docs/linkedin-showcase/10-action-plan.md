@@ -1,5 +1,30 @@
 # Estado da implantação e retomada — estado consolidado
 
+## Estado RCL —06/11/2026
+
+RCL000001/GLPI5: Worker1.0.1 abortado por evidência inicial insuficiente; candidata drenada e stable preservada. RCL000002/GLPI6: API2.0.1-lab aguarda aprovação humana. RCL000003/GLPI7: Worker1.0.2 concluiu Canary1→2, promoção e drenagem, em observação até22:04:27Z de06/11 (19:04:27 em São Paulo). Nenhum encerramento12h antecipado; nenhuma aprovação API pelo agente. As GMUDs anteriores não foram renumeradas.
+
+| RCL | Aplicação/versão | GLPI | Kestra | Estado |
+|---|---|---|---|---|
+|RCL000001|Worker1.0.1|5|lAvjxmfP9MKrFLukQOWon|ROLLED_BACK, stable preservada|
+|RCL000002|API2.0.1-lab|6|6F3UA0J7u0LLIVJJxSQxwP|HUMAN_REVIEW/PAUSED|
+|RCL000003|Worker1.0.2|7|6EzLdoosy2wpJXqZFJPRWU|OBSERVING, Canary COMPLETE|
+
+[API — aprovação autenticada](https://kestra.cosmotechsolutions.com.br/releases/33d04c09dea95bb81833b59108cd3266471b2d83da824abae9e099354750227d) · [GLPI6](https://glpi.cosmotechsolutions.com.br/front/change.form.php?id=6).
+[Worker — acompanhamento/rollback elegível](https://kestra.cosmotechsolutions.com.br/releases/8e0e93674b858867cd5945864c5ff61fa8f7e885d744fc517251fb7b3da004b9) · [GLPI7](https://glpi.cosmotechsolutions.com.br/front/change.form.php?id=7).
+
+Concluído nesta etapa: sequência RCL, título padrão com versão real, portal pt-BR responsivo, labels Kestra, SNS, metadados GitOps/Prometheus/Grafana, execução Canary Worker1→2 e800 pedidos sintéticos. API atual permanece2.0.0-lab; candidata2.0.1-lab não foi promovida.
+
+Pendências: aprovação humana API; observação Worker até22:04:27Z sem lacunas/erro/versão substituída; rollback responsável pós-promoção ainda não executado; exporter SQS nos painéis; capturas definitivas. GMUD antiga cuja versão foi substituída não fecha como sucesso e requer análise, sem bloquear a observação das demais. Falha/timeout é isolada por release no reconciliador.
+
+Commits enviados: automation19cb384, infrastructured158485, observability4f0b35e; API88f6bc2; Workera1cd2c9/63f8729. Fonte do host comparada ao commit automation:28 módulos coincidentes. Fluxo gate revisão4, scheduler persistente revisão2. Sem recursos AWS novos; plano IAM0 adições/1 atualização/0 destruições e Access Analyzer sem findings. Custo incremental de chamadas/carga/telemetria não isolado; não declarar zero. Bedrock desabilitado, sem inferências. Nenhuma operação NLB/CloudTrail.
+
+## Snapshots anteriores preservados
+
+<details><summary>Histórico técnico anterior (não é o estado vigente)</summary>
+
+# Estado da implantação e retomada — estado consolidado
+
 > Atualização pós-aprovação —06/11/2026: GMUD3/API e4/Worker aprovadas pelo responsável, deploys concluídos e GLPI em OBSERVING/Review8. API e Worker usaram RollingUpdate; Worker foi bootstrap de telemetria, sem Canary. Kestra agora tem labels aplicação/versão/GMUD, inclusive nas duas execuções existentes. Correção da primeira probe Istio aplicada ao injector para novos pods Orders e validada em dois pods reais isolados, sem Warning/restart. Os diagramas/carrossel existentes são snapshots anteriores às aprovações e precisam de revisão antes de publicação definitiva.
 
 > Snapshot anterior às aprovações — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
@@ -134,5 +159,7 @@ LinkedIn, alteração dos workflows remotos, apply Terraform ou deploy de aplica
 O portal conserva ledger/CSRF e o backup de código no host. Nenhuma fila, tabela,
 volume, estado Terraform ou histórico Git foi removido. A autorização de execução
 anterior e a nova decisão permanecem válidas para a continuação do mesmo escopo.
+
+</details>
 
 </details>

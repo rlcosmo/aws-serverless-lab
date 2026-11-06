@@ -1,5 +1,17 @@
 # CosmoTech AWS Lab — arquitetura e estado real — estado consolidado
 
+## Estado RCL —06/11/2026
+
+RCL000001/GLPI5: Worker1.0.1 abortado por evidência inicial insuficiente; candidata drenada e stable preservada. RCL000002/GLPI6: API2.0.1-lab aguarda aprovação humana. RCL000003/GLPI7: Worker1.0.2 concluiu Canary1→2, promoção e drenagem, em observação até22:04:27Z de06/11 (19:04:27 em São Paulo). Nenhum encerramento12h antecipado; nenhuma aprovação API pelo agente. As GMUDs anteriores não foram renumeradas.
+
+A arquitetura foi reutilizada: GLPI Change nativo, Kestra como gate, publisher exclusivo e Argo com assinatura exigida; Canary apenas Worker/SQS. RCL global é reservado atomicamente no ledger persistente protegido antes do POST GLPI, sem contador no CI/portal. API mantém estratégia rolling e autorização humana.
+
+## Snapshots anteriores preservados
+
+<details><summary>Histórico técnico anterior (não é o estado vigente)</summary>
+
+# CosmoTech AWS Lab — arquitetura e estado real — estado consolidado
+
 > Atualização pós-aprovação —06/11/2026: GMUD3/API e4/Worker aprovadas pelo responsável, deploys concluídos e GLPI em OBSERVING/Review8. API e Worker usaram RollingUpdate; Worker foi bootstrap de telemetria, sem Canary. Kestra agora tem labels aplicação/versão/GMUD, inclusive nas duas execuções existentes. Correção da primeira probe Istio aplicada ao injector para novos pods Orders e validada em dois pods reais isolados, sem Warning/restart. Os diagramas/carrossel existentes são snapshots anteriores às aprovações e precisam de revisão antes de publicação definitiva.
 
 > Snapshot anterior às aprovações — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
@@ -59,5 +71,7 @@ O laboratório continua sendo ambiente de aprendizado, com Spot, capacidade limi
 Bedrock regional Nova Micro foi escolhido para recomendação; publisher GPG e portal autenticado foram implementados localmente. O runtime AWS existente não foi modificado. Plano e fronteiras em10/11.
 
 Na retomada atual, seis módulos foram atualizados no host; o portal segue decision-only. O bloqueio vigente é Actions read não concedido à instalação do App; quota Bedrock não é requisito.
+
+</details>
 
 </details>

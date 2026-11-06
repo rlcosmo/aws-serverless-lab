@@ -1,5 +1,17 @@
 # Segurança da publicação — estado consolidado
 
+## Estado RCL —06/11/2026
+
+RCL000001/GLPI5: Worker1.0.1 abortado por evidência inicial insuficiente; candidata drenada e stable preservada. RCL000002/GLPI6: API2.0.1-lab aguarda aprovação humana. RCL000003/GLPI7: Worker1.0.2 concluiu Canary1→2, promoção e drenagem, em observação até22:04:27Z de06/11 (19:04:27 em São Paulo). Nenhum encerramento12h antecipado; nenhuma aprovação API pelo agente. As GMUDs anteriores não foram renumeradas.
+
+Portal preserva autenticação/autorizações/CSRF/Origin/auditoria; CSS e clipboard JS são autorizados por hashes CSP, sem unsafe-inline ou dependências externas. GET autenticado200 e anônimo401 confirmados nas três RCLs; nenhum POST de aprovação em produção pelo agente. Ativos visuais/evidência pública foram revisados sem tokens, conta AWS, IPs privados ou identidade pessoal. Capturas continuam placeholders claramente identificados.
+
+## Snapshots anteriores preservados
+
+<details><summary>Histórico técnico anterior (não é o estado vigente)</summary>
+
+# Segurança da publicação — estado consolidado
+
 > Atualização pós-aprovação —06/11/2026: GMUD3/API e4/Worker aprovadas pelo responsável, deploys concluídos e GLPI em OBSERVING/Review8. API e Worker usaram RollingUpdate; Worker foi bootstrap de telemetria, sem Canary. Kestra agora tem labels aplicação/versão/GMUD, inclusive nas duas execuções existentes. Correção da primeira probe Istio aplicada ao injector para novos pods Orders e validada em dois pods reais isolados, sem Warning/restart. Os diagramas/carrossel existentes são snapshots anteriores às aprovações e precisam de revisão antes de publicação definitiva.
 
 > Snapshot anterior às aprovações — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
@@ -54,5 +66,7 @@ O post06 está escrito para o estado atual de implementação local e teste isol
 - [ ] Não publicar chaves GPG/Ed25519 privadas, GNUPGHOME, ledger com identidade, cabeçalhos Basic, challenges CSRF ou credenciais SNS/Kestra.
 - [ ] Revisar diff e fixtures: IDs fictícios dos testes não autorizam publicar IDs reais presentes nos arquivos de configuração.
 - [ ] Manter MFA ausente e endpoints anônimos como riscos internos não resolvidos.
+
+</details>
 
 </details>

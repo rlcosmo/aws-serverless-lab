@@ -1,5 +1,17 @@
 # Desafios técnicos reais — estado consolidado
 
+## Estado RCL —06/11/2026
+
+RCL000001/GLPI5: Worker1.0.1 abortado por evidência inicial insuficiente; candidata drenada e stable preservada. RCL000002/GLPI6: API2.0.1-lab aguarda aprovação humana. RCL000003/GLPI7: Worker1.0.2 concluiu Canary1→2, promoção e drenagem, em observação até22:04:27Z de06/11 (19:04:27 em São Paulo). Nenhum encerramento12h antecipado; nenhuma aprovação API pelo agente. As GMUDs anteriores não foram renumeradas.
+
+A primeira tentativa RCL000001 foi abortada antes de evidências suficientes dos pods; a stable permaneceu disponível. Corrigida espera inicial limitada a90s por etapa, sem renovar lease sem prova ou reduzir janelas/amostras obrigatórias. A nova tentativa possui alteração rastreável no health e versão1.0.2; o RCL anterior não foi reaproveitado. A API inicialmente falhou na leitura do arquivo opcional de versão legado:404 agora tem tipo explícito, com fallback AST;403/rede continuam bloqueando. Retomada a mesma execução, sem GMUD duplicada.
+
+## Snapshots anteriores preservados
+
+<details><summary>Histórico técnico anterior (não é o estado vigente)</summary>
+
+# Desafios técnicos reais — estado consolidado
+
 > Atualização pós-aprovação —06/11/2026: GMUD3/API e4/Worker aprovadas pelo responsável, deploys concluídos e GLPI em OBSERVING/Review8. API e Worker usaram RollingUpdate; Worker foi bootstrap de telemetria, sem Canary. Kestra agora tem labels aplicação/versão/GMUD, inclusive nas duas execuções existentes. Correção da primeira probe Istio aplicada ao injector para novos pods Orders e validada em dois pods reais isolados, sem Warning/restart. Os diagramas/carrossel existentes são snapshots anteriores às aprovações e precisam de revisão antes de publicação definitiva.
 
 > Snapshot anterior às aprovações — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
@@ -44,5 +56,7 @@ A inspeção também identificou o sync SSM executando validador/bootstrap da á
 ## Actions read não concedido à instalação — intervenção humana necessária
 
 O App declara Actions read, mas a instalação conserva apenas Contents write, Pull requests write e Metadata read. Tokens por repositório com Actions read retornam422; runs sem essa permissão retornam403. É necessário o proprietário aceitar a atualização da instalação. Não usar claims do CI como evidência confiável nem token pessoal permanente para contornar o bloqueio.
+
+</details>
 
 </details>

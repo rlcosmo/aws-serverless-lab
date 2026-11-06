@@ -1,5 +1,19 @@
 # Canary real de consumidor SQS — código local, ativação pendente — estado consolidado
 
+## Estado RCL —06/11/2026
+
+RCL000001/GLPI5: Worker1.0.1 abortado por evidência inicial insuficiente; candidata drenada e stable preservada. RCL000002/GLPI6: API2.0.1-lab aguarda aprovação humana. RCL000003/GLPI7: Worker1.0.2 concluiu Canary1→2, promoção e drenagem, em observação até22:04:27Z de06/11 (19:04:27 em São Paulo). Nenhum encerramento12h antecipado; nenhuma aprovação API pelo agente. As GMUDs anteriores não foram renumeradas.
+
+Integração real Canary Worker concluída para RCL000003:1→2 consumidores,300s/amostras por etapa, promoção de1.0.2, drenagem comprovada e candidata escalada a0. SQS distribui consumo; não há pesos HTTP prometidos. Observações persistidas no journal do controller, lease180s e reconciliação por agendamento Kestra.
+
+RCL000001 comprovou aborto/drenagem da candidata preservando stable, não reversão de uma stable já promovida. O fluxo de rollback responsável exige autenticação, justificativa, prazo, digest atual e inflight zero. Retomada da versão restaurada exige imageID do manifest correto em pod realmente Running; imagem de configuração não é aceita como digest de deploy. Isso tem testes isolados; reversão responsável pós-promoção ainda precisa de execução real autorizada.
+
+## Snapshots anteriores preservados
+
+<details><summary>Histórico técnico anterior (não é o estado vigente)</summary>
+
+# Canary real de consumidor SQS — código local, ativação pendente — estado consolidado
+
 > Atualização pós-aprovação —06/11/2026: GMUD3/API e4/Worker aprovadas pelo responsável, deploys concluídos e GLPI em OBSERVING/Review8. API e Worker usaram RollingUpdate; Worker foi bootstrap de telemetria, sem Canary. Kestra agora tem labels aplicação/versão/GMUD, inclusive nas duas execuções existentes. Correção da primeira probe Istio aplicada ao injector para novos pods Orders e validada em dois pods reais isolados, sem Warning/restart. Os diagramas/carrossel existentes são snapshots anteriores às aprovações e precisam de revisão antes de publicação definitiva.
 
 > Snapshot anterior às aprovações — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
@@ -70,5 +84,7 @@ Disponível: testes unitários de progressão, falhas, drain, restart e rollback
 ## Atualização desta revisão — 2026-11-05T21:04:49.426224+00:00
 
 O executor local aplica somente efeitos vinculados ao ledger confiável, com journal por geração e lease limitada. Resposta de deploy ambígua exige reconciliação, não retry cego. Callbacks de staging/promoção/restauração precisam ser ligados ao publisher exclusivo e ao estado Argo antes de ativar. O mock de rollback não comprova efeitos Kubernetes.
+
+</details>
 
 </details>

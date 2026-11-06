@@ -1,5 +1,23 @@
 # Demonstração reproduzível — estado consolidado
 
+## Estado RCL —06/11/2026
+
+RCL000001/GLPI5: Worker1.0.1 abortado por evidência inicial insuficiente; candidata drenada e stable preservada. RCL000002/GLPI6: API2.0.1-lab aguarda aprovação humana. RCL000003/GLPI7: Worker1.0.2 concluiu Canary1→2, promoção e drenagem, em observação até22:04:27Z de06/11 (19:04:27 em São Paulo). Nenhum encerramento12h antecipado; nenhuma aprovação API pelo agente. As GMUDs anteriores não foram renumeradas.
+
+1. Abrir GLPI5/6/7 e conferir os mesmos RCLs nos títulos/labels Kestra/portal.
+2. Mostrar API RCL000002 pausada; o agente não opera Aprovar/Rejeitar em nome do responsável.
+3. Mostrar RCL000001 revertida e RCL000003 em observação, sem esconder falha inicial.
+4. Consultar série Prometheus por cosmotech_io_gmud_id=RCL000003 e dashboard, distinguindo SEM DADOS.
+5. Conferir carga sintética800 aceitos e amostras COMPLETED; explicitar simulação de pagamento da aplicação.
+6. Depois da aprovação humana real, acompanhar API pelo publisher/Argo e cumprir12h reais. Não acelerar relógio/encerrar artificialmente.
+7. Revalidar elegibilidade/digest atual antes de rollback, preservar drenagem/journal e exigir nova GMUD após o prazo. Só então produzir capturas definitivas sanitizadas.
+
+## Snapshots anteriores preservados
+
+<details><summary>Histórico técnico anterior (não é o estado vigente)</summary>
+
+# Demonstração reproduzível — estado consolidado
+
 > Atualização pós-aprovação —06/11/2026: GMUD3/API e4/Worker aprovadas pelo responsável, deploys concluídos e GLPI em OBSERVING/Review8. API e Worker usaram RollingUpdate; Worker foi bootstrap de telemetria, sem Canary. Kestra agora tem labels aplicação/versão/GMUD, inclusive nas duas execuções existentes. Correção da primeira probe Istio aplicada ao injector para novos pods Orders e validada em dois pods reais isolados, sem Warning/restart. Os diagramas/carrossel existentes são snapshots anteriores às aprovações e precisam de revisão antes de publicação definitiva.
 
 > Snapshot anterior às aprovações — 06/11/2026 UTC (05/11 em São Paulo). A integração real chegou à aprovação humana das GMUDs 3/API e 4/Worker. CI, coleta, política, GLPI, portal/SNS e controle de assinatura estão ativos. Nenhuma release de aplicação foi promovida nesta etapa; Canary, rollback EKS e a janela real de 12h continuam pendentes. Bedrock opcional/desabilitado, sem novas inferências. As seções históricas abaixo não descrevem necessariamente o ambiente atual.
@@ -60,5 +78,7 @@ Após aceitação de Actions read na instalação do GitHub App, concluir as lig
 7. Registrar incidente/notificação, sync/health final e capturas reais sanitizadas.
 
 Não usar credenciais humanas armazenadas para aprovar em nome do proprietário. Não registrar a demonstração completa como executada antes de haver provas. NLB e CloudTrail não fazem parte dessa sequência.
+
+</details>
 
 </details>
