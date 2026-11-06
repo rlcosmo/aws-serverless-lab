@@ -181,7 +181,7 @@ def slide4(e):
             ),
             (
                 "Identidade e decisões visíveis",
-                "laboratorio com acesso operacional. Página reaberta informa quem aprovou. Histórico disponível durante falha do GLPI.",
+                "laboratorio consulta a interface nativa do Kestra. Admin preservado. Aprovações e rollback no portal autenticado.",
             ),
         ]
     ):

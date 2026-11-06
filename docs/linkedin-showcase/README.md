@@ -1,5 +1,7 @@
 # CosmoTech Solutions — kit LinkedIn e evidências
 
+**Atualização vigente:** a conta operacional por e-mail acessa também a interface nativa em https://kestra.cosmotechsolutions.com.br/ para consulta de fluxos, execuções, logs e dashboards. Admin preservado. Aprovações/rollback no portal. Evidência: `assets/kestra-native-view-evidence.json`. Restrições de acesso nativo descritas em revisões anteriores são históricas.
+
 Revisão06/11/2026: API2.0.3-lab/RCL000007 e Worker1.0.5/RCL000008 implantados, em observação12h. Canary exclusivo Worker concluído. Os16 documentos preservam os snapshots anteriores em histórico expansível.
 
 - `assets/`: três diagramas de arquitetura/CI-CD/Canary em SVG e PNG; JSONs de execução real com escopo e timestamp; manifesto de integridade.

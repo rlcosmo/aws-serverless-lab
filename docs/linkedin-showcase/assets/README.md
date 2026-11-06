@@ -18,3 +18,5 @@ Arquivos anteriores preservam evidências históricas. Sem tokens, senhas, conta
 - `tag-only-deployment-evidence.json`: migração real para tags ECR imutáveis sem `@sha256`, commits assinados, digests executados conferidos e janelas preservadas. Atualiza somente o formato das referências; registros tag@digest anteriores permanecem históricos.
 
 - `operational-email-cd-links-evidence.json`: login por e-mail, dez acompanhamentos CD autenticados200, acesso anônimo401 e compatibilidade308 de links antigos; zero decisões no teste.
+
+- `kestra-native-view-evidence.json`: login operacional real pelo formulário/API nativo, catálogo idêntico de17 fluxos, logs/execuções/dashboard, negação de alterações e preservação do admin inclusive com adaptador temporariamente indisponível. São resultados HTTP reais; não existe print de browser automatizado nesta rodada.

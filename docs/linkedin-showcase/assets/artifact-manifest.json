@@ -1,10 +1,10 @@
 {
-  "scope": "Acesso operacional por e-mail e CD corrigidos; observação12h aberta; capturas UI pendentes",
+  "scope": "Consulta nativa operacional, admin preservado; observação12h aberta; screenshots UI pendentes",
   "files": [
     {
       "path": "assets/README.md",
-      "sha256": "afbd5d8f24fb67d49c24884669b5ab082f1fe0a6c5cd4cf6e57d51dd3cefd155",
-      "bytes": 2082
+      "sha256": "4289a8ea3726f3b46f2670d0d5b5807ca3fc28798dfa659b60dd4d99e9a8d164",
+      "bytes": 2424
     },
     {
       "path": "assets/aws/cloudwatch.svg",
@@ -70,6 +70,11 @@
       "path": "assets/glpi-outage-recovery-evidence.json",
       "sha256": "10d06413eb5a929904fe3b8212119491008a83808954b7362b269cc985beb45e",
       "bytes": 724
+    },
+    {
+      "path": "assets/kestra-native-view-evidence.json",
+      "sha256": "a37f0e911aa39af2e0bf06252161f3aa4e336d886c1c133c9843b1308ef91b4e",
+      "bytes": 3184
     },
     {
       "path": "assets/live-legacy-gate-rejection.json",
@@ -178,13 +183,13 @@
     },
     {
       "path": "carousel/04-cosmotech.png",
-      "sha256": "0556184472c1c7d4f8c9d3b972d0457dc23f12847ff40c6d7ae2a0e45b8605b4",
-      "bytes": 175859
+      "sha256": "5415fecb0c979bae55121f0c571b95f13e4323d2c04749aa5ef1565aadedcf49",
+      "bytes": 175151
     },
     {
       "path": "carousel/04-cosmotech.svg",
-      "sha256": "73b30602dfd5091977429a7b44a40a4c50e2b118f77add31e44494c4b6573b83",
-      "bytes": 4795
+      "sha256": "e82b278d64fb404cfb4057e89c1c9900a388cb6e102cf7a72c6cf6c1298ccd57",
+      "bytes": 4790
     },
     {
       "path": "carousel/05-cosmotech.png",
@@ -213,13 +218,13 @@
     },
     {
       "path": "carousel/contact-sheet.png",
-      "sha256": "eb9250fc8429f56acece8b1129dc5b29fbe4734c301641b6486e9da8272cd2d5",
-      "bytes": 220962
+      "sha256": "7ef6092019717d6d7e8220f62be88ef24867780e152a23f15a0060f115f66053",
+      "bytes": 220808
     },
     {
       "path": "carousel/cosmotech-carousel-review.pdf",
-      "sha256": "9a41e036a0a751d8298352dbbeb965d8c97ea47126ee5ef83189c6428850f5be",
-      "bytes": 49228
+      "sha256": "a41f402ac955b0c55ef37e4813a86ed3948e3dda5041b4ca33a29eccba927733",
+      "bytes": 49211
     },
     {
       "path": "screenshots/README.md",

@@ -1,0 +1,108 @@
+{
+  "operator": {
+    "verified_at": "2026-11-06T13:54:37.234208+00:00",
+    "username": "laboratorio@cosmotechsolutions.com.br",
+    "root_http": 200,
+    "native_login_http": 204,
+    "cookie_secure": true,
+    "cookie_http_only": true,
+    "cookie_same_site": "Strict",
+    "opaque_session": true,
+    "browser_admin_cookie_present": false,
+    "reads": [
+      {
+        "path": "/api/v1/configs",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/main/flows/search",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/main/executions/search",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/main/dashboards/defaults/definitions",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/main/executions/7jyFluWNV09PrJqsDc3kVb",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/main/executions/50dZBEpEZFcQPNS8qv56rI",
+        "status": 200
+      },
+      {
+        "path": "/api/v1/main/logs/7jyFluWNV09PrJqsDc3kVb",
+        "status": 200
+      }
+    ],
+    "mutations_denied": [
+      {
+        "path": "/api/v1/main/executions/COSMOTECH-NONEXISTENT/actions/resume",
+        "method": "POST",
+        "status": 403
+      },
+      {
+        "path": "/api/v1/main/flows/cosmotech.readonlytest/absent",
+        "method": "DELETE",
+        "status": 403
+      },
+      {
+        "path": "/api/v1/main/executions/webhook/cosmotech.readonlytest/absent/invalid",
+        "method": "GET",
+        "status": 403
+      }
+    ],
+    "internal_auth_external_http": 404,
+    "logout_http": 204,
+    "after_logout_api_http": 401,
+    "approval_posts": 0,
+    "real_flow_mutations": 0,
+    "flow_catalog_matches_admin": {
+      "count": 17,
+      "sha256": "d35733d6b4d72b36492b8d88475cad3be5b4fb0e23d80d56407b1fae8acbac7c"
+    },
+    "dashboard_query": {
+      "status": 200,
+      "chart_id": "kpi_success_ratio",
+      "actual_query": true
+    },
+    "scope": "Protocolo HTTP real da interface nativa; sem browser ou captura de tela automatizada."
+  },
+  "administrator": {
+    "admin_basic_http": 200,
+    "existing_admin_cookie_http": 200,
+    "native_admin_login_http": 204,
+    "admin_permissions_changed": false,
+    "protected_mapping_mode": "0o600",
+    "password_exposed": false,
+    "approval_posts": 0,
+    "portal_cannot_read_admin_mapping": true
+  },
+  "administrator_fallback": {
+    "admin_basic_while_adapter_unavailable": 200,
+    "admin_existing_cookie_while_adapter_unavailable": 200,
+    "admin_login_fallback_http": 204,
+    "adapter_recovered": true,
+    "approval_posts": 0,
+    "real_flow_mutations": 0,
+    "scope": "Indisponibilidade real breve somente do adaptador, recuperada; backend Kestra não foi interrompido."
+  },
+  "source_commits": [
+    "80c3657",
+    "d910f15",
+    "1063c89"
+  ],
+  "infrastructure_commit": "131c443",
+  "local_tests": 219,
+  "local_subtests": 4,
+  "runtime_modules": 37,
+  "new_cloud_resources": 0,
+  "costs": "Chamadas e uso do host existente; custo incremental não isolado.",
+  "backend_edition_unchanged": "Kestra OSS 2.0.8",
+  "native_rbac_added": false,
+  "adapter": "Sessões opacas e autorização de consulta no Nginx/portal; interface original preservada."
+}
